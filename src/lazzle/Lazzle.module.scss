@@ -1,0 +1,291 @@
+.lazzle {
+    max-width: 960px;
+    margin-bottom: 5em;
+
+    section {
+        margin-bottom: 2rem;
+    }
+}
+
+.world {
+    border: 1px solid grey;
+    box-sizing: content-box;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+.orbit {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border-radius: 50%;
+    border: 1px dashed grey;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.laser {
+    position: absolute;
+    width: 32px;
+    height: 24px;
+}
+
+.laserDevice {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('./images/laser.svg');
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.laserOrder {
+    position: absolute;
+    top: 50%;
+    width: 1.5em;
+    transform: translate(-100%, -50%);
+
+    > div {
+        text-align: center;
+    }
+}
+
+.laserMoveHandle, .laserRotationHandle {
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    position: absolute;
+    top: 50%;
+    cursor: grab;
+    
+    &:hover {
+        background-color: grey;
+    }
+}
+.laserMoving .laserMoveHandle, .laserRotating .laserRotationHandle {
+    background-color: darkgrey;
+}
+.laserMoveHandle {
+    transform: translate(-50%, -50%);
+}
+.laserRotationHandle {
+    left: 100%;
+    transform: translate(-50%, -50%);
+}
+
+.laserLocked {
+    .laserMoveHandle, .laserRotationHandle {
+        display: none;
+    }
+}
+
+.laserHelpLine {
+    width: 900px;
+    height: 1px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-top: 2px dashed black;
+    opacity: 0.5;
+    background-color: transparent;
+    pointer-events: none;
+
+    &.shoot {
+        border-width: 0;
+        opacity: 1;
+        animation: laser-shot 0.8s cubic-bezier(1,0,.93,1);
+    }
+}
+
+.laser:hover {
+    .laserHelpLine {
+        opacity: 1;
+    }
+}
+
+@keyframes laser-shot {
+    0% {
+        box-shadow: none;
+        background-color: transparent;
+    }
+    50% {
+        box-shadow: 0 0 6px 0px rgba(0, 255, 255, 1);
+        background-color: #0ff;
+    }
+    100% {
+        box-shadow: none;
+        background-color: transparent;
+    }
+}
+
+.laserHitBlock {
+    position: absolute;
+    display: none;
+    background: repeating-linear-gradient(45deg, black, black 7.542px, transparent 7.542px, transparent 15.085px);
+    opacity: 0.2;
+}
+
+.laser:hover, .laserMoving, .laserRotating {
+    &+ .laserHitBlocks .laserHitBlock {
+        display: block;
+    }
+}
+
+.block {
+    position: absolute;
+    transition: top 0.2s ease-out 0.1s;
+
+    &.destroyed {
+        animation: block-destroyed 0.2s ease-out;
+        animation-fill-mode: forwards;
+    }
+    &::after {
+        /* border as shadow, translucent to have it adapt to the block's color */
+        content: ' ';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: transparent;
+        border: 1px solid #000000;
+        border-right-color: #FFFFFF;
+        border-bottom-color: #FFFFFF;
+        opacity: 0.2;
+    }
+}
+
+@keyframes block-destroyed {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(3);
+    }
+}
+
+.resultContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    animation: fade-in 0.2s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.result {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.goalContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    animation: fade-in 0.2s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.editorSwitchMode {
+    label {
+        border-bottom-width: 0;
+        margin-left: 0 !important;
+
+        &:first-of-type {
+            border-bottom-left-radius: 0;
+        }
+        &:last-of-type {
+            border-bottom-right-radius: 0;
+        }
+    }
+}
+
+.editor {
+    .block, .goalContainer, .laser {
+        pointer-events: none;
+    }
+}
+
+.blockAidLines {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.blockAidLinesRow {
+    display: flex;
+}
+
+.blockAidLinesCell {
+    border: 1px solid rgb(200, 200, 200);
+    border-bottom-width: 0;
+    border-right-width: 0;
+    cursor: pointer;
+
+    &:last-child {
+        border-right-width: 1px;
+    }
+    &:hover {
+        background-color: rgb(230, 230, 230);
+    }
+}
+.blockAidLinesRow:last-child .blockAidLinesCell {
+    border-bottom-width: 1px;
+}
+
+.exportOutput {
+    font-family: var(--bs-font-monospace);
+}
+
+.bi {
+    /* bootstrap icon svg pasted directly */
+    display: 'inline-block';
+    vertical-align: -.1em;
+}
+
+.tabContentWrapper {
+    width: 100%;
+    overflow-x: hidden;
+    padding: 1rem;
+}
+
+.tabContent {
+    display: flex;
+
+    .tabPane {
+        width: 100%;
+        opacity: 0;
+        transition: opacity 0.15s ease-in;
+        z-index: 0;
+    }
+
+    .tabPaneActive {
+        opacity: 1;
+        z-index: 1;
+    }
+}

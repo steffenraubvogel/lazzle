@@ -1,0 +1,73 @@
+{
+    "name": "Almost starting to think",
+    "gridX": 1,
+    "gridY": 6,
+    "blocks": [
+        {
+            "x": 0,
+            "y": 5,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 4,
+            "color": 1
+        },
+        {
+            "x": 0,
+            "y": 3,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 2,
+            "color": 1
+        },
+        {
+            "x": 0,
+            "y": 1,
+            "color": 1
+        },
+        {
+            "x": 0,
+            "y": 0,
+            "color": 1
+        }
+    ],
+    "goal": [
+        {
+            "x": 0,
+            "y": 5,
+            "color": 1
+        },
+        {
+            "x": 0,
+            "y": 4,
+            "color": 1
+        },
+        {
+            "x": 0,
+            "y": 3,
+            "color": 1
+        },
+        {
+            "x": 0,
+            "y": 2,
+            "color": 1
+        }
+    ],
+    "lasers": [
+        {
+            "angle": 30,
+            "rotation": -90,
+            "distance": 300,
+            "order": 1
+        },
+        {
+            "angle": 60,
+            "rotation": -90,
+            "distance": 400,
+            "order": 2
+        }
+    ]
+}

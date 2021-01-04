@@ -1,0 +1,67 @@
+{
+    "name": "Easy Peasy",
+    "gridX": 1,
+    "gridY": 6,
+    "blocks": [
+        {
+            "x": 0,
+            "y": 5,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 4,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 3,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 2,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 1,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 0,
+            "color": 0
+        }
+    ],
+    "goal": [
+        {
+            "x": 0,
+            "y": 5,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 4,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 3,
+            "color": 0
+        },
+        {
+            "x": 0,
+            "y": 2,
+            "color": 0
+        }
+    ],
+    "lasers": [
+        {
+            "angle": 35,
+            "rotation": 315,
+            "distance": 300,
+            "order": 1
+        }
+    ]
+}
