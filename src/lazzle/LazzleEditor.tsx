@@ -4,8 +4,8 @@ import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
 import { AllLevels, Colors, Level, LevelBlock, LevelLaser } from "./Levels";
 import { LevelEditorPhase } from "./Phase";
-import Tabs, { Tab } from "./components/Tabs";
-import Accordion, { AccordionItem } from "./components/Accordion";
+import Tabs, { Tab } from "../components/Tabs";
+import Accordion, { AccordionItem } from "../components/Accordion";
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
 
 export default function LazzleLevelEditor() {

@@ -1,5 +1,5 @@
 import { ReactElement, ReactNode, useState } from "react"
-import styles from "./../Lazzle.module.scss";
+import styles from "./Tabs.module.scss";
 
 type TabProps = {
     header: string

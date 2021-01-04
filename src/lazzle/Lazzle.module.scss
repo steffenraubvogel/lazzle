@@ -267,25 +267,3 @@
     display: 'inline-block';
     vertical-align: -.1em;
 }
-
-.tabContentWrapper {
-    width: 100%;
-    overflow-x: hidden;
-    padding: 1rem;
-}
-
-.tabContent {
-    display: flex;
-
-    .tabPane {
-        width: 100%;
-        opacity: 0;
-        transition: opacity 0.15s ease-in;
-        z-index: 0;
-    }
-
-    .tabPaneActive {
-        opacity: 1;
-        z-index: 1;
-    }
-}
