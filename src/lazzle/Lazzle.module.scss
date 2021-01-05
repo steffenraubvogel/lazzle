@@ -1,3 +1,5 @@
+@import "~bootstrap/scss/bootstrap-utilities";
+
 .lazzle {
     max-width: 960px;
     margin-bottom: 5em;
@@ -23,6 +25,10 @@
     border: 1px dashed grey;
     transform: translate(-50%, -50%);
     pointer-events: none;
+
+    &.laserMoving {
+        border-color: black;
+    }
 }
 
 .laser {
@@ -45,14 +51,31 @@
     position: absolute;
     top: 50%;
     width: 1.5em;
-    transform: translate(-125%, -50%);
+    transform: translate(-150%, -50%);
 
     > div {
         text-align: center;
     }
 }
 
-.laserMoveHandle, .laserRotationHandle {
+.laserMoveHandle {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    top: 50%;
+    transform: translate(-75%, -50%);
+    cursor: grab;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+.laserMoveHandle:hover, .laserMoving .laserMoveHandle {
+    color: $primary;
+}
+
+.laserRotationHandle {
     width: 24px;
     height: 24px;
     border-radius: 12px;
@@ -64,15 +87,8 @@
         background-color: grey;
     }
 }
-.laser:hover .laserMoveHandle, .laser:hover .laserRotationHandle {
-    border: 5px solid transparent;
+.laserRotating .laserRotationHandle {
     background-color: darkgrey;
-}
-.laserMoving .laserMoveHandle, .laserRotating .laserRotationHandle {
-    background-color: darkgrey;
-}
-.laserMoveHandle {
-    transform: translate(-50%, -50%);
 }
 .laserRotationHandle {
     left: 100%;

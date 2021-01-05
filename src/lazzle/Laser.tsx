@@ -6,6 +6,7 @@ import { nextId } from "./Util";
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
 import { Block } from "./Block";
 import { rayIntersectsBlock } from "./Geometry";
+import { ReactComponent as GripIcon } from "bootstrap-icons/icons/grip-vertical.svg"
 
 export class Laser {
 
@@ -100,8 +101,8 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
         };
     }
 
-    function getCssClassNames() {
-        const classes = [styles.laser]
+    function getAdditionalCssClassNames() {
+        const classes = []
         if (isMoving) {
             classes.push(styles.laserMoving)
         }
@@ -111,19 +112,19 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
         if (!(props.phase instanceof SetupPhase)) {
             classes.push(styles.laserLocked)
         }
-        return classes.join(' ')
+        return ' ' + classes.join(' ')
     }
 
     return (<>
         <div
-            className={styles.orbit}
+            className={styles.orbit + getAdditionalCssClassNames()}
             style={{
                 width: props.laser.distance * 2,
                 height: props.laser.distance * 2
             }}>
         </div>
         <div
-            className={getCssClassNames()}
+            className={styles.laser + getAdditionalCssClassNames()}
             style={{
                 transform: "translateY(-50%) translate(" + props.laser.x + "px, " + props.laser.y + "px) rotate(" + props.laser.rotation + "rad)",
                 transformOrigin: 'center left'
@@ -140,6 +141,7 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
             </div>
 
             <div className={styles.laserMoveHandle} onMouseDown={laserMoveHandleMouseDown}>
+                <GripIcon />
             </div>
 
             <div className={styles.laserRotationHandle} onMouseDown={laserRotationHandleMouseDown}>
