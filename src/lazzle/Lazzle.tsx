@@ -5,7 +5,7 @@ import BlockComponent, { Block } from "./Block";
 import { Colors, Level, AllLevels, LevelBlock } from "./Levels";
 import { BlockFallPhase, LaserShotPhase, Phase, ResultPhase, SetupPhase } from "./Phase";
 import { Point, rayIntersectsBlock } from "./Geometry";
-import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
+import { BLOCK_SIZE, LOCAL_STORAGE_KEY_GAME_PROGRESS, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
 
 export default function LazzleGame() {
 
@@ -17,7 +17,14 @@ export default function LazzleGame() {
     const [goalBlocks, setGoalBlocks] = useState<Block[]>([])
 
     useEffect(() => {
-        loadLevel(AllLevels[3])
+        // check local storage for previous game progress
+        const gameProgress = localStorage.getItem(LOCAL_STORAGE_KEY_GAME_PROGRESS)
+        let levelToLoad = 0
+        if (gameProgress) {
+            levelToLoad = Math.min(AllLevels.length, Math.max(0, Math.round(Number(gameProgress))))
+        }
+
+        loadLevel(AllLevels[levelToLoad])
     }, [])
 
     function loadLevel(level: Level, keepLasers: boolean = false) {
@@ -135,6 +142,7 @@ export default function LazzleGame() {
 
     function startNextLevel() {
         const nextLevel = (AllLevels.indexOf(level) + 1) % AllLevels.length
+        localStorage.setItem(LOCAL_STORAGE_KEY_GAME_PROGRESS, nextLevel.toString())
         loadLevel(AllLevels[nextLevel])
     }
 
@@ -149,9 +157,8 @@ export default function LazzleGame() {
     return <div className={"container-md " + styles.lazzle}>
         <h1>Lazzle</h1>
 
+        <h2>Level {AllLevels.indexOf(level) + 1} - {level.name}</h2>
         <p>
-            Level: {level.name}<br />
-            Controls: &nbsp;
             <button type="button" className="btn btn-primary" disabled={!(phase instanceof SetupPhase)} onClick={startLasers}>Start Lasers</button>&nbsp;
             <button type="button" className="btn btn-secondary" disabled={!(phase instanceof SetupPhase)} onClick={toggleGoal}>Toggle Goal</button>&nbsp;
         </p>

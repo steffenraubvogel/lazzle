@@ -45,7 +45,7 @@
     position: absolute;
     top: 50%;
     width: 1.5em;
-    transform: translate(-100%, -50%);
+    transform: translate(-125%, -50%);
 
     > div {
         text-align: center;
@@ -63,6 +63,10 @@
     &:hover {
         background-color: grey;
     }
+}
+.laser:hover .laserMoveHandle, .laser:hover .laserRotationHandle {
+    border: 5px solid transparent;
+    background-color: darkgrey;
 }
 .laserMoving .laserMoveHandle, .laserRotating .laserRotationHandle {
     background-color: darkgrey;
@@ -260,10 +264,4 @@
 
 .exportOutput {
     font-family: var(--bs-font-monospace);
-}
-
-.bi {
-    /* bootstrap icon svg pasted directly */
-    display: 'inline-block';
-    vertical-align: -.1em;
 }

@@ -11,6 +11,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "bootstrap": "^5.0.0-beta1",
+    "bootstrap-icons": "^1.2.2",
     "colyseus.js": "^0.14.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
