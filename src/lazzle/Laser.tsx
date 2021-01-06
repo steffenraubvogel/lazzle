@@ -5,8 +5,9 @@ import { LevelLaser } from "./Levels";
 import { nextId } from "./Util";
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
 import { Block } from "./Block";
-import { rayIntersectsBlock } from "./Geometry";
+import { Point, rayIntersectsBlock } from "./Geometry";
 import { ReactComponent as GripIcon } from "bootstrap-icons/icons/grip-vertical.svg"
+import { ReactComponent as ArrowRightIcon } from "bootstrap-icons/icons/arrow-right.svg"
 
 export class Laser {
 
@@ -17,6 +18,11 @@ export class Laser {
     private _distance: number // from bottom center of blocks in pixels
     private _rotation: number // in radians
     readonly order: number // a number indicating when to shoot this laser in shoot phase
+
+    private _leftMoveArrowPos: Point = { x: 0, y: 0 } // moving indicator position left of laser
+    private _leftMoveArrowRotation: number = 0
+    private _rightMoveArrowPos: Point = { x: 0, y: 0 } // moving indicator position right of laser
+    private _rightMoveArrowRotation: number = 0
 
     constructor(config: LevelLaser) {
         this._angle = config.angle * Math.PI / 180
@@ -31,6 +37,18 @@ export class Laser {
     private updatePosition() {
         this._x = WORLD_WIDTH / 2 + this._distance * Math.cos(this._angle)
         this._y = WORLD_HEIGHT - this._distance * Math.sin(this._angle)
+
+        this._leftMoveArrowPos = {
+            x: WORLD_WIDTH / 2 + Math.cos(this._angle + 8 * Math.PI / 180) * this._distance,
+            y: WORLD_HEIGHT - Math.sin(this._angle + 8 * Math.PI / 180) * this._distance
+        }
+        this._leftMoveArrowRotation = -this._angle - 8 * Math.PI / 180 - Math.PI / 2
+
+        this._rightMoveArrowPos = {
+            x: WORLD_WIDTH / 2 + Math.cos(this._angle - 8 * Math.PI / 180) * this._distance,
+            y: WORLD_HEIGHT - Math.sin(this._angle - 8 * Math.PI / 180) * this._distance
+        }
+        this._rightMoveArrowRotation = -this._angle + 8 * Math.PI / 180 + Math.PI / 2
     }
 
     public drag(mouseX: number, mouseY: number) {
@@ -62,10 +80,29 @@ export class Laser {
         return this._rotation
     }
 
+    get angle() {
+        return this._angle
+    }
+
     get distance() {
         return this._distance
     }
 
+    get leftMoveArrowPos() {
+        return this._leftMoveArrowPos
+    }
+
+    get leftMoveArrowRotation() {
+        return this._leftMoveArrowRotation
+    }
+
+    get rightMoveArrowPos() {
+        return this._rightMoveArrowPos
+    }
+
+    get rightMoveArrowRotation() {
+        return this._rightMoveArrowRotation
+    }
 }
 
 export default function LaserComponent(props: { laser: Laser, blocks: Block[], phase: Phase }) {
@@ -117,11 +154,12 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
 
     return (<>
         <div
-            className={styles.orbit + getAdditionalCssClassNames()}
+            className={styles.laserOrbit + getAdditionalCssClassNames()}
             style={{
                 width: props.laser.distance * 2,
                 height: props.laser.distance * 2
-            }}>
+            }}
+        >
         </div>
         <div
             className={styles.laser + getAdditionalCssClassNames()}
@@ -147,10 +185,26 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
             <div className={styles.laserRotationHandle} onMouseDown={laserRotationHandleMouseDown}>
             </div>
         </div>
-        <div className={styles.laserHitBlocks}>
-            {props.blocks.filter(b => b.state !== "destroyed")
-                .filter(b => rayIntersectsBlock(props.laser, { x: Math.cos(props.laser.rotation), y: Math.sin(props.laser.rotation) }, b))
-                .map(b => <div key={b.id} className={styles.laserHitBlock} style={{ left: b.x, top: b.y, width: BLOCK_SIZE + 'px', height: BLOCK_SIZE + 'px' }}></div>)}
+        <div className={styles.laserHoveredElements + getAdditionalCssClassNames()}>
+            <div className={styles.laserMoveHandleArrow} style={{
+                left: props.laser.leftMoveArrowPos.x,
+                top: props.laser.leftMoveArrowPos.y,
+                transform: 'translate(-50%, -50%) rotate(' + props.laser.leftMoveArrowRotation + 'rad)'
+            }}>
+                <ArrowRightIcon />
+            </div>
+            <div className={styles.laserMoveHandleArrow} style={{
+                left: props.laser.rightMoveArrowPos.x,
+                top: props.laser.rightMoveArrowPos.y,
+                transform: 'translate(-50%, -50%) rotate(' + props.laser.rightMoveArrowRotation + 'rad)'
+            }}>
+                <ArrowRightIcon />
+            </div>
+            <div className={styles.laserHitBlocks}>
+                {props.blocks.filter(b => b.state !== "destroyed")
+                    .filter(b => rayIntersectsBlock(props.laser, { x: Math.cos(props.laser.rotation), y: Math.sin(props.laser.rotation) }, b))
+                    .map(b => <div key={b.id} className={styles.laserHitBlock} style={{ left: b.x, top: b.y, width: BLOCK_SIZE + 'px', height: BLOCK_SIZE + 'px' }}></div>)}
+            </div>
         </div>
     </>
     )
