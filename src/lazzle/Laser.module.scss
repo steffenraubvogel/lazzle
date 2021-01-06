@@ -1,0 +1,161 @@
+@import "~bootstrap/scss/bootstrap-utilities";
+
+.laserOrbit {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border-radius: 50%;
+    border: 1px dashed grey;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+
+    &.laserMoving {
+        border-color: black;
+    }
+}
+
+.laserHoveredElements {
+    display: none;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.laser:hover, .laserMoving, .laserRotating {
+    &+ .laserHoveredElements {
+        display: block;
+    }
+}
+.laserRotating + .laserHoveredElements .laserMoveHandleArrow {
+    display: none;
+}
+.laserMoving + .laserHoveredElements .laserRotationHandleArrow {
+    display: none;
+}
+
+.laserMoveHandleArrow, .laserRotationHandleArrow  {
+    position: absolute;
+    opacity: 0.3;
+    width: 32px;
+    height: 32px;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+.laserMoving .laserMoveHandleArrow, .laserRotating .laserRotationHandleArrow {
+    opacity: 0.8;
+}
+
+.laser {
+    position: absolute;
+    width: 32px;
+    height: 24px;
+}
+
+.laserDevice {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('./images/laser.svg');
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.laserOrder {
+    position: absolute;
+    top: 50%;
+    width: 1.5em;
+    transform: translate(-150%, -50%);
+
+    > div {
+        text-align: center;
+    }
+}
+
+.laserMoveHandle {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    top: 50%;
+    transform: translate(-75%, -50%);
+    cursor: grab;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+.laserMoveHandle:hover, .laserMoving .laserMoveHandle {
+    color: $primary;
+}
+
+.laserRotationHandle {
+    width: 900px;
+    height: 12px;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+    cursor: grab;
+    opacity: 0.5;
+    
+    &:hover {
+        background-color: $primary;
+    }
+}
+
+.laserLocked {
+    pointer-events: none;
+
+    .laserMoveHandle, .laserRotationHandle {
+        display: none;
+    }
+}
+
+.laserHelpLine {
+    width: 900px;
+    height: 1px;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    border-top: 2px dashed black;
+    opacity: 0.5;
+    background-color: transparent;
+    pointer-events: none;
+
+    &.shoot {
+        border-width: 0;
+        opacity: 1;
+        animation: laser-shot 0.8s cubic-bezier(1,0,.93,1);
+    }
+}
+
+.laser:hover {
+    .laserHelpLine {
+        opacity: 1;
+    }
+}
+
+@keyframes laser-shot {
+    0% {
+        box-shadow: none;
+        background-color: transparent;
+    }
+    50% {
+        box-shadow: 0 0 6px 0px rgba(0, 255, 255, 1);
+        background-color: #0ff;
+    }
+    100% {
+        box-shadow: none;
+        background-color: transparent;
+    }
+}
+
+.laserHitBlock {
+    position: absolute;
+    background: repeating-linear-gradient(45deg, black, black 7.542px, transparent 7.542px, transparent 15.085px);
+    opacity: 0.2;
+}
