@@ -6,6 +6,7 @@ import { Colors, Level, AllLevels, LevelBlock } from "./Levels";
 import { BlockFallPhase, LaserShotPhase, Phase, ResultPhase, SetupPhase, StartPhase } from "./Phase";
 import { Point, rayIntersectsBlock } from "./Geometry";
 import { BLOCK_SIZE, LOCAL_STORAGE_KEY_GAME_PROGRESS, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
+import { ReactComponent as BullsEyeIcon } from "bootstrap-icons/icons/bullseye.svg"
 import { ReactComponent as PlayIcon } from "bootstrap-icons/icons/play.svg"
 import { ReactComponent as PauseIcon } from "bootstrap-icons/icons/pause.svg"
 import { ReactComponent as SkipStartIcon } from "bootstrap-icons/icons/skip-start.svg"
@@ -58,7 +59,7 @@ export default function LazzleGame() {
             // nothing to do here
             return
         }
-        
+
         let timer: NodeJS.Timeout | undefined
         const timeModifier = 1 / speed
 
@@ -86,7 +87,7 @@ export default function LazzleGame() {
         }
 
         return timer !== undefined ? () => clearTimeout(timer!) : undefined
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [phase, speed])
 
     function nextLaserOrder(prevOrder: number = -1): number | undefined {
@@ -192,6 +193,17 @@ export default function LazzleGame() {
         setSpeed(1000) // increase speed such that it appears to be almost instant
     }
 
+    useEffect(() => {
+        // handle shortcuts
+        const eventListener: (event: KeyboardEvent) => void = (event) => { 
+            if (event.key === 'g') {
+                toggleGoal()
+            }
+        }
+        document.addEventListener("keydown", eventListener);
+        return () => document.removeEventListener("keydown", eventListener);
+    }, [])
+
     return <div className={"container-md " + styles.lazzle}>
         <h1>Lazzle</h1>
 
@@ -199,7 +211,7 @@ export default function LazzleGame() {
         <p>
             {phase instanceof SetupPhase && <>
                 <button type="button" className="btn btn-primary" onClick={startLasers}><PlayIcon /> Start Lasers</button>&nbsp;
-                <button type="button" className="btn btn-secondary" onClick={toggleGoal}>Toggle Goal</button>
+                <button type="button" className="btn btn-secondary" onClick={toggleGoal}><BullsEyeIcon /> Toggle <u>G</u>oal</button>
             </>}
             {!(phase instanceof SetupPhase) && <>
                 <div className="btn-group me-3">
@@ -247,14 +259,16 @@ export default function LazzleGame() {
         <h2>How to</h2>
         <p>
             The game consists of colored blocks and lasers.
-            <ul>
-                <li>Use <em>Toggle Goal</em> to see the target blocks arrangement that you need to accomplish by shooting with the lasers.</li>
-                <li>Each laser can be dragged around on its semi-circle and rotated in any direction. Hover a laser to see its movement and rotation handles.
+        </p>
+        <ul>
+            <li>Use <em>Toggle Goal</em> to see the target blocks arrangement that you need to accomplish by shooting with the lasers.</li>
+            <li>Each laser can be dragged around on its semi-circle and rotated in any direction. Hover a laser to see its movement and rotation handles.
                     Drag a handle to move or rotate the laser.</li>
-                <li>Once you are ready click <em>Start Lasers</em>. Lasers will be shot in sequence as indicated by their numbers. The lasers will
+            <li>Once you are ready click <em>Start Lasers</em>. Lasers will be shot in sequence as indicated by their numbers. The lasers will
                     destroy or re-color the blocks they are aiming at. Blocks up in the air will then fall down. After all lasers shot, the resulting block arrangement
                     will be compared with the goal.</li>
-            </ul>
+        </ul>
+        <p>
             You will win the level if all resulting blocks match with the target blocks.
         </p>
 
@@ -262,6 +276,12 @@ export default function LazzleGame() {
         <p>
             The difficulty will increase with each level. At the moment there are {AllLevels.length} levels available.
         </p>
+        <p>
+            Shortcuts:
+        </p>
+        <ul>
+            <li><kbd>g</kbd> - toggle goal</li>
+        </ul>
     </div>
 
 }
