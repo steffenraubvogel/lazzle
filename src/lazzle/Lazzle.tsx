@@ -3,18 +3,24 @@ import styles from "./Lazzle.module.scss";
 import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
 import { Colors, Level, AllLevels, LevelBlock } from "./Levels";
-import { BlockFallPhase, LaserShotPhase, Phase, ResultPhase, SetupPhase } from "./Phase";
+import { BlockFallPhase, LaserShotPhase, Phase, ResultPhase, SetupPhase, StartPhase } from "./Phase";
 import { Point, rayIntersectsBlock } from "./Geometry";
 import { BLOCK_SIZE, LOCAL_STORAGE_KEY_GAME_PROGRESS, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
+import { ReactComponent as PlayIcon } from "bootstrap-icons/icons/play.svg"
+import { ReactComponent as PauseIcon } from "bootstrap-icons/icons/pause.svg"
+import { ReactComponent as SkipStartIcon } from "bootstrap-icons/icons/skip-start.svg"
+import { ReactComponent as SkipEndIcon } from "bootstrap-icons/icons/skip-end.svg"
 
 export default function LazzleGame() {
 
     const [level, setLevel] = useState<Level>(AllLevels[0])
     const [lasers, setLasers] = useState<Laser[]>([])
     const [blocks, setBlocks] = useState<Block[]>([])
-    const [phase, setPhase] = useState<Phase>(new SetupPhase())
     const [showGoal, setShowGoal] = useState<boolean>(false)
     const [goalBlocks, setGoalBlocks] = useState<Block[]>([])
+
+    const [phase, setPhase] = useState<Phase>(new SetupPhase())
+    const [speed, setSpeed] = useState<number>(1)
 
     useEffect(() => {
         // check local storage for previous game progress
@@ -24,7 +30,7 @@ export default function LazzleGame() {
             levelToLoad = Math.min(AllLevels.length, Math.max(0, Math.round(Number(gameProgress))))
         }
 
-        loadLevel(AllLevels[levelToLoad])
+        loadLevel(AllLevels[1])
     }, [])
 
     function loadLevel(level: Level, keepLasers: boolean = false) {
@@ -42,10 +48,46 @@ export default function LazzleGame() {
 
     function startLasers() {
         setShowGoal(false)
-
-        const startingOrder = nextLaserOrder()!
-        afterBlocksFallen(startingOrder)
+        setSpeed(1)
+        setPhase(new StartPhase())
     }
+
+    useEffect(() => {
+        // phase has changed, trigger timer if necessary for next phase
+        if (phase instanceof SetupPhase || phase instanceof ResultPhase || speed === 0) {
+            // nothing to do here
+            return
+        }
+        
+        let timer: NodeJS.Timeout | undefined
+        const timeModifier = 1 / speed
+
+        if (phase instanceof StartPhase) {
+            timer = setTimeout(() => {
+                setPhase(new LaserShotPhase(nextLaserOrder()!))
+            }, 1000 * timeModifier)
+        }
+        if (phase instanceof LaserShotPhase) {
+            timer = setTimeout(() => {
+                afterLaserShot(phase.order)
+            }, 800 * timeModifier)
+        }
+        if (phase instanceof BlockFallPhase) {
+            timer = setTimeout(() => {
+                const next = nextLaserOrder(phase.order)
+
+                if (!next) {
+                    afterAllLasersShot()
+                }
+                else {
+                    setPhase(new LaserShotPhase(next))
+                }
+            }, 1200 * timeModifier)
+        }
+
+        return timer !== undefined ? () => clearTimeout(timer!) : undefined
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [phase, speed])
 
     function nextLaserOrder(prevOrder: number = -1): number | undefined {
         const ordersSortedAsc = lasers.map(ls => ls.order).sort((a, b) => a - b)
@@ -95,22 +137,7 @@ export default function LazzleGame() {
         while (blockFallen)
 
         // start fall phase
-        setPhase(new BlockFallPhase())
-
-        const next = nextLaserOrder(laserOrder)
-        const fallTime = 1200
-
-        if (!next) {
-            setTimeout(afterAllLasersShot, fallTime)
-        }
-        else {
-            setTimeout(afterBlocksFallen, fallTime, next)
-        }
-    }
-
-    function afterBlocksFallen(nextOrder: number) {
-        setPhase(new LaserShotPhase(nextOrder))
-        setTimeout(() => afterLaserShot(nextOrder), 800)
+        setPhase(new BlockFallPhase(laserOrder))
     }
 
     function afterAllLasersShot() {
@@ -154,16 +181,42 @@ export default function LazzleGame() {
         setShowGoal(prev => !prev)
     }
 
+    function playOrPause() {
+        setSpeed(0)
+    }
+    function skipStart() {
+        restartLevel()
+        setPhase(new StartPhase())
+    }
+    function skipEnd() {
+        setSpeed(1000) // increase speed such that it appears to be almost instant
+    }
+
     return <div className={"container-md " + styles.lazzle}>
         <h1>Lazzle</h1>
 
         <h2>Level {AllLevels.indexOf(level) + 1} - {level.name}</h2>
         <p>
-            <button type="button" className="btn btn-primary" disabled={!(phase instanceof SetupPhase)} onClick={startLasers}>Start Lasers</button>&nbsp;
-            <button type="button" className="btn btn-secondary" disabled={!(phase instanceof SetupPhase)} onClick={toggleGoal}>Toggle Goal</button>&nbsp;
+            {phase instanceof SetupPhase && <>
+                <button type="button" className="btn btn-primary" onClick={startLasers}><PlayIcon /> Start Lasers</button>&nbsp;
+                <button type="button" className="btn btn-secondary" onClick={toggleGoal}>Toggle Goal</button>
+            </>}
+            {!(phase instanceof SetupPhase) && <>
+                <div className="btn-group me-3">
+                    <button type="button" className="btn btn-light" onClick={skipStart} disabled={phase instanceof ResultPhase}><SkipStartIcon /></button>
+                    <button type="button" className="btn btn-light" onClick={() => setSpeed(0.25)} disabled={phase instanceof ResultPhase}>slow</button>
+                    <button type="button" className="btn btn-light" onClick={playOrPause} disabled={phase instanceof ResultPhase}>
+                        {speed === 0 && <PlayIcon />}
+                        {speed > 0 && <PauseIcon />}
+                    </button>
+                    <button type="button" className="btn btn-light" onClick={() => setSpeed(4.00)} disabled={phase instanceof ResultPhase}>fast</button>
+                    <button type="button" className="btn btn-light" onClick={skipEnd} disabled={phase instanceof ResultPhase}><SkipEndIcon /></button>
+                </div>
+                Phase: {phase.displayName}
+            </>}
         </p>
 
-        <div id='world' className={styles.world + ' mb-3'} style={{ width: WORLD_WIDTH + 'px', height: WORLD_HEIGHT + 'px' }}>
+        <div id='world' className={styles.world + ' mb-3'} style={{ width: WORLD_WIDTH + 'px', height: WORLD_HEIGHT + 'px', ['--speed' as any]: speed }}>
             {blocks.map(block => <BlockComponent key={block.id} block={block} />)}
             {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={phase} blocks={blocks} />)}
 

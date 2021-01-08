@@ -129,7 +129,7 @@
     &.shoot {
         border-width: 0;
         opacity: 1;
-        animation: laser-shot 0.8s cubic-bezier(1,0,.93,1);
+        animation: laser-shot calc(0.8s / var(--speed, 1)) cubic-bezier(1,0,.93,1);
     }
 }
 

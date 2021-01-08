@@ -19,10 +19,10 @@
 
 .block {
     position: absolute;
-    transition: top 0.2s ease-out 0.1s;
+    transition: top calc(0.2s / var(--speed, 1)) ease-out 0.1s;
 
     &.destroyed {
-        animation: block-destroyed 0.2s ease-out;
+        animation: block-destroyed calc(0.2s / var(--speed, 1)) ease-out;
         animation-fill-mode: forwards;
     }
     &::after {
