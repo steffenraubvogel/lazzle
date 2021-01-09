@@ -3,7 +3,7 @@ import styles from "./Lazzle.module.scss";
 import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
 import { Colors, Level, AllLevels, LevelBlock } from "./Levels";
-import { BlockFallPhase, LaserShotPhase, Phase, ResultPhase, SetupPhase, StartPhase } from "./Phase";
+import { BlockFallPhase, GoalMatchPhase, LaserShotPhase, MatchingBlock, Phase, ResultPhase, SetupPhase, StartPhase } from "./Phase";
 import { Point, rayIntersectsBlock } from "./Geometry";
 import { BLOCK_SIZE, LOCAL_STORAGE_KEY_GAME_PROGRESS, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
 import { ReactComponent as BullsEyeIcon } from "bootstrap-icons/icons/bullseye.svg"
@@ -11,6 +11,10 @@ import { ReactComponent as PlayIcon } from "bootstrap-icons/icons/play.svg"
 import { ReactComponent as PauseIcon } from "bootstrap-icons/icons/pause.svg"
 import { ReactComponent as SkipStartIcon } from "bootstrap-icons/icons/skip-start.svg"
 import { ReactComponent as SkipEndIcon } from "bootstrap-icons/icons/skip-end.svg"
+import { ReactComponent as RemoveIcon } from "bootstrap-icons/icons/x.svg"
+import { ReactComponent as CheckIcon } from "bootstrap-icons/icons/check.svg"
+import { ReactComponent as QuestionMarkIcon } from "bootstrap-icons/icons/question.svg"
+import { ReactComponent as WrongColorIcon } from "./images/wrongColor.svg"
 
 export default function LazzleGame() {
 
@@ -85,6 +89,11 @@ export default function LazzleGame() {
                 }
             }, 1200 * timeModifier)
         }
+        if (phase instanceof GoalMatchPhase) {
+            timer = setTimeout(() => {
+                setPhase(new ResultPhase(phase))
+            }, 3000 * timeModifier)
+        }
 
         return timer !== undefined ? () => clearTimeout(timer!) : undefined
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,17 +147,29 @@ export default function LazzleGame() {
         while (blockFallen)
 
         // start fall phase
+        setBlocks([...blocks])
         setPhase(new BlockFallPhase(laserOrder))
     }
 
     function afterAllLasersShot() {
-        // calculate score
+        // calculate score and detailed matching blocks
         let score = 0
+        const matching: MatchingBlock[] = []
 
         // -> count blocks matching goal
         for (let gb of level.goal) {
-            if (blocks.find(b => blockMatchingGoalBlock(b, gb))) {
-                score++
+            const foundMatchingBlock = blocks.find(b => blockMatchingGoalBlock(b, gb))
+            if (foundMatchingBlock) {
+                if (foundMatchingBlock.color === Colors[gb.color]) {
+                    score++
+                    matching.push({ state: "matching", block: foundMatchingBlock })
+                }
+                else {
+                    matching.push({ state: "wrongColor", block: new Block(gb, level) })
+                }
+            }
+            else {
+                matching.push({ state: "missing", block: new Block(gb, level) })
             }
         }
 
@@ -156,16 +177,18 @@ export default function LazzleGame() {
         for (let b of blocks) {
             if (b.state !== "destroyed" && !level.goal.find(gb => blockMatchingGoalBlock(b, gb))) {
                 score--
+                matching.push({ state: "overtowering", block: b })
             }
         }
 
-        score = Math.max(0, score)
-        setPhase(new ResultPhase(score / level.goal.length))
+        score = Math.max(0, score) / level.goal.length
+
+        setPhase(new GoalMatchPhase(matching, score))
     }
 
     function blockMatchingGoalBlock(b: Block, gb: LevelBlock) {
         const blockInstance = new Block(gb, level)
-        return b.x === blockInstance.x && b.y === blockInstance.y && b.color === Colors[gb.color] && b.state !== "destroyed"
+        return b.x === blockInstance.x && b.y === blockInstance.y && b.state !== "destroyed"
     }
 
     function startNextLevel() {
@@ -177,13 +200,19 @@ export default function LazzleGame() {
     function restartLevel() {
         loadLevel(level, true)
     }
+    function inspectResult() {
+        if (phase instanceof ResultPhase) {
+            setPhase(phase.result)
+            setSpeed(0)
+        }
+    }
 
     function toggleGoal() {
         setShowGoal(prev => !prev)
     }
 
     function playOrPause() {
-        setSpeed(0)
+        setSpeed(prev => prev === 0 ? 1 : 0)
     }
     function skipStart() {
         restartLevel()
@@ -195,7 +224,7 @@ export default function LazzleGame() {
 
     useEffect(() => {
         // handle shortcuts
-        const eventListener: (event: KeyboardEvent) => void = (event) => { 
+        const eventListener: (event: KeyboardEvent) => void = (event) => {
             if (event.key === 'g') {
                 toggleGoal()
             }
@@ -228,22 +257,50 @@ export default function LazzleGame() {
             </>}
         </p>
 
-        <div id='world' className={styles.world + ' mb-3'} style={{ width: WORLD_WIDTH + 'px', height: WORLD_HEIGHT + 'px', ['--speed' as any]: speed }}>
+        <div id='world' className={styles.world + ' mb-3'} style={{
+            width: WORLD_WIDTH + 'px',
+            height: WORLD_HEIGHT + 'px',
+            ['--speed' as any]: (speed === 0 ? 1000 : speed) // a value of exactly 0 would mean division by 0 in CSS
+        }}>
             {blocks.map(block => <BlockComponent key={block.id} block={block} />)}
             {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={phase} blocks={blocks} />)}
+
+            {phase instanceof GoalMatchPhase &&
+                phase.matchingBlocks.map(mb =>
+                    <div className={styles.matchingBlock + ' ' + styles[mb.state]} style={{
+                        width: BLOCK_SIZE + 'px',
+                        height: BLOCK_SIZE + 'px',
+                        left: mb.block.x,
+                        top: mb.block.y
+                    }}>
+                        {(() => {
+                            switch (mb.state) {
+                                case "overtowering":
+                                    return <RemoveIcon />
+                                case "matching":
+                                    return <CheckIcon />
+                                case "missing":
+                                    return <QuestionMarkIcon />
+                                case "wrongColor":
+                                    return <WrongColorIcon style={{ ['--goalBlockColor' as any]: mb.block.color }} />
+                            }
+                        })()}
+                    </div>)}
 
             {phase instanceof ResultPhase &&
                 <div className={styles.resultContainer}>
                     <div className={styles.result}>
-                        <span>Your score is {Math.floor(phase.score * 100)}%. Level <strong>{phase.score === 1 ? 'complete' : 'incomplete'}</strong>.</span>
+                        <span>Your score is {Math.floor(phase.result.score * 100)}%. Level <strong>{phase.result.score === 1 ? 'complete' : 'incomplete'}</strong>.</span>
 
                         <div className='mt-3'>
-                            {phase.score === 1 && <>
+                            {phase.result.score === 1 && <>
                                 <button type="button" className="btn btn-primary" onClick={startNextLevel}>Next Level</button>&nbsp;
                                 <button type="button" className="btn btn-secondary" onClick={restartLevel}>Restart Level</button>
                             </>}
-                            {phase.score < 1 &&
-                                <button type="button" className="btn btn-primary" onClick={restartLevel}>Try again</button>}
+                            {phase.result.score < 1 && <>
+                                <button type="button" className="btn btn-primary" onClick={restartLevel}>Try again</button>&nbsp;
+                                <button type="button" className="btn btn-secondary" onClick={inspectResult}>Inspect Result</button>
+                            </>}
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,5 @@
+import { Block } from "./Block"
+
 export abstract class Phase {
 
     abstract get displayName(): string
@@ -58,14 +60,37 @@ export class BlockFallPhase extends Phase {
 
 }
 
+export type MatchingBlock = {
+    state: "wrongColor" | "matching" | "missing" | "overtowering"
+    block: Block
+}
+
 /**
- * All lasers are shot, we present the result here. Show score and actions to continue or restart the
+ * All lasers are shot, we display the matching blocks comparing the remaining blocks and the goal blocks.
+ */
+export class GoalMatchPhase extends Phase {
+
+    constructor(
+        public readonly matchingBlocks: MatchingBlock[], // visual aid on how blocks match with goal
+        public readonly score: number // roughly the percentage of goal blocks matching
+    ) {
+        super()
+    }
+
+    get displayName() {
+        return 'Matching blocks with goal blocks'
+    }
+
+}
+
+/**
+ * Simulation is finished, we present the result here. Show score and actions to continue or restart the
  * laser if incomplete.
  */
 export class ResultPhase extends Phase {
 
     constructor(
-        public readonly score: number // percentage of goal blocks matching
+        public readonly result: GoalMatchPhase
     ) {
         super()
     }
@@ -80,7 +105,7 @@ export class ResultPhase extends Phase {
  * This phase is active as long as a level is being edited in the level editor.
  */
 export class LevelEditorPhase extends Phase {
-    
+
     get displayName() {
         return 'Editing level'
     }
