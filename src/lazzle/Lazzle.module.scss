@@ -9,6 +9,21 @@
     }
 }
 
+.levelCompleted {
+    border-color: $success;
+    .levelCompletedCheckMark {
+        position: absolute;
+        color: $success;
+        height: 4rem;
+        width: 4rem;
+        right: 0;
+        bottom: 0;
+    }
+}
+.levelLocked {
+    opacity: 0.5;
+}
+
 .world {
     border: 1px solid grey;
     box-sizing: content-box;

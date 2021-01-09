@@ -9,7 +9,6 @@
 - colored lasers coloring blocks
 
 # Quality of Life
-- select level in game
 
 # Bugs
 - moving laser: eleminate the jump when cursor is not near actual position of laser

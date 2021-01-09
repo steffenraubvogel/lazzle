@@ -21,7 +21,7 @@ export default function App() {
               <div className="card-body">
                 <h5 className="card-title">Play the Game</h5>
                 <p className="card-text">Click to play the game level by level.</p>
-                <button type="button" className="btn btn-primary" onClick={loadLazzleGame}>Play</button>
+                <button type="button" className="btn btn-primary stretched-link" onClick={loadLazzleGame}>Play</button>
               </div>
             </div>
           </div>
@@ -30,7 +30,7 @@ export default function App() {
               <div className="card-body">
                 <h5 className="card-title">Game Level Editor</h5>
                 <p className="card-text">Create your own Lazzle levels by starting from scratch or loading existing levels.</p>
-                <button type="button" className="btn btn-primary" onClick={loadLazzleEditor}>Open Editor</button>
+                <button type="button" className="btn btn-primary stretched-link" onClick={loadLazzleEditor}>Open Editor</button>
               </div>
             </div>
           </div>
