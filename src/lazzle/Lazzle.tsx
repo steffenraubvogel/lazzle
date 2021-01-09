@@ -29,10 +29,10 @@ export default function LazzleGame() {
         {!level && <>
             <section>
                 <h2>Choose Your Level</h2>
-                <div className="row my-5">
+                <div className="row my-3">
                     {AllLevels.map((availableLevel, index) =>
                         <div key={index} className='col-12 col-sm-6 col-md-4 col-lg-3 mb-3'>
-                            <div className={"card " + (index < progress ? styles.levelCompleted : (index === progress ? styles.levelUnlocked : styles.levelLocked))}>
+                            <div className={"card shadow-sm " + (index < progress ? styles.levelCompleted : (index === progress ? styles.levelUnlocked : styles.levelLocked))}>
                                 <div className="card-body">
                                     <h5 className="card-title">Level {index + 1}</h5>
                                     <h6 className="card-subtitle mb-2 text-muted">{availableLevel.name}</h6>
