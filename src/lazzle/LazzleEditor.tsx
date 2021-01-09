@@ -9,6 +9,8 @@ import Accordion, { AccordionItem } from "../components/Accordion";
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
 import { ReactComponent as TrashIcon } from "bootstrap-icons/icons/trash.svg"
 import { ReactComponent as ClipboardIcon } from "bootstrap-icons/icons/clipboard.svg"
+import Modal from "../components/Modal";
+import Game from "./Game";
 
 export default function LazzleLevelEditor() {
 
@@ -26,6 +28,8 @@ export default function LazzleLevelEditor() {
     const [showGoal, setShowGoal] = useState<boolean>(false)
 
     const [activeBlockColor, setActiveBlockColor] = useState<number>(0)
+
+    const [testLevel, setTestLevel] = useState<Level>()
 
     const [importValue, setImportValue] = useState<string>('')
 
@@ -146,7 +150,7 @@ export default function LazzleLevelEditor() {
 
             <div className="row">
                 <div className="col-12 col-md-6">
-                    <div className="mb-3">
+                    <div className="mb-3 mb-md-0">
                         <label htmlFor="levelNameInput" className="form-label"> Level name:</label>
                         <input id="levelNameInput" name="levelName" type="text" className="form-control" value={level.name} onChange={handleLevelNameChange} />
                         <div className="form-text">Provide a funny and short description for the level, usually with a hint on difficulty.</div>
@@ -159,7 +163,7 @@ export default function LazzleLevelEditor() {
                         <input id="gridXRange" type="range" className="form-range" min="1" max="15" step="1" value={level.gridX} onChange={handleGridXRangeChange} />
                     </div>
 
-                    <div className='mb-3'>
+                    <div className='mb-3 mb-md-0'>
                         <label htmlFor="gridYRange" className="form-label">Level height: {level.gridY} blocks</label>
                         <input id="gridYRange" type="range" className="form-range" min="1" max="15" step="1" value={level.gridY} onChange={handleGridYRangeChange} />
                     </div>
@@ -177,7 +181,7 @@ export default function LazzleLevelEditor() {
                 <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" checked={showGoal} onChange={() => setShowGoal(true)} />
                 <label className="btn btn-outline-primary" htmlFor="btnradio2">Goal Blocks</label>
             </div>
-            <div id='world' className={styles.world + ' ' + styles.editor + ' mb-3'} style={{ width: WORLD_WIDTH + 'px', height: WORLD_HEIGHT + 'px' }}>
+            <div className={styles.world + ' ' + styles.editor + ' mb-3'} style={{ width: WORLD_WIDTH + 'px', height: WORLD_HEIGHT + 'px' }}>
                 <div className={styles.blockAidLines}>
                     {Array(level.gridY).fill(0).map((_y, indexY) =>
                         <div key={indexY} className={styles.blockAidLinesRow}>
@@ -282,6 +286,22 @@ export default function LazzleLevelEditor() {
                 </Tab>
             </Tabs>
         </section >
+
+        <section>
+            <h2>Test Level</h2>
+            <p>
+                You can try out your level here. A fullscreen dialog will open and show how the level would be played by users.
+            </p>
+            <button className='btn btn-outline-secondary' onClick={() => setTestLevel(level)}>Test Level</button>
+            {testLevel &&
+                <Modal title='Test Your Level' fullScreen={true} close={() => setTestLevel(undefined)}>
+                    <div className='d-flex justify-content-center'>
+                        <div>
+                            <Game level={testLevel} levelFinishedButtonText='Close Test' onLevelFinished={() => setTestLevel(undefined)} />
+                        </div>
+                    </div>
+                </Modal>}
+        </section>
 
         <section>
             <h2>Export</h2>

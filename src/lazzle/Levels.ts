@@ -40,4 +40,4 @@ export type Level = {
     lasers: LevelLaser[]
 }
 
-export const AllLevels: Level[] = [Level1, Level2, Level3, Level4, Level5]
+export const AllLevels: Level[] = [Level1, Level2, Level3, Level5, Level4]

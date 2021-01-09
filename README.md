@@ -9,7 +9,6 @@
 - colored lasers coloring blocks
 
 # Quality of Life
-- editor: directly test level
 - select level in game
 
 # Bugs
