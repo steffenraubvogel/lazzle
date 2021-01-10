@@ -115,6 +115,26 @@
     }
 }
 
+.laserNotMovable {
+    .laserMoveHandle {
+        cursor: not-allowed;
+        color: initial !important;
+    }
+    .laserMoveHandleArrow {
+        display: none !important;
+    }
+}
+
+.laserNotRotatable {
+    .laserRotationHandle {
+        cursor: not-allowed;
+        background-color: transparent !important;
+    }
+    .laserRotationHandleArrow {
+        display: none !important;
+    }
+}
+
 .laserHelpLine {
     width: 900px;
     height: 1px;
@@ -144,7 +164,7 @@
         box-shadow: none;
         background-color: transparent;
     }
-    50% {
+    80% {
         box-shadow: 0 0 6px 0px rgba(0, 255, 255, 1);
         background-color: #0ff;
     }

@@ -326,13 +326,17 @@
             "distance": 300,
             "rotation": 359,
             "angle": 11,
-            "order": 1
+            "order": 1,
+            "movable": true,
+            "rotatable": true
         },
         {
             "distance": 350,
             "rotation": 182,
             "angle": 175,
-            "order": 2
+            "order": 2,
+            "movable": true,
+            "rotatable": true
         }
     ]
 }

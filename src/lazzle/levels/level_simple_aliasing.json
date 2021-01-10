@@ -136,7 +136,9 @@
             "angle": 30,
             "rotation": -90,
             "distance": 300,
-            "order": 1
+            "order": 1,
+            "movable": true,
+            "rotatable": true
         }
     ]
 }

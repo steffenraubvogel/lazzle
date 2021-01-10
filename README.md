@@ -1,6 +1,5 @@
 # Feature Ideas
 
-- one of movement/rotation of laser fixed
 - movement is restricted to a certain range of angles
 - mirrors
 - blocks blocking laser shot

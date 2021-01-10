@@ -61,7 +61,9 @@
             "angle": 35,
             "rotation": 315,
             "distance": 300,
-            "order": 1
+            "order": 1,
+            "movable": true,
+            "rotatable": true
         }
     ]
 }

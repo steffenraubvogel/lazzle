@@ -1,6 +1,7 @@
 import Level1 from './levels/level_simple_easypeasy.json'
 import Level2 from './levels/level_simple_twoshots.json'
 import Level3 from './levels/level_simple_aliasing.json'
+import LevelRestricted from './levels/level_medium_restricted.json'
 import Level4 from './levels/level_medium_cross.json'
 import Level5 from './levels/level_medium_colored.json'
 
@@ -25,10 +26,12 @@ export type LevelBlock = {
 }
 
 export type LevelLaser = {
+    order: number
     angle: number
     rotation: number
     distance: number
-    order: number
+    movable: boolean
+    rotatable: boolean
 }
 
 export type Level = {
@@ -40,4 +43,4 @@ export type Level = {
     lasers: LevelLaser[]
 }
 
-export const AllLevels: Level[] = [Level1, Level2, Level3, Level5, Level4]
+export const AllLevels: Level[] = [Level1, Level2, Level3, LevelRestricted, Level5, Level4]

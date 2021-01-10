@@ -38,11 +38,19 @@ export default function LazzleLevelEditor() {
     }
     function handleGridXRangeChange(event: ChangeEvent<HTMLInputElement>) {
         const newGridX = Number(event.target.value)
-        setLevel(prev => ({ ...prev, gridX: newGridX, blocks: removeOutsideBlocks(prev.blocks, newGridX, prev.gridY) }))
+        setLevel(prev => ({
+            ...prev, gridX: newGridX,
+            blocks: removeOutsideBlocks(prev.blocks, newGridX, prev.gridY),
+            goal: removeOutsideBlocks(prev.goal, newGridX, prev.gridY)
+        }))
     }
     function handleGridYRangeChange(event: ChangeEvent<HTMLInputElement>) {
         const newGridY = Number(event.target.value)
-        setLevel(prev => ({ ...prev, gridY: newGridY, blocks: removeOutsideBlocks(prev.blocks, prev.gridX, newGridY) }))
+        setLevel(prev => ({
+            ...prev, gridY: newGridY, 
+            blocks: removeOutsideBlocks(prev.blocks, prev.gridX, newGridY),
+            goal: removeOutsideBlocks(prev.goal, prev.gridX, newGridY)
+        }))
     }
 
     function removeOutsideBlocks(blocks: LevelBlock[], gridX: number, gridY: number) {
@@ -56,7 +64,7 @@ export default function LazzleLevelEditor() {
     }, [level])
 
     function removeAllBlocks() {
-        setLevel(prev => ({ ...prev, blocks: [] }))
+        setLevel(prev => ({ ...prev, blocks: [], goal: [] }))
     }
 
     function handleBlockClick(blockX: number, blockY: number) {
@@ -91,7 +99,9 @@ export default function LazzleLevelEditor() {
                 distance: 300,
                 rotation: 90,
                 angle: Math.ceil(10 + 160 * Math.random()),
-                order: 1
+                order: 1,
+                movable: true,
+                rotatable: true
             })
         }))
     }
@@ -100,11 +110,22 @@ export default function LazzleLevelEditor() {
         setLevel(prev => ({ ...prev, lasers: prev.lasers.filter((_l, i) => i !== index) }))
     }
 
-    function handleLaserPropertyChange(laser: LevelLaser, property: keyof LevelLaser, event: ChangeEvent<HTMLInputElement>) {
+    function handleNumericLaserPropertyChange(laser: LevelLaser, property: keyof LevelLaser, event: ChangeEvent<HTMLInputElement>) {
         setLevel(prev => ({
             ...prev, lasers: prev.lasers.map(l => {
                 if (l === laser) {
                     return { ...l, [property]: event.target.valueAsNumber }
+                }
+                return l
+            })
+        }))
+    }
+
+    function handleBooleanLaserPropertyChange(laser: LevelLaser, property: keyof LevelLaser, event: ChangeEvent<HTMLInputElement>) {
+        setLevel(prev => ({
+            ...prev, lasers: prev.lasers.map(l => {
+                if (l === laser) {
+                    return { ...l, [property]: event.target.checked }
                 }
                 return l
             })
@@ -239,42 +260,44 @@ export default function LazzleLevelEditor() {
                                 <div className="col-12 col-md-6 mb-3">
                                     <label htmlFor={"laserOrderInput_" + index} className="form-label">Order:</label>
                                     <input type="number" className="form-control" id={"laserOrderInput_" + index} value={laser.order}
-                                        onChange={event => handleLaserPropertyChange(laser, 'order', event)} min={1} max={level.lasers.length} step={1} />
+                                        onChange={event => handleNumericLaserPropertyChange(laser, 'order', event)} min={1} max={level.lasers.length} step={1} />
                                     <div className="form-text">The order defines the sequence of laser shots. Lower order numbers start first.</div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
                                     <label htmlFor={"laserDistanceInput_" + index} className="form-label">Distance: {laser.distance}</label>
                                     <input type="range" className="form-range" id={"laserDistanceInput_" + index} value={laser.distance}
-                                        onChange={event => handleLaserPropertyChange(laser, 'distance', event)} min={200} max={400} step={25} />
+                                        onChange={event => handleNumericLaserPropertyChange(laser, 'distance', event)} min={200} max={400} step={25} />
                                     <div className="form-text">The distance from the bottom center of the blocks (radius of laser's semi-circle).</div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
                                     <label htmlFor={"laserAngleInput_" + index} className="form-label">Angle: {laser.angle}°</label>
                                     <input type="range" className="form-range" id={"laserAngleInput_" + index} value={laser.angle}
-                                        onChange={event => handleLaserPropertyChange(laser, 'angle', event)} min={0} max={180} step={1} />
+                                        onChange={event => handleNumericLaserPropertyChange(laser, 'angle', event)} min={0} max={180} step={1} />
                                     <div className="form-text">Controls where the laser is positioned on its semi-circle.</div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
                                     <label htmlFor={"laserRotationInput_" + index} className="form-label">Rotation: {laser.rotation}°</label>
                                     <input type="range" className="form-range" id={"laserRotationInput_" + index} value={laser.rotation}
-                                        onChange={event => handleLaserPropertyChange(laser, 'rotation', event)} min={0} max={359} step={1} />
+                                        onChange={event => handleNumericLaserPropertyChange(laser, 'rotation', event)} min={0} max={359} step={1} />
                                     <div className="form-text">Sets the direction in which the laser shoots.</div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
                                     <div className="form-check form-switch">
-                                        <input className="form-check-input" type="checkbox" id={"laserMovableSwitch_" + index} disabled />
-                                        <label className="form-check-label" htmlFor={"laserMovableSwitch_" + index}>Fixed angle (not movable)</label>
+                                        <input className="form-check-input" type="checkbox" id={"laserMovableSwitch_" + index} checked={laser.movable}
+                                            onChange={event => handleBooleanLaserPropertyChange(laser, 'movable', event)} />
+                                        <label className="form-check-label" htmlFor={"laserMovableSwitch_" + index}>Can be moved</label>
                                     </div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
                                     <div className="form-check form-switch">
-                                        <input className="form-check-input" type="checkbox" id={"laserRotatableSwitch_" + index} disabled />
-                                        <label className="form-check-label" htmlFor={"laserRotatableSwitch_" + index}>Fixed rotation (not rotatable)</label>
+                                        <input className="form-check-input" type="checkbox" id={"laserRotatableSwitch_" + index} checked={laser.rotatable}
+                                            onChange={event => handleBooleanLaserPropertyChange(laser, 'rotatable', event)} />
+                                        <label className="form-check-label" htmlFor={"laserRotatableSwitch_" + index}>Can be rotated</label>
                                     </div>
                                 </div>
                             </div>

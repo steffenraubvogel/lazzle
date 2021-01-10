@@ -62,14 +62,14 @@ export default function LazzleGame() {
                 </p>
                 <ul>
                     <li>Use <em>Toggle Goal</em> to see the target blocks arrangement that you need to accomplish by shooting with the lasers.</li>
-                    <li>Each laser can be dragged around on its semi-circle and rotated in any direction. Hover a laser to see its movement and rotation handles.
-                        Drag a handle to move or rotate the laser.</li>
+                    <li>Lasers can be dragged around on their semi-circle and rotated in any direction (if allowed by level). Drag the grip behind 
+                        the laser to move it. Drag the laser aid line to rotate it.</li>
                     <li>Once you are ready click <em>Start Lasers</em>. Lasers will be shot in sequence as indicated by their numbers. The lasers will
-                        destroy or re-color the blocks they are aiming at. Blocks up in the air will then fall down. After all lasers shot, the resulting block arrangement
-                        will be compared with the goal.</li>
+                        destroy or re-color the blocks they are aiming at. Blocks up in the air will then fall down. After all lasers shot, the resulting 
+                        block arrangement will be compared with the goal.</li>
                 </ul>
                 <p>
-                    You will win the level if all resulting blocks match with the target blocks.
+                    You will win the level if all resulting blocks match with the target blocks. Have fun!
                 </p>
             </section>
 

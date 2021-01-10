@@ -1,0 +1,102 @@
+{
+    "name": "You have to work with what you have.",
+    "gridX": 6,
+    "gridY": 8,
+    "blocks": [
+        {
+            "x": 2,
+            "y": 7,
+            "color": 8
+        },
+        {
+            "x": 2,
+            "y": 6,
+            "color": 8
+        },
+        {
+            "x": 2,
+            "y": 5,
+            "color": 8
+        },
+        {
+            "x": 2,
+            "y": 4,
+            "color": 8
+        },
+        {
+            "x": 2,
+            "y": 3,
+            "color": 8
+        },
+        {
+            "x": 3,
+            "y": 7,
+            "color": 7
+        },
+        {
+            "x": 3,
+            "y": 6,
+            "color": 4
+        },
+        {
+            "x": 3,
+            "y": 5,
+            "color": 4
+        },
+        {
+            "x": 3,
+            "y": 4,
+            "color": 4
+        },
+        {
+            "x": 2,
+            "y": 2,
+            "color": 9
+        },
+        {
+            "x": 3,
+            "y": 3,
+            "color": 7
+        }
+    ],
+    "goal": [
+        {
+            "x": 2,
+            "y": 7,
+            "color": 8
+        },
+        {
+            "x": 2,
+            "y": 6,
+            "color": 8
+        },
+        {
+            "x": 3,
+            "y": 7,
+            "color": 4
+        },
+        {
+            "x": 3,
+            "y": 6,
+            "color": 7
+        }
+    ],
+    "lasers": [
+        {
+            "distance": 300,
+            "rotation": 300,
+            "angle": 56,
+            "order": 2,
+            "movable": false,
+            "rotatable": true
+        },
+        {
+            "distance": 350,
+            "rotation": 241,
+            "angle": 122,
+            "order": 1,
+            "movable": true,
+            "rotatable": false
+        }
+    ]
+}

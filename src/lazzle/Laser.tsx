@@ -19,6 +19,8 @@ export class Laser {
     private _distance: number // from bottom center of blocks in pixels
     private _rotation: number // in radians
     readonly order: number // a number indicating when to shoot this laser in shoot phase
+    readonly movable: boolean // can user move the laser around?
+    readonly rotatable: boolean // can user rotate the laser?
 
     private _leftMoveArrowPos: Point = { x: 0, y: 0 } // moving indicator position left of laser
     private _leftMoveArrowRotation: number = 0
@@ -35,6 +37,8 @@ export class Laser {
         this._distance = config.distance
         this._rotation = config.rotation * Math.PI / 180 + Math.PI
         this.order = config.order
+        this.movable = config.movable
+        this.rotatable = config.rotatable
 
         this.id = nextId()
         this.updatePosition()
@@ -82,7 +86,9 @@ export class Laser {
         const oldAngle = this._angle
 
         this._angle = Math.max(0, Math.min(newAngle, Math.PI))
-        this._rotation = this._rotation - (newAngle - oldAngle)
+        if (this.rotatable) {
+            this._rotation = this._rotation - (newAngle - oldAngle)
+        }
         this.updatePosition()
     }
 
@@ -153,13 +159,17 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
     const [, setForceRerender] = useState(0)
 
     function laserMoveHandleMouseDown() {
-        setMoving(true)
-        drag(props.laser.drag.bind(props.laser))
+        if (props.laser.movable) {
+            setMoving(true)
+            drag(props.laser.drag.bind(props.laser))
+        }
     }
 
     function laserRotationHandleMouseDown() {
-        setRotating(true)
-        drag(props.laser.rotate.bind(props.laser))
+        if (props.laser.rotatable) {
+            setRotating(true)
+            drag(props.laser.rotate.bind(props.laser))
+        }
     }
 
     function drag(cb: (x: number, y: number) => void) {
@@ -181,15 +191,15 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
 
     function getAdditionalCssClassNames() {
         const classes = []
-        if (isMoving) {
-            classes.push(styles.laserMoving)
-        }
-        if (isRotating) {
-            classes.push(styles.laserRotating)
-        }
+        isMoving && classes.push(styles.laserMoving)
+        isRotating && classes.push(styles.laserRotating)
+        !props.laser.movable && classes.push(styles.laserNotMovable)
+        !props.laser.rotatable && classes.push(styles.laserNotRotatable)
+        
         if (!(props.phase instanceof SetupPhase)) {
             classes.push(styles.laserLocked)
         }
+
         return ' ' + classes.join(' ')
     }
 
