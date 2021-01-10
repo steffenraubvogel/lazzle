@@ -10,8 +10,10 @@
 - double shot lasers
 
 # Quality of Life
+- i18n
+- client-side routing
 
 # Bugs
 - moving laser: eleminate the jump when cursor is not near actual position of laser
 - aid arrow positions depend on laser distance
-- shortcut preventDefault
+- last level not recognized 
