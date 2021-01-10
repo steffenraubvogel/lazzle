@@ -10,7 +10,6 @@
 }
 
 .levelCompleted {
-    border-color: $success;
     .levelCompletedCheckMark {
         position: absolute;
         color: $success;
@@ -18,6 +17,11 @@
         width: 4rem;
         right: 0;
         bottom: 0;
+    }
+}
+.levelUnlocked:hover, .levelCompleted:hover {
+    .levelPreview .world {
+        filter: none;
     }
 }
 .levelLocked {
@@ -33,6 +37,7 @@
         transform-origin: 0 0;
         border-width: 0;
         left: 50%; /* in conjunction with generated translateX(-50%) -> centered */
+        filter: saturate(45%);
     }
 }
 

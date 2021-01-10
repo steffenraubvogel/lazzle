@@ -29,7 +29,12 @@ export function LevelChooser(props: RouteComponentProps) {
                             <h5 className="card-title">Level {index + 1}</h5>
                             <h6 className="card-subtitle mb-2 text-muted">{availableLevel.name}</h6>
                             <div className='cardActions d-flex'>
-                                <Link className={"btn btn-outline-secondary stretched-link" + (index > progress ? ' disabled' : '')} to={props.match.path + '/' + index}>
+                                <Link className={"btn "
+                                    + (index === progress ? 'btn-outline-primary' : 'btn-outline-secondary')
+                                    + " stretched-link"
+                                    + (index > progress ? ' disabled' : '')} 
+                                    to={props.match.path + '/' + index}
+                                >
                                     {(index < progress ? 'Play again' : (index === progress ? 'Play' : 'Locked'))}
                                 </Link>
                                 {index < progress && <CheckIcon className={styles.levelCompletedCheckMark} />}
