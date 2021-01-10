@@ -12,6 +12,9 @@
     .card {
         height: 100%;
     }
+    .card-img-top {
+        overflow: hidden; /* in case the element has not same border radius top it would overtower */
+    }
     .card-body {
         display: flex;
         flex-direction: column;

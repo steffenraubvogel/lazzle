@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_KEY_GAME_PROGRESS } from "./Constants";
 import Game from "./Game";
 import { ReactComponent as CheckIcon } from "bootstrap-icons/icons/check.svg"
 import { Link, Route, RouteComponentProps, Switch, useRouteMatch } from "react-router-dom";
+import LevelPreview from "./LevelPreview";
 
 function getGameProgressFromLocalStorage() {
     const storedProgress = localStorage.getItem(LOCAL_STORAGE_KEY_GAME_PROGRESS)
@@ -21,6 +22,9 @@ export function LevelChooser(props: RouteComponentProps) {
             {AllLevels.map((availableLevel, index) =>
                 <div key={index} className='col-12 col-sm-6 col-md-4 col-lg-3 mb-3'>
                     <div className={"card shadow-sm " + (index < progress ? styles.levelCompleted : (index === progress ? styles.levelUnlocked : styles.levelLocked))}>
+                        <div className='card-img-top'>
+                            <LevelPreview level={availableLevel} />
+                        </div>
                         <div className="card-body">
                             <h5 className="card-title">Level {index + 1}</h5>
                             <h6 className="card-subtitle mb-2 text-muted">{availableLevel.name}</h6>

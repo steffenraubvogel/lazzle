@@ -24,6 +24,18 @@
     opacity: 0.5;
 }
 
+.levelPreview {
+    height: 0;
+    position: relative;
+    overflow: hidden;
+
+    .world {
+        transform-origin: 0 0;
+        border-width: 0;
+        left: 50%; /* in conjunction with generated translateX(-50%) -> centered */
+    }
+}
+
 .world {
     border: 1px solid grey;
     box-sizing: content-box;

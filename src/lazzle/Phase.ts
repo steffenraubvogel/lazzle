@@ -111,3 +111,14 @@ export class LevelEditorPhase extends Phase {
     }
 
 }
+
+/**
+ * Used to render a preview of the level where levels can be chosen from.
+ */
+export class LevelPreviewPhase extends Phase {
+
+    get displayName() {
+        return 'Previewing level'
+    }
+
+}
