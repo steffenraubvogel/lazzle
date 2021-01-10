@@ -226,7 +226,7 @@ export default function Game(props: { level: Level, levelFinishedButtonText: str
     }, [])
 
     return <>
-        <p>
+        <div className='mt-3 mb-2'>
             {phase instanceof SetupPhase && <>
                 <button type="button" className="btn btn-primary" onClick={startLasers}><PlayIcon /> Start Lasers</button>&nbsp;
                 <button type="button" className="btn btn-secondary" onClick={toggleGoal}><BullsEyeIcon /> Toggle <u>G</u>oal</button>
@@ -244,7 +244,7 @@ export default function Game(props: { level: Level, levelFinishedButtonText: str
                 </div>
                 Phase: {phase.displayName}
             </>}
-        </p>
+        </div>
 
         <div id='world' className={styles.world + ' mb-3'} style={{
             width: WORLD_WIDTH + 'px',
@@ -256,7 +256,7 @@ export default function Game(props: { level: Level, levelFinishedButtonText: str
 
             {phase instanceof GoalMatchPhase &&
                 phase.matchingBlocks.map(mb =>
-                    <div className={styles.matchingBlock + ' ' + styles[mb.state]} style={{
+                    <div key={mb.block.id} className={styles.matchingBlock + ' ' + styles[mb.state]} style={{
                         width: BLOCK_SIZE + 'px',
                         height: BLOCK_SIZE + 'px',
                         left: mb.block.x,

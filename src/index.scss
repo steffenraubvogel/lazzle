@@ -5,3 +5,18 @@
     display: 'inline-block';
     vertical-align: -.1em;
 }
+
+/* equal height cards in a row, placing the actions to the bottom of the card */
+.cardRow {
+    align-items: stretch;
+    .card {
+        height: 100%;
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+    .cardActions {
+        margin-top: auto;
+    }
+}

@@ -10,7 +10,8 @@
 
 # Quality of Life
 - i18n
-- client-side routing
+- SEO: https://medium.com/@prestonwallace/3-ways-improve-react-seo-without-isomorphic-app-a6354595e400
+- level preview
 
 # Bugs
 - moving laser: eleminate the jump when cursor is not near actual position of laser
