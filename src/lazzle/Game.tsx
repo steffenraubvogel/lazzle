@@ -54,21 +54,28 @@ export default function Game(props: { level: Level, levelFinishedButtonText: str
             return
         }
 
-        let timer: NodeJS.Timeout | undefined
+        let timers: NodeJS.Timeout[] | undefined
         const timeModifier = 1 / speed
 
         if (phase instanceof StartPhase) {
-            timer = setTimeout(() => {
+            timers = [setTimeout(() => {
                 setPhase(new LaserShotPhase(nextLaserOrder()!))
-            }, 1000 * timeModifier)
+            }, 1000 * timeModifier)]
         }
         if (phase instanceof LaserShotPhase) {
-            timer = setTimeout(() => {
-                afterLaserShot(phase.order)
-            }, 800 * timeModifier)
+            timers = [
+                setTimeout(() => {
+                    const audio = new Audio('/sound/laser.mp3')
+                    audio.play()
+                }, 800 * timeModifier / 4 * 3),
+
+                setTimeout(() => {
+                    afterLaserShot(phase.order)
+                }, 800 * timeModifier)
+            ]
         }
         if (phase instanceof BlockFallPhase) {
-            timer = setTimeout(() => {
+            timers = [setTimeout(() => {
                 const next = nextLaserOrder(phase.order)
 
                 if (!next) {
@@ -77,15 +84,15 @@ export default function Game(props: { level: Level, levelFinishedButtonText: str
                 else {
                     setPhase(new LaserShotPhase(next))
                 }
-            }, 1200 * timeModifier)
+            }, 1200 * timeModifier)]
         }
         if (phase instanceof GoalMatchPhase) {
-            timer = setTimeout(() => {
+            timers = [setTimeout(() => {
                 setPhase(new ResultPhase(phase))
-            }, 3000 * timeModifier)
+            }, 3000 * timeModifier)]
         }
 
-        return timer !== undefined ? () => clearTimeout(timer!) : undefined
+        return timers !== undefined ? () => timers?.forEach(timer => clearTimeout(timer)) : undefined
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [phase, speed])
 
@@ -171,7 +178,7 @@ export default function Game(props: { level: Level, levelFinishedButtonText: str
             }
         }
 
-        score = Math.max(0, score) / props.level.goal.length
+        score = props.level.goal.length === 0 ? 0 : Math.max(0, score) / props.level.goal.length
 
         setPhase(new GoalMatchPhase(matching, score))
     }
@@ -211,6 +218,7 @@ export default function Game(props: { level: Level, levelFinishedButtonText: str
         const eventListener: (event: KeyboardEvent) => void = (event) => {
             if (event.key === 'g') {
                 toggleGoal()
+                event.preventDefault() // prevents browser features like quick search
             }
         }
         document.addEventListener("keydown", eventListener);
