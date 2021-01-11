@@ -16,7 +16,12 @@ import { ReactComponent as CheckIcon } from "bootstrap-icons/icons/check.svg"
 import { ReactComponent as QuestionMarkIcon } from "bootstrap-icons/icons/question.svg"
 import { ReactComponent as WrongColorIcon } from "./images/wrongColor.svg"
 
-export default function Game(props: { level: Level, levelFinishedButtonText: string, onLevelFinished: () => void }) {
+export default function Game(props: {
+    level: Level,
+    levelFinishedButtonText: string,
+    onLevelFinished?: () => void, // full score reached
+    onLevelFinishedClick: () => void // finish button clicked
+}) {
 
     const [lasers, setLasers] = useState<Laser[]>([])
     const [blocks, setBlocks] = useState<Block[]>([])
@@ -180,6 +185,11 @@ export default function Game(props: { level: Level, levelFinishedButtonText: str
 
         score = props.level.goal.length === 0 ? 0 : Math.max(0, score) / props.level.goal.length
 
+        if (score === 1) {
+            // completed level succefully
+            props.onLevelFinished && props.onLevelFinished()
+        }
+
         setPhase(new GoalMatchPhase(matching, score))
     }
 
@@ -283,7 +293,7 @@ export default function Game(props: { level: Level, levelFinishedButtonText: str
 
                         <div className='mt-3'>
                             {phase.result.score === 1 && <>
-                                <button type="button" className="btn btn-primary" onClick={props.onLevelFinished}>{props.levelFinishedButtonText}</button>&nbsp;
+                                <button type="button" className="btn btn-primary" onClick={props.onLevelFinishedClick}>{props.levelFinishedButtonText}</button>&nbsp;
                                 <button type="button" className="btn btn-secondary" onClick={restartLevel}>Restart Level</button>
                             </>}
                             {phase.result.score < 1 && <>

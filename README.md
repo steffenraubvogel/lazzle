@@ -15,4 +15,3 @@
 # Bugs
 - moving laser: eleminate the jump when cursor is not near actual position of laser
 - aid arrow positions depend on laser distance
-- last level not recognized 

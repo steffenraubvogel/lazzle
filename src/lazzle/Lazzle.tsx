@@ -4,6 +4,7 @@ import { Level, AllLevels } from "./Levels";
 import { LOCAL_STORAGE_KEY_GAME_PROGRESS } from "./Constants";
 import Game from "./Game";
 import { ReactComponent as CheckIcon } from "bootstrap-icons/icons/check.svg"
+import { ReactComponent as TrophyIcon } from "./images/trophy.svg"
 import { Link, Route, RouteComponentProps, Switch, useRouteMatch } from "react-router-dom";
 import LevelPreview from "./LevelPreview";
 
@@ -32,7 +33,7 @@ export function LevelChooser(props: RouteComponentProps) {
                                 <Link className={"btn "
                                     + (index === progress ? 'btn-outline-primary' : 'btn-outline-secondary')
                                     + " stretched-link"
-                                    + (index > progress ? ' disabled' : '')} 
+                                    + (index > progress ? ' disabled' : '')}
                                     to={props.match.path + '/' + index}
                                 >
                                     {(index < progress ? 'Play again' : (index === progress ? 'Play' : 'Locked'))}
@@ -57,18 +58,32 @@ export function LevelLoader(props: RouteComponentProps<{ levelIndex?: string | u
         [props.match.params.levelIndex])
 
     function startNextLevel() {
-        const nextLevel = (AllLevels.indexOf(level!) + 1) % AllLevels.length
+        const nextLevelIndex = AllLevels.indexOf(level!) + 1
+
+        if (nextLevelIndex === AllLevels.length) {
+            // all levels completed
+            props.history.push('/game/completed')
+        }
+        else {
+            props.history.push('/game/' + nextLevelIndex)
+        }
+    }
+
+    function storeProgress() {
+        const nextLevel = AllLevels.indexOf(level!) + 1
         if (nextLevel > getGameProgressFromLocalStorage()) {
             localStorage.setItem(LOCAL_STORAGE_KEY_GAME_PROGRESS, nextLevel.toString())
         }
-        props.history.push('/game/' + nextLevel)
     }
 
     return <>
         {level && <>
             <section>
                 <h2>Level {AllLevels.indexOf(level) + 1} - {level.name}</h2>
-                <Game level={level} levelFinishedButtonText='Next Level' onLevelFinished={startNextLevel} />
+                <Game level={level}
+                    levelFinishedButtonText={AllLevels.indexOf(level) === AllLevels.length - 1 ? 'Finish Level' : 'Next Level'} 
+                    onLevelFinished={storeProgress}
+                    onLevelFinishedClick={startNextLevel} />
             </section>
 
             <section>
@@ -112,6 +127,16 @@ export function LevelLoader(props: RouteComponentProps<{ levelIndex?: string | u
     </>
 }
 
+function LevelsCompleted() {
+    return <section>
+        <h2>Congratulations!</h2>
+        <p>
+            You managed to solve all levels. Well done!
+        </p>
+        <TrophyIcon />
+    </section>
+}
+
 export default function LazzleGame() {
 
     const match = useRouteMatch();
@@ -120,7 +145,8 @@ export default function LazzleGame() {
         <h1>Lazzle</h1>
 
         <Switch>
-            <Route path={`${match.path}/:levelIndex`} component={LevelLoader} />
+            <Route path={match.path + '/completed'} component={LevelsCompleted} />
+            <Route path={match.path + '/:levelIndex'} component={LevelLoader} />
             <Route path={match.path} component={LevelChooser} />
         </Switch>
     </div>

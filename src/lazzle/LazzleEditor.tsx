@@ -320,7 +320,7 @@ export default function LazzleLevelEditor() {
                 <Modal title='Test Your Level' fullScreen={true} close={() => setTestLevel(undefined)}>
                     <div className='d-flex justify-content-center'>
                         <div>
-                            <Game level={testLevel} levelFinishedButtonText='Close Test' onLevelFinished={() => setTestLevel(undefined)} />
+                            <Game level={testLevel} levelFinishedButtonText='Close Test' onLevelFinishedClick={() => setTestLevel(undefined)} />
                         </div>
                     </div>
                 </Modal>}
