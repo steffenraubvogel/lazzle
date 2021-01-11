@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import styles from "./Lazzle.module.scss";
 import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
-import { AllLevels, Colors, Level, LevelBlock, LevelLaser } from "./Levels";
+import { AllLevels, ColorNames, Colors, Level, LevelBlock, LevelLaser } from "./Levels";
 import { LevelEditorPhase } from "./Phase";
 import Tabs, { Tab } from "../components/Tabs";
 import Accordion, { AccordionItem } from "../components/Accordion";
@@ -47,7 +47,7 @@ export default function LazzleLevelEditor() {
     function handleGridYRangeChange(event: ChangeEvent<HTMLInputElement>) {
         const newGridY = Number(event.target.value)
         setLevel(prev => ({
-            ...prev, gridY: newGridY, 
+            ...prev, gridY: newGridY,
             blocks: removeOutsideBlocks(prev.blocks, prev.gridX, newGridY),
             goal: removeOutsideBlocks(prev.goal, prev.gridX, newGridY)
         }))
@@ -126,6 +126,17 @@ export default function LazzleLevelEditor() {
             ...prev, lasers: prev.lasers.map(l => {
                 if (l === laser) {
                     return { ...l, [property]: event.target.checked }
+                }
+                return l
+            })
+        }))
+    }
+
+    function handleLaserColorChange(laser: LevelLaser, event: ChangeEvent<HTMLSelectElement>) {
+        setLevel(prev => ({
+            ...prev, lasers: prev.lasers.map(l => {
+                if (l === laser) {
+                    return { ...l, color: event.target.value === "-1" ? undefined : Number(event.target.value) }
                 }
                 return l
             })
@@ -299,6 +310,17 @@ export default function LazzleLevelEditor() {
                                             onChange={event => handleBooleanLaserPropertyChange(laser, 'rotatable', event)} />
                                         <label className="form-check-label" htmlFor={"laserRotatableSwitch_" + index}>Can be rotated</label>
                                     </div>
+                                </div>
+
+                                <div className="col-12 col-md-6 mb-3">
+                                    <label htmlFor={"laserColor_" + index} className="form-label">Effect:</label>
+                                    <select id={"laserColor_" + index} className="form-select" value={laser.color}
+                                        onChange={event => handleLaserColorChange(laser, event)}>
+                                        <option value={-1}>Destroys blocks</option>
+                                        {Colors.map((color, index) =>
+                                            <option key={index} value={index} style={{ backgroundColor: color }}>Colors blocks to {ColorNames[index]}</option>)}
+                                    </select>
+                                    <div className="form-text">If a color is chosen then the laser will not destroy but color the hit blocks.</div>
                                 </div>
                             </div>
                             <button className='btn btn-outline-secondary' onClick={() => removeLaser(index)}>Remove This Laser</button>

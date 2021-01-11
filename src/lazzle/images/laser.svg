@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Laser"
-	xmlns="http://www.w3.org/2000/svg"
-	xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="125px" height="95px" viewBox="0 0 125 95" 
-	xml:space="preserve">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="125" height="95" fill="currentColor" viewBox="0 0 125 95">
 	<rect width="27.852" height="94.302"/>
 	<polygon points="66.771,81.715 66.771,75.527 66.771,69.126 66.771,62.939 66.771,56.539 66.771,50.351 66.771,43.951 
 	66.771,37.763 66.771,31.363 66.771,25.175 66.771,18.775 66.771,12.588 66.771,6.188 66.771,0 54.259,0 32.707,0 32.707,6.188 

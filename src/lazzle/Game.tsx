@@ -114,7 +114,12 @@ export default function Game(props: {
 
                 for (let block of blocks) {
                     if (block.state !== "destroyed" && rayIntersectsBlock(laser, laserDir, block)) {
-                        block.state = "destroyed"
+                        if (laser.color === undefined) {
+                            block.state = "destroyed"
+                        }
+                        else {
+                            block.color = Colors[laser.color]
+                        }
                     }
                 }
             }

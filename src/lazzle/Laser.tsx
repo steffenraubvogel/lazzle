@@ -1,11 +1,12 @@
 import { useState } from "react";
 import styles from "./Laser.module.scss";
 import { LaserShotPhase, Phase, SetupPhase } from "./Phase";
-import { LevelLaser } from "./Levels";
+import { Colors, LevelLaser } from "./Levels";
 import { nextId } from "./Util";
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
 import { Block } from "./Block";
 import { Point, rayIntersectsBlock } from "./Geometry";
+import { ReactComponent as LaserSvg } from "./images/laser.svg"
 import { ReactComponent as GripIcon } from "bootstrap-icons/icons/grip-vertical.svg"
 import { ReactComponent as ArrowRightIcon } from "bootstrap-icons/icons/arrow-right.svg"
 import { ReactComponent as ReplyIcon } from "bootstrap-icons/icons/reply.svg"
@@ -21,6 +22,7 @@ export class Laser {
     readonly order: number // a number indicating when to shoot this laser in shoot phase
     readonly movable: boolean // can user move the laser around?
     readonly rotatable: boolean // can user rotate the laser?
+    readonly color?: number
 
     private _leftMoveArrowPos: Point = { x: 0, y: 0 } // moving indicator position left of laser
     private _leftMoveArrowRotation: number = 0
@@ -39,6 +41,7 @@ export class Laser {
         this.order = config.order
         this.movable = config.movable
         this.rotatable = config.rotatable
+        this.color = config.color
 
         this.id = nextId()
         this.updatePosition()
@@ -216,13 +219,15 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
             className={styles.laser + getAdditionalCssClassNames()}
             style={{
                 transform: "translateY(-50%) translate(" + props.laser.x + "px, " + props.laser.y + "px) rotate(" + props.laser.rotation + "rad)",
-                transformOrigin: 'center left'
+                transformOrigin: 'center left',
+                ['--laser-color' as any]: props.laser.color === undefined ? 'black' : Colors[props.laser.color]
             }}>
 
             <div className={styles.laserHelpLine + ' ' + (props.phase instanceof LaserShotPhase && props.phase.order === props.laser.order ? styles.shoot : '')}>
             </div>
 
             <div className={styles.laserDevice}>
+                <LaserSvg />
             </div>
 
             <div className={styles.laserOrder}>

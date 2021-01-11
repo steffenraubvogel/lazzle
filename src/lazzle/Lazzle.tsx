@@ -98,6 +98,7 @@ export function LevelLoader(props: RouteComponentProps<{ levelIndex?: string | u
                     <li>Once you are ready click <em>Start Lasers</em>. Lasers will be shot in sequence as indicated by their numbers. The lasers will
                         destroy or re-color the blocks they are aiming at. Blocks up in the air will then fall down. After all lasers shot, the resulting
                         block arrangement will be compared with the goal.</li>
+                    <li>If a laser has a color different than black then its shot will not destroy but re-color the blocks hit.</li>
                 </ul>
                 <p>
                     You will win the level if all resulting blocks match with the target blocks. Have fun!

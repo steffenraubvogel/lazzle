@@ -1,6 +1,7 @@
 import Level1 from './levels/level_simple_easypeasy.json'
 import Level2 from './levels/level_simple_twoshots.json'
 import Level3 from './levels/level_simple_aliasing.json'
+import LevelRecolor from './levels/level_simple_recolor.json'
 import LevelRestricted from './levels/level_medium_restricted.json'
 import Level4 from './levels/level_medium_cross.json'
 import Level5 from './levels/level_medium_colored.json'
@@ -19,28 +20,43 @@ export const Colors: string[] = [
     '#ace600', // yellow-green
 ]
 
+export const ColorNames: string[] = [ // must match Colors
+    'red',
+    'green',
+    'blue',
+    'yellow',
+    'pink',
+    'cyan',
+    'gray',
+    'purple',
+    'brown',
+    'orange',
+    'yellowish green',
+]
+
 export type LevelBlock = {
-    x: number
-    y: number
-    color: number
+    x: number // coordinate on grid
+    y: number // coordinate on grid
+    color: number // index, see Colors
 }
 
 export type LevelLaser = {
-    order: number
-    angle: number
-    rotation: number
-    distance: number
+    order: number // when will the laser shot (sequence number)
+    angle: number // on its semi-circle in degrees (0 to 180)
+    rotation: number // in degrees (0 to 360) where 0 is "rotate to left side"
+    distance: number // from bottom center of blocks in pixels
     movable: boolean
     rotatable: boolean
+    color?: number // if specified, the laser will not destroy but color the blocks; index, see Colors
 }
 
 export type Level = {
-    name: string
-    gridX: number
-    gridY: number
-    blocks: LevelBlock[]
-    goal: LevelBlock[]
-    lasers: LevelLaser[]
+    name: string // fancy name of level, short description
+    gridX: number // maximum number of horizontal blocks
+    gridY: number // maximum number of vertical blocks
+    blocks: LevelBlock[] // initial blocks
+    goal: LevelBlock[] // goal to be reached to win the level
+    lasers: LevelLaser[] // initial lasers
 }
 
-export const AllLevels: Level[] = [Level1, Level2, Level3, LevelRestricted, Level5, Level4]
+export const AllLevels: Level[] = [Level1, Level2, Level3, LevelRecolor, LevelRestricted, Level5, Level4]
