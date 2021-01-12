@@ -1,3 +1,5 @@
+import Obfuscate from 'react-obfuscate';
+
 export default function Legal() {
     return <div className='container'>
         <h1>Impressum</h1>
@@ -13,7 +15,7 @@ export default function Legal() {
         </p>
         <p>
             <strong>Kontakt:</strong><br />
-            E-Mail: <a href='mailto:steffen@lazzle.de'>steffen@lazzle.de</a>
+            E-Mail: <Obfuscate email="steffen@lazzle.de" />
         </p>
         <p>
             Der Nutzung der auf den Webseiten (z. B. im Impressum) veröffentlichten Kontaktdaten durch Dritte insbesondere zum Zwecke der Werbung wird hiermit,
@@ -53,8 +55,7 @@ export default function Legal() {
 
         <h2>Begriffsbestimmungen</h2>
         <p>
-            Die im Folgenden verwendeten Begriffe sind unter anderem die aus Art. 4
-            <a href="https://eur-lex.europa.eu/legal-content/DE/TXT/HTML/?uri=CELEX:32016R0679&amp;from=EN">Datenschutz-Grundverordnung (DSGVO)</a>.
+            Die im Folgenden verwendeten Begriffe sind unter anderem die aus Art. 4 <a href="https://eur-lex.europa.eu/legal-content/DE/TXT/HTML/?uri=CELEX:32016R0679&amp;from=EN">Datenschutz-Grundverordnung (DSGVO)</a>.
         </p>
 
         <h2>Name und Anschrift des Verantwortlichen</h2>
@@ -74,8 +75,9 @@ export default function Legal() {
 
         <h3>Rechtsgrundlage für die Verarbeitung personenbezogener Daten</h3>
         <p>
-            Soweit wir für Verarbeitungsvorgänge personenbezogener Daten eine Einwilligung der betroffenen Person einholen, dient Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a
-            <a href="https://eur-lex.europa.eu/legal-content/DE/TXT/HTML/?uri=CELEX:32016R0679&amp;from=EN">EU-Datenschutzgrundverordnung (DSGVO)</a> als Rechtsgrundlage.
+            Soweit wir für Verarbeitungsvorgänge personenbezogener Daten eine Einwilligung der betroffenen Person einholen, dient
+            Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a <a href="https://eur-lex.europa.eu/legal-content/DE/TXT/HTML/?uri=CELEX:32016R0679&amp;from=EN">
+                EU-Datenschutzgrundverordnung (DSGVO)</a> als Rechtsgrundlage.
         </p>
         <p>
             Bei der Verarbeitung von personenbezogenen Daten, die zur Erfüllung eines Vertrages, dessen Vertragspartei die betroffene Person ist, erforderlich ist,

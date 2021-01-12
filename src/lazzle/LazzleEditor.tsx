@@ -11,6 +11,7 @@ import { ReactComponent as EraserIcon } from "bootstrap-icons/icons/eraser.svg"
 import { ReactComponent as ClipboardIcon } from "bootstrap-icons/icons/clipboard.svg"
 import Modal from "../components/Modal";
 import Game from "./Game";
+import Obfuscate from 'react-obfuscate';
 
 export default function LazzleLevelEditor() {
 
@@ -360,7 +361,8 @@ export default function LazzleLevelEditor() {
             <h2>Export</h2>
 
             <label htmlFor="exportOutput" className="form-label">
-                The level is stored as JSON file. If you would like to share your awesome level, copy the level data below and send me an email:
+                The level is stored as JSON file. If you would like to share your awesome level, copy the level data below and send me 
+                an <Obfuscate email="steffen@lazzle.de">email</Obfuscate>:
             </label>
             <div className='row'>
                 <div className='col'>
