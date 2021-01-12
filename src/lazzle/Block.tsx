@@ -10,6 +10,7 @@ export class Block {
     public x: number // top left coordinates within world
     public y: number
     public state: "destroyed" | "active"
+    public strength: number // number of shots to resist
 
     constructor(block: LevelBlock, level: Level) {
         this.id = nextId()
@@ -17,6 +18,7 @@ export class Block {
         this.y = WORLD_HEIGHT - level.gridY * BLOCK_SIZE + block.y * BLOCK_SIZE
         this.color = Colors[block.color]
         this.state = "active"
+        this.strength = block.strength === undefined ? 1 : block.strength
     }
 
 }
@@ -32,7 +34,10 @@ export default function BlockComponent(props: { block: Block }) {
                 backgroundColor: props.block.color,
                 left: props.block.x,
                 top: props.block.y
-            }}>
+            }}
+        >
+            {props.block.strength === 2 && <div className={styles.blockStrengthened + ' ' + styles.blockStrengthened1} />}
+            {props.block.strength === 3 && <div className={styles.blockStrengthened + ' ' + styles.blockStrengthened2} />}
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import Level1 from './levels/level_simple_easypeasy.json'
 import Level2 from './levels/level_simple_twoshots.json'
 import Level3 from './levels/level_simple_aliasing.json'
+import LevelStrengthened from './levels/level_simple_strengthened.json'
 import LevelRecolor from './levels/level_simple_recolor.json'
 import LevelRestricted from './levels/level_medium_restricted.json'
 import Level4 from './levels/level_medium_cross.json'
@@ -34,10 +35,18 @@ export const ColorNames: string[] = [ // must match Colors
     'yellowish green',
 ]
 
+export const BlockStrengthNames: string[] = [
+    'destroyed', // 0
+    'normal', // 1
+    'strengthened', // 2
+    'heavy' // 3
+]
+
 export type LevelBlock = {
     x: number // coordinate on grid
     y: number // coordinate on grid
     color: number // index, see Colors
+    strength?: number // how many shots the block can resist before destroyed, defaults to 1
 }
 
 export type LevelLaser = {
@@ -59,4 +68,4 @@ export type Level = {
     lasers: LevelLaser[] // initial lasers
 }
 
-export const AllLevels: Level[] = [Level1, Level2, Level3, LevelRecolor, LevelRestricted, Level5, Level4]
+export const AllLevels: Level[] = [Level1, Level2, Level3, LevelStrengthened, LevelRecolor, LevelRestricted, Level5, Level4]

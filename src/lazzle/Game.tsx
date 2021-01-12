@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Lazzle.module.scss";
 import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
-import { Colors, Level, LevelBlock } from "./Levels";
+import { BlockStrengthNames, ColorNames, Colors, Level, LevelBlock } from "./Levels";
 import { BlockFallPhase, GoalMatchPhase, LaserShotPhase, MatchingBlock, Phase, ResultPhase, SetupPhase, StartPhase } from "./Phase";
 import { Point, rayIntersectsBlock } from "./Geometry";
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
@@ -15,6 +15,8 @@ import { ReactComponent as RemoveIcon } from "bootstrap-icons/icons/x.svg"
 import { ReactComponent as CheckIcon } from "bootstrap-icons/icons/check.svg"
 import { ReactComponent as QuestionMarkIcon } from "bootstrap-icons/icons/question.svg"
 import { ReactComponent as WrongColorIcon } from "./images/wrongColor.svg"
+import { ReactComponent as ShieldPlusIcon } from "bootstrap-icons/icons/shield-plus.svg"
+import { ReactComponent as ShieldMinusIcon } from "bootstrap-icons/icons/shield-minus.svg"
 
 export default function Game(props: {
     level: Level,
@@ -115,9 +117,14 @@ export default function Game(props: {
                 for (let block of blocks) {
                     if (block.state !== "destroyed" && rayIntersectsBlock(laser, laserDir, block)) {
                         if (laser.color === undefined) {
-                            block.state = "destroyed"
+                            // laser is destroying blocks
+                            block.strength -= 1
+                            if (block.strength === 0) {
+                                block.state = "destroyed"
+                            }
                         }
                         else {
+                            // laser is re-coloring blocks
                             block.color = Colors[laser.color]
                         }
                     }
@@ -166,17 +173,28 @@ export default function Game(props: {
         // -> count blocks matching goal
         for (let gb of props.level.goal) {
             const foundMatchingBlock = blocks.find(b => blockMatchingGoalBlock(b, gb))
+            const blocksInfo = {
+                goal: new Block(gb, props.level),
+                block: foundMatchingBlock,
+                ref: foundMatchingBlock || new Block(gb, props.level)
+            }
+
             if (foundMatchingBlock) {
                 if (foundMatchingBlock.color === Colors[gb.color]) {
-                    score++
-                    matching.push({ state: "matching", block: foundMatchingBlock })
+                    if (foundMatchingBlock.strength === (gb.strength === undefined ? 1 : gb.strength)) {
+                        score++
+                        matching.push({ state: "matching", ...blocksInfo })
+                    }
+                    else {
+                        matching.push({ state: "wrongStrength", ...blocksInfo })
+                    }
                 }
                 else {
-                    matching.push({ state: "wrongColor", block: new Block(gb, props.level) })
+                    matching.push({ state: "wrongColor", ...blocksInfo })
                 }
             }
             else {
-                matching.push({ state: "missing", block: new Block(gb, props.level) })
+                matching.push({ state: "missing", ...blocksInfo })
             }
         }
 
@@ -184,7 +202,7 @@ export default function Game(props: {
         for (let b of blocks) {
             if (b.state !== "destroyed" && !props.level.goal.find(gb => blockMatchingGoalBlock(b, gb))) {
                 score--
-                matching.push({ state: "overtowering", block: b })
+                matching.push({ state: "overtowering", block: b, ref: b })
             }
         }
 
@@ -271,22 +289,33 @@ export default function Game(props: {
 
             {phase instanceof GoalMatchPhase &&
                 phase.matchingBlocks.map(mb =>
-                    <div key={mb.block.id} className={styles.matchingBlock + ' ' + styles[mb.state]} style={{
+                    <div key={mb.ref.id} className={styles.matchingBlock + ' ' + styles[mb.state]} style={{
                         width: BLOCK_SIZE + 'px',
                         height: BLOCK_SIZE + 'px',
-                        left: mb.block.x,
-                        top: mb.block.y
+                        left: mb.ref.x,
+                        top: mb.ref.y
                     }}>
                         {(() => {
                             switch (mb.state) {
                                 case "overtowering":
-                                    return <RemoveIcon />
+                                    return <RemoveIcon title='The block is not filled in goal.' />
                                 case "matching":
-                                    return <CheckIcon />
+                                    return <CheckIcon title='The block is matching with goal.' />
                                 case "missing":
-                                    return <QuestionMarkIcon />
+                                    return <QuestionMarkIcon title='The block is missing because it is present in goal but not in your result.' />
                                 case "wrongColor":
-                                    return <WrongColorIcon style={{ ['--goalBlockColor' as any]: mb.block.color }} />
+                                    return <WrongColorIcon
+                                        title={'The block has the wrong color. It should be ' + ColorNames[Colors.indexOf(mb.goal!.color)] + ' but is '
+                                            + ColorNames[Colors.indexOf(mb.block!.color)] + '.'}
+                                        style={{ ['--goalBlockColor' as any]: mb.goal!.color }} />
+                                case "wrongStrength":
+                                    const title = 'The block strength doesn\'t match with the goal. It should be ' + BlockStrengthNames[mb.goal!.strength]
+                                        + ' but is ' + BlockStrengthNames[mb.block!.strength] + '.'
+
+                                    if (mb.block!.strength > mb.goal!.strength) {
+                                        return <ShieldMinusIcon title={title} />
+                                    }
+                                    return <ShieldPlusIcon title={title} />
                             }
                         })()}
                     </div>)}

@@ -61,8 +61,10 @@ export class BlockFallPhase extends Phase {
 }
 
 export type MatchingBlock = {
-    state: "wrongColor" | "matching" | "missing" | "overtowering"
-    block: Block
+    state: "wrongColor" | "wrongStrength" | "matching" | "missing" | "overtowering"
+    goal?: Block // in case it exists
+    block?: Block // in case it exists
+    ref: Block // either goal or user block
 }
 
 /**

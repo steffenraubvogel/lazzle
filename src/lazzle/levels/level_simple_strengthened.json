@@ -1,0 +1,55 @@
+{
+    "name": "Strengthened blocks to the rescue",
+    "gridX": 3,
+    "gridY": 6,
+    "blocks": [
+        {
+            "x": 1,
+            "y": 5,
+            "color": 4,
+            "strength": 1
+        },
+        {
+            "x": 1,
+            "y": 4,
+            "color": 4,
+            "strength": 1
+        },
+        {
+            "x": 1,
+            "y": 3,
+            "color": 7,
+            "strength": 2
+        },
+        {
+            "x": 1,
+            "y": 2,
+            "color": 5,
+            "strength": 1
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "color": 5,
+            "strength": 1
+        }
+    ],
+    "goal": [
+        {
+            "x": 1,
+            "y": 5,
+            "color": 7,
+            "strength": 1
+        }
+    ],
+    "lasers": [
+        {
+            "distance": 300,
+            "rotation": 191,
+            "angle": 132,
+            "order": 1,
+            "movable": true,
+            "rotatable": true
+        }
+    ]
+}

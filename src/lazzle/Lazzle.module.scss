@@ -83,6 +83,23 @@
     }
 }
 
+.blockStrengthened {
+    position: absolute; 
+    width: 100%; 
+    height: 100%;
+    opacity: 0.4;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.blockStrengthened1 {
+    background-image: url('./images/strengthened_1.svg');
+}
+.blockStrengthened2 {
+    background-image: url('./images/strengthened_2.svg');
+}
+
 .matchingBlock {
     position: absolute;
     animation: block-matched calc(0.2s / var(--speed, 1)) ease-out;
@@ -91,6 +108,11 @@
     svg {
         width: 100%;
         height: 100%;
+    }
+
+    &.wrongStrength {
+        /* shield icons are too tall */
+        padding: 4px;
     }
 }
 

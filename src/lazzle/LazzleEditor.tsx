@@ -2,12 +2,12 @@ import { ChangeEvent, useEffect, useState } from "react";
 import styles from "./Lazzle.module.scss";
 import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
-import { AllLevels, ColorNames, Colors, Level, LevelBlock, LevelLaser } from "./Levels";
+import { AllLevels, BlockStrengthNames, ColorNames, Colors, Level, LevelBlock, LevelLaser } from "./Levels";
 import { LevelEditorPhase } from "./Phase";
 import Tabs, { Tab } from "../components/Tabs";
 import Accordion, { AccordionItem } from "../components/Accordion";
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
-import { ReactComponent as TrashIcon } from "bootstrap-icons/icons/trash.svg"
+import { ReactComponent as EraserIcon } from "bootstrap-icons/icons/eraser.svg"
 import { ReactComponent as ClipboardIcon } from "bootstrap-icons/icons/clipboard.svg"
 import Modal from "../components/Modal";
 import Game from "./Game";
@@ -28,6 +28,7 @@ export default function LazzleLevelEditor() {
     const [showGoal, setShowGoal] = useState<boolean>(false)
 
     const [activeBlockColor, setActiveBlockColor] = useState<number>(0)
+    const [activeStrength, setActiveStrength] = useState<number>(1)
 
     const [testLevel, setTestLevel] = useState<Level>()
 
@@ -72,20 +73,20 @@ export default function LazzleLevelEditor() {
         const existingBlock = level[blocksType].find(b => b.x === blockX && b.y === blockY)
 
         if (!existingBlock && activeBlockColor >= 0) {
-            // add a new block
-            setLevel(prev => ({ ...prev, [blocksType]: prev[blocksType].concat({ x: blockX, y: blockY, color: activeBlockColor }) }))
+            // add a new block with active color and strength
+            setLevel(prev => ({ ...prev, [blocksType]: prev[blocksType].concat({ x: blockX, y: blockY, color: activeBlockColor, strength: activeStrength }) }))
         }
         else if (existingBlock && activeBlockColor === -1) {
             // remove a block
             setLevel(prev => ({ ...prev, [blocksType]: prev[blocksType].filter(b => b !== existingBlock) }))
         }
         else if (existingBlock && activeBlockColor >= 0) {
-            // re-color block
+            // re-color block and adapt strength
             setLevel(prev => ({
                 ...prev,
                 [blocksType]: prev[blocksType].map(b => {
                     if (b === existingBlock) {
-                        return { ...b, color: activeBlockColor }
+                        return { ...b, color: activeBlockColor, strength: activeStrength }
                     }
                     return b
                 })
@@ -243,7 +244,7 @@ export default function LazzleLevelEditor() {
                         <div>
                             <button className={'btn btn-outline-secondary me-2' + (-1 === activeBlockColor ? ' active' : '')}
                                 onClick={() => setActiveBlockColor(-1)}>
-                                <TrashIcon />&nbsp;Rubber
+                                <EraserIcon />&nbsp;Rubber
                             </button>
 
                             {Colors.map((_color, index) =>
@@ -256,6 +257,13 @@ export default function LazzleLevelEditor() {
                             )}
                         </div>
                         <div className="form-text">Colors are predefined. Use the rubber to remove blocks.</div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor='strengthSelect' className="form-label">Block Strength:</label>
+                        <select id='strengthSelect' className="form-select" value={activeStrength} onChange={event => setActiveStrength(Number(event.target.value))}>
+                            {BlockStrengthNames.map((bsn, index) => (index === 0 ? undefined :
+                                <option key={index} value={index}>{bsn} ({index} shots to destroy)</option>))}
+                        </select>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Or use one of the tools below:</label>
@@ -352,7 +360,7 @@ export default function LazzleLevelEditor() {
             <h2>Export</h2>
 
             <label htmlFor="exportOutput" className="form-label">
-                The level is stored as JSON within code. Copy/paste the following text into levels folder of lazzle and import it in <em>Levels.ts</em>:
+                The level is stored as JSON file. If you would like to share your awesome level, copy the level data below and send me an email:
             </label>
             <div className='row'>
                 <div className='col'>
