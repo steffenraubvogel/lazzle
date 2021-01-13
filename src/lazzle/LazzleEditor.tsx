@@ -21,7 +21,15 @@ export default function LazzleLevelEditor() {
         gridY: 5,
         blocks: [],
         goal: [],
-        lasers: []
+        lasers: [{
+            order: 1,
+            distance: 300,
+            angle: 120,
+            rotation: 270,
+            movable: true,
+            rotatable: true,
+            color: undefined
+        }]
     })
     const [lasers, setLasers] = useState<Laser[]>([])
     const [blocks, setBlocks] = useState<Block[]>([])
@@ -30,6 +38,7 @@ export default function LazzleLevelEditor() {
 
     const [activeBlockColor, setActiveBlockColor] = useState<number>(0)
     const [activeStrength, setActiveStrength] = useState<number>(1)
+    const [initialLaserOpen, setInitialLaserOpen] = useState<number>(0)
 
     const [testLevel, setTestLevel] = useState<Level>()
 
@@ -96,6 +105,7 @@ export default function LazzleLevelEditor() {
     }
 
     function addLaser() {
+        setInitialLaserOpen(level.lasers.length)
         setLevel(prev => ({
             ...prev, lasers: prev.lasers.concat({
                 distance: 300,
@@ -274,7 +284,7 @@ export default function LazzleLevelEditor() {
                     </div>
                 </Tab>
                 <Tab header='Lasers'>
-                    <Accordion>
+                    <Accordion initialOpened={initialLaserOpen}>
                         {level.lasers.map((laser, index) => <AccordionItem key={index} header={'Laser #' + (index + 1)}>
                             <div className='row'>
                                 <div className="col-12 col-md-6 mb-3">

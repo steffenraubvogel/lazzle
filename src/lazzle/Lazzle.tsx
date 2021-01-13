@@ -18,7 +18,7 @@ export function LevelChooser(props: RouteComponentProps) {
     const progress = getGameProgressFromLocalStorage()
 
     return <section>
-        <h2>Choose Your Level</h2>
+        <h2>Choose a Level</h2>
         <div className="row my-3 cardRow">
             {AllLevels.map((availableLevel, index) =>
                 <div key={index} className='col-12 col-sm-6 col-md-4 col-lg-3 mb-3'>

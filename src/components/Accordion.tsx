@@ -1,17 +1,20 @@
-import { ReactElement, ReactNode, useState } from "react"
+import { PropsWithChildren, ReactElement, useEffect, useState } from "react"
 
-type AccordionItemProps = {
+type AccordionItemProps = PropsWithChildren<{
     header: string
-    children: ReactNode
-}
+}>
 
 export const AccordionItem: React.FC<AccordionItemProps> = () => {
     return <></>
 }
 
-export default function Accordion(props: { children: ReactElement<AccordionItemProps>[] }) {
+export default function Accordion(props: { initialOpened?: number, children: ReactElement<AccordionItemProps>[] }) {
 
     const [openedItem, setOpenedItem] = useState<number | undefined>()
+
+    useEffect(() => {
+        setOpenedItem(props.initialOpened)
+    }, [props.initialOpened])
 
     function handleItemClick(itemIndex: number) {
         setOpenedItem(prev => prev === itemIndex ? undefined : itemIndex)
