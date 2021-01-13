@@ -1,0 +1,161 @@
+{
+    "name": "The Single Survivor",
+    "gridX": 8,
+    "gridY": 8,
+    "blocks": [
+        {
+            "x": 1,
+            "y": 7,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 3,
+            "y": 6,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 2,
+            "y": 6,
+            "color": 9,
+            "strength": 2
+        },
+        {
+            "x": 2,
+            "y": 7,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 3,
+            "y": 7,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 4,
+            "y": 7,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 4,
+            "y": 6,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 5,
+            "y": 7,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 5,
+            "y": 6,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 4,
+            "y": 5,
+            "color": 9,
+            "strength": 2
+        },
+        {
+            "x": 5,
+            "y": 5,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 6,
+            "y": 5,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 6,
+            "y": 4,
+            "color": 9,
+            "strength": 2
+        },
+        {
+            "x": 6,
+            "y": 6,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 6,
+            "y": 7,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 0,
+            "y": 7,
+            "color": 9,
+            "strength": 2
+        },
+        {
+            "x": 7,
+            "y": 4,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 7,
+            "y": 5,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 7,
+            "y": 6,
+            "color": 9,
+            "strength": 1
+        },
+        {
+            "x": 7,
+            "y": 7,
+            "color": 9,
+            "strength": 1
+        }
+    ],
+    "goal": [
+        {
+            "x": 6,
+            "y": 7,
+            "color": 9,
+            "strength": 1
+        }
+    ],
+    "lasers": [
+        {
+            "distance": 250,
+            "rotation": 19,
+            "angle": 1,
+            "order": 1,
+            "movable": true,
+            "rotatable": true
+        },
+        {
+            "distance": 325,
+            "rotation": 197,
+            "angle": 153,
+            "order": 1,
+            "movable": true,
+            "rotatable": true
+        },
+        {
+            "distance": 400,
+            "rotation": 201,
+            "angle": 158,
+            "order": 2,
+            "movable": true,
+            "rotatable": true
+        }
+    ]
+}

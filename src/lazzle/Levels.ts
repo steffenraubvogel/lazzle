@@ -2,7 +2,9 @@ import Level1 from './levels/level_simple_easypeasy.json'
 import Level2 from './levels/level_simple_twoshots.json'
 import Level3 from './levels/level_simple_aliasing.json'
 import LevelStrengthened from './levels/level_simple_strengthened.json'
+import LevelStrengthened2 from './levels/level_medium_strengthened.json'
 import LevelRecolor from './levels/level_simple_recolor.json'
+import LevelRecolor2 from './levels/level_simple_recolor2.json'
 import LevelRestricted from './levels/level_medium_restricted.json'
 import Level4 from './levels/level_medium_cross.json'
 import Level5 from './levels/level_medium_colored.json'
@@ -68,4 +70,4 @@ export type Level = {
     lasers: LevelLaser[] // initial lasers
 }
 
-export const AllLevels: Level[] = [Level1, Level2, Level3, LevelStrengthened, LevelRecolor, LevelRestricted, Level5, Level4]
+export const AllLevels: Level[] = [Level1, Level2, Level3, LevelStrengthened, LevelStrengthened2, LevelRecolor2, LevelRecolor, LevelRestricted, Level5, Level4]
