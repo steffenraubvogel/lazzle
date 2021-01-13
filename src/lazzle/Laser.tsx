@@ -259,14 +259,14 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
             <div className={styles.laserRotationHandleArrow} style={{
                 left: props.laser.leftRotationArrowPos.x,
                 top: props.laser.leftRotationArrowPos.y,
-                transform: 'translate(-50%, -50%) rotate(' + props.laser.leftRotationArrowRotation + 'rad) scaleX(-1)'
+                transform: 'translate(-50%, -50%) rotate(' + props.laser.leftRotationArrowRotation + 'rad)'
             }}>
                 <ReplyIcon />
             </div>
             <div className={styles.laserRotationHandleArrow} style={{
                 left: props.laser.rightRotationArrowPos.x,
                 top: props.laser.rightRotationArrowPos.y,
-                transform: 'translate(-50%, -50%) rotate(' + props.laser.rightRotationArrowRotation + 'rad)'
+                transform: 'translate(-50%, -50%) rotate(' + props.laser.rightRotationArrowRotation + 'rad) scaleX(-1)'
             }}>
                 <ReplyIcon />
             </div>
