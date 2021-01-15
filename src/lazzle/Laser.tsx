@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Laser.module.scss";
 import { LaserShotPhase, Phase, SetupPhase } from "./Phase";
 import { Colors, LevelLaser } from "./Levels";
@@ -29,9 +29,9 @@ export class Laser {
     private _rightMoveArrowPos: Point = { x: 0, y: 0 } // moving indicator position right of laser
     private _rightMoveArrowRotation: number = 0
 
-    private _leftRotationArrowPos: Point = { x: 0, y: 0}
+    private _leftRotationArrowPos: Point = { x: 0, y: 0 }
     private _leftRotationArrowRotation: number = 0
-    private _rightRotationArrowPos: Point = { x: 0, y: 0}
+    private _rightRotationArrowPos: Point = { x: 0, y: 0 }
     private _rightRotationArrowRotation: number = 0
 
     constructor(config: LevelLaser) {
@@ -161,33 +161,26 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
     const [isRotating, setRotating] = useState(false)
     const [, setForceRerender] = useState(0)
 
+    const gripMove = useRef<HTMLDivElement>(null)
+    const gripRotate = useRef<HTMLDivElement>(null)
+
     function laserMoveHandleMouseDown() {
         if (props.laser.movable) {
             setMoving(true)
-            drag(props.laser.drag.bind(props.laser))
+            dragStart(props.laser.drag.bind(props.laser))
         }
     }
 
     function laserRotationHandleMouseDown() {
         if (props.laser.rotatable) {
             setRotating(true)
-            drag(props.laser.rotate.bind(props.laser))
+            dragStart(props.laser.rotate.bind(props.laser))
         }
     }
 
-    function drag(cb: (x: number, y: number) => void) {
+    function dragStart(cb: (x: number, y: number) => void) {
         document.onmousemove = event => {
-            const world = document.querySelector("#world")!
-            const scaledWorldBounds = world.getBoundingClientRect()
-            const unscaledWorldBounds = { width: world.clientWidth, height: world.clientHeight }
-
-            // NOTE: the world is usually scaled (css transform) to adapt to available space; we need to scale
-            // the mouse position appropriately
-            const relativeX = (event.clientX - scaledWorldBounds.left) / scaledWorldBounds.width
-            const relativeY = (event.clientY - scaledWorldBounds.top) / scaledWorldBounds.height
-
-            cb(relativeX * unscaledWorldBounds.width, relativeY * unscaledWorldBounds.height)
-            setForceRerender(prev => prev + 1)
+            drag(cb, event.clientY, event.clientY)
         };
 
         document.onmouseup = () => {
@@ -199,6 +192,72 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
             setRotating(false)
         };
     }
+    function drag(cb: (x: number, y: number) => void, clientX: number, clientY: number) {
+        const world = document.querySelector("#world")!
+        const scaledWorldBounds = world.getBoundingClientRect()
+        const unscaledWorldBounds = { width: world.clientWidth, height: world.clientHeight }
+
+        // NOTE: the world is usually scaled (css transform) to adapt to available space; we need to scale
+        // the mouse position appropriately
+        const relativeX = (clientX - scaledWorldBounds.left) / scaledWorldBounds.width
+        const relativeY = (clientY - scaledWorldBounds.top) / scaledWorldBounds.height
+
+        cb(relativeX * unscaledWorldBounds.width, relativeY * unscaledWorldBounds.height)
+        setForceRerender(prev => prev + 1)
+    }
+
+    useEffect(() => {
+        const gm = gripMove.current!
+        gm.addEventListener("touchstart", laserMoveHandleTouchStart, { passive: false })
+        gm.addEventListener("touchmove", laserMoveHandleTouchMove, { passive: false })
+        gm.addEventListener("touchend", laserMoveHandleTouchEnd, { passive: false })
+        
+        const gr = gripRotate.current!
+        gr.addEventListener("touchstart", laserRotationHandleTouchStart, { passive: false })
+        gr.addEventListener("touchmove", laserRotationHandleTouchMove, { passive: false })
+        gr.addEventListener("touchend", laserRotationHandleTouchEnd, { passive: false })
+
+        return () => {
+            gm.removeEventListener("touchstart", laserMoveHandleTouchStart)
+            gm.removeEventListener("touchmove", laserMoveHandleTouchMove)
+            gm.removeEventListener("touchend", laserMoveHandleTouchEnd)
+            
+            gr.removeEventListener("touchstart", laserRotationHandleTouchStart)
+            gr.removeEventListener("touchmove", laserRotationHandleTouchMove)
+            gr.removeEventListener("touchend", laserRotationHandleTouchEnd)
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    function laserMoveHandleTouchStart(event: TouchEvent) {
+        event.preventDefault()
+        if (props.laser.movable) {
+            setMoving(true)
+        }
+    }
+    function laserMoveHandleTouchMove(event: TouchEvent) {
+        event.preventDefault()
+        const touch = event.changedTouches[0];
+        drag(props.laser.drag.bind(props.laser), touch.clientX, touch.clientY)
+    }
+    function laserMoveHandleTouchEnd(event: TouchEvent) {
+        setMoving(false)
+    }
+
+    function laserRotationHandleTouchStart(event: TouchEvent) {
+        event.preventDefault()
+        if (props.laser.rotatable) {
+            setRotating(true)
+        }
+    }
+    function laserRotationHandleTouchMove(event: TouchEvent) {
+        event.preventDefault()
+        const touch = event.changedTouches[0];
+        drag(props.laser.rotate.bind(props.laser), touch.clientX, touch.clientY)
+    }
+    function laserRotationHandleTouchEnd(event: TouchEvent) {
+        setRotating(false)
+    }
 
     function getAdditionalCssClassNames() {
         const classes = []
@@ -206,7 +265,7 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
         isRotating && classes.push(styles.laserRotating)
         !props.laser.movable && classes.push(styles.laserNotMovable)
         !props.laser.rotatable && classes.push(styles.laserNotRotatable)
-        
+
         if (!(props.phase instanceof SetupPhase)) {
             classes.push(styles.laserLocked)
         }
@@ -242,11 +301,11 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
                 <div style={{ transform: "rotate(" + (-props.laser.rotation) + "rad)" }}>{props.laser.order}</div>
             </div>
 
-            <div className={styles.laserMoveHandle} onMouseDown={laserMoveHandleMouseDown}>
+            <div ref={gripMove} className={styles.laserMoveHandle} onMouseDown={laserMoveHandleMouseDown}>
                 <GripIcon />
             </div>
 
-            <div className={styles.laserRotationHandle} onMouseDown={laserRotationHandleMouseDown}>
+            <div ref={gripRotate} className={styles.laserRotationHandle} onMouseDown={laserRotationHandleMouseDown}>
             </div>
         </div>
         <div className={styles.laserHoveredElements + getAdditionalCssClassNames()}>
