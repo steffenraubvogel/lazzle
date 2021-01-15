@@ -325,31 +325,30 @@ export default function Game(props: {
                             })()}
                         </div>)}
 
-                {phase instanceof ResultPhase &&
-                    <div className={styles.resultContainer}>
-                        <div className={styles.result}>
-                            <span>Your score is {Math.floor(phase.result.score * 100)}%. Level <strong>{phase.result.score === 1 ? 'complete' : 'incomplete'}</strong>.</span>
-
-                            <div className='mt-3'>
-                                {phase.result.score === 1 && <>
-                                    <button type="button" className="btn btn-primary" onClick={props.onLevelFinishedClick}>{props.levelFinishedButtonText}</button>&nbsp;
-                                <button type="button" className="btn btn-secondary" onClick={restartLevel}>Restart Level</button>
-                                </>}
-                                {phase.result.score < 1 && <>
-                                    <button type="button" className="btn btn-primary" onClick={restartLevel}>Try again</button>&nbsp;
-                                <button type="button" className="btn btn-secondary" onClick={inspectResult}>Inspect Result</button>
-                                </>}
-                            </div>
-                        </div>
-                    </div>
-                }
-
-                {showGoal && <>
+                {showGoal &&
                     <div className={styles.goalContainer}>
                         {goalBlocks.map(block => <BlockComponent key={block.id} block={block} />)}
-                    </div>
-                </>}
+                    </div>}
             </AutoScaler>
+
+            {phase instanceof ResultPhase &&
+                <div className={styles.resultContainer}>
+                    <div className={styles.result}>
+                        <span>Your score is {Math.floor(phase.result.score * 100)}%. Level <strong>{phase.result.score === 1 ? 'complete' : 'incomplete'}</strong>.</span>
+
+                        <div className='mt-3'>
+                            {phase.result.score === 1 && <>
+                                <button type="button" className="btn btn-primary" onClick={props.onLevelFinishedClick}>{props.levelFinishedButtonText}</button>&nbsp;
+                                <button type="button" className="btn btn-secondary" onClick={restartLevel}>Restart Level</button>
+                            </>}
+                            {phase.result.score < 1 && <>
+                                <button type="button" className="btn btn-primary" onClick={restartLevel}>Try again</button>&nbsp;
+                                <button type="button" className="btn btn-secondary" onClick={inspectResult}>Inspect Result</button>
+                            </>}
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </>
 }
