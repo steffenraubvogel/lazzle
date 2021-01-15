@@ -180,7 +180,7 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
 
     function dragStart(cb: (x: number, y: number) => void) {
         document.onmousemove = event => {
-            drag(cb, event.clientY, event.clientY)
+            drag(cb, event.clientX, event.clientY)
         };
 
         document.onmouseup = () => {
