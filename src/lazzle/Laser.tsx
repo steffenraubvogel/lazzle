@@ -177,8 +177,16 @@ export default function LaserComponent(props: { laser: Laser, blocks: Block[], p
 
     function drag(cb: (x: number, y: number) => void) {
         document.onmousemove = event => {
-            const worldBounds = document.querySelector("#world")!.getBoundingClientRect()
-            cb(event.clientX - worldBounds.left, event.clientY - worldBounds.top)
+            const world = document.querySelector("#world")!
+            const scaledWorldBounds = world.getBoundingClientRect()
+            const unscaledWorldBounds = { width: world.clientWidth, height: world.clientHeight }
+
+            // NOTE: the world is usually scaled (css transform) to adapt to available space; we need to scale
+            // the mouse position appropriately
+            const relativeX = (event.clientX - scaledWorldBounds.left) / scaledWorldBounds.width
+            const relativeY = (event.clientY - scaledWorldBounds.top) / scaledWorldBounds.height
+
+            cb(relativeX * unscaledWorldBounds.width, relativeY * unscaledWorldBounds.height)
             setForceRerender(prev => prev + 1)
         };
 

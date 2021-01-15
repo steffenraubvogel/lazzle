@@ -28,23 +28,15 @@
     opacity: 0.5;
 }
 
-.levelPreview {
-    height: 0;
-    position: relative;
-    overflow: hidden;
+.levelPreview .world {
+    filter: saturate(45%);
+}
 
-    .world {
-        transform-origin: 0 0;
-        border-width: 0;
-        left: 50%; /* in conjunction with generated translateX(-50%) -> centered */
-        filter: saturate(45%);
-    }
+.worldContainer {
+    border: 1px solid grey;
 }
 
 .world {
-    border: 1px solid grey;
-    box-sizing: content-box;
-    position: relative;
     overflow: hidden;
     user-select: none;
 }

@@ -17,6 +17,7 @@ import { ReactComponent as QuestionMarkIcon } from "bootstrap-icons/icons/questi
 import { ReactComponent as WrongColorIcon } from "./images/wrongColor.svg"
 import { ReactComponent as ShieldPlusIcon } from "bootstrap-icons/icons/shield-plus.svg"
 import { ReactComponent as ShieldMinusIcon } from "bootstrap-icons/icons/shield-minus.svg"
+import AutoScaler from "../components/AutoScaler";
 
 export default function Game(props: {
     level: Level,
@@ -91,7 +92,7 @@ export default function Game(props: {
                 else {
                     setPhase(new LaserShotPhase(next))
                 }
-            }, 1200 * timeModifier)]
+            }, 1200 * timeModifier * (phase.changed ? 1 : 0.25))]
         }
         if (phase instanceof GoalMatchPhase) {
             timers = [setTimeout(() => {
@@ -109,6 +110,8 @@ export default function Game(props: {
     }
 
     function afterLaserShot(laserOrder: number) {
+        let changed = false
+
         // calc destroyed blocks
         for (const laser of lasers) {
             if (laser.order === laserOrder) {
@@ -127,6 +130,8 @@ export default function Game(props: {
                             // laser is re-coloring blocks
                             block.color = Colors[laser.color]
                         }
+
+                        changed = true
                     }
                 }
             }
@@ -154,6 +159,7 @@ export default function Game(props: {
                     if (newBlockY !== block.y) {
                         block.y = newBlockY
                         blockFallen = true
+                        changed = true
                     }
                 }
             }
@@ -162,7 +168,7 @@ export default function Game(props: {
 
         // start fall phase
         setBlocks([...blocks])
-        setPhase(new BlockFallPhase(laserOrder))
+        setPhase(new BlockFallPhase(laserOrder, changed))
     }
 
     function afterAllLasersShot() {
@@ -275,75 +281,75 @@ export default function Game(props: {
                     <button type="button" className="btn btn-light" onClick={() => setSpeed(4.00)} disabled={phase instanceof ResultPhase}>fast</button>
                     <button type="button" className="btn btn-light" onClick={skipEnd} disabled={phase instanceof ResultPhase}><SkipEndIcon /></button>
                 </div>
-                Phase: {phase.displayName}
+                Phase: {phase.displayName}{speed === 0 && ' (stopped)'}
             </>}
         </div>
 
-        <div id='world' className={styles.world + ' mb-3'} style={{
-            width: WORLD_WIDTH + 'px',
-            height: WORLD_HEIGHT + 'px',
-            ['--speed' as any]: (speed === 0 ? 1000 : speed) // a value of exactly 0 would mean division by 0 in CSS
-        }}>
-            {blocks.map(block => <BlockComponent key={block.id} block={block} />)}
-            {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={phase} blocks={blocks} />)}
+        <div className={styles.worldContainer + ' mb-3'}>
+            <AutoScaler id='world' defaultWidth={WORLD_WIDTH} defaultHeight={WORLD_HEIGHT} maxScaledHeight='100vh' className={styles.world} style={{
+                ['--speed' as any]: (speed === 0 ? 1000 : speed) // a value of exactly 0 would mean division by 0 in CSS
+            }}>
+                {blocks.map(block => <BlockComponent key={block.id} block={block} />)}
+                {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={phase} blocks={blocks} />)}
 
-            {phase instanceof GoalMatchPhase &&
-                phase.matchingBlocks.map(mb =>
-                    <div key={mb.ref.id} className={styles.matchingBlock + ' ' + styles[mb.state]} style={{
-                        width: BLOCK_SIZE + 'px',
-                        height: BLOCK_SIZE + 'px',
-                        left: mb.ref.x,
-                        top: mb.ref.y
-                    }}>
-                        {(() => {
-                            switch (mb.state) {
-                                case "overtowering":
-                                    return <RemoveIcon title='The block is not filled in goal.' />
-                                case "matching":
-                                    return <CheckIcon title='The block is matching with goal.' />
-                                case "missing":
-                                    return <QuestionMarkIcon title='The block is missing because it is present in goal but not in your result.' />
-                                case "wrongColor":
-                                    return <WrongColorIcon
-                                        title={'The block has the wrong color. It should be ' + ColorNames[Colors.indexOf(mb.goal!.color)] + ' but is '
-                                            + ColorNames[Colors.indexOf(mb.block!.color)] + '.'}
-                                        style={{ ['--goalBlockColor' as any]: mb.goal!.color }} />
-                                case "wrongStrength":
-                                    const title = 'The block strength doesn\'t match with the goal. It should be ' + BlockStrengthNames[mb.goal!.strength]
-                                        + ' but is ' + BlockStrengthNames[mb.block!.strength] + '.'
+                {phase instanceof GoalMatchPhase &&
+                    phase.matchingBlocks.map(mb =>
+                        <div key={mb.ref.id} className={styles.matchingBlock + ' ' + styles[mb.state]} style={{
+                            width: BLOCK_SIZE + 'px',
+                            height: BLOCK_SIZE + 'px',
+                            left: mb.ref.x,
+                            top: mb.ref.y
+                        }}>
+                            {(() => {
+                                switch (mb.state) {
+                                    case "overtowering":
+                                        return <RemoveIcon title='The block is not filled in goal.' />
+                                    case "matching":
+                                        return <CheckIcon title='The block is matching with goal.' />
+                                    case "missing":
+                                        return <QuestionMarkIcon title='The block is missing because it is present in goal but not in your result.' />
+                                    case "wrongColor":
+                                        return <WrongColorIcon
+                                            title={'The block has the wrong color. It should be ' + ColorNames[Colors.indexOf(mb.goal!.color)] + ' but is '
+                                                + ColorNames[Colors.indexOf(mb.block!.color)] + '.'}
+                                            style={{ ['--goalBlockColor' as any]: mb.goal!.color }} />
+                                    case "wrongStrength":
+                                        const title = 'The block strength doesn\'t match with the goal. It should be ' + BlockStrengthNames[mb.goal!.strength]
+                                            + ' but is ' + BlockStrengthNames[mb.block!.strength] + '.'
 
-                                    if (mb.block!.strength > mb.goal!.strength) {
-                                        return <ShieldMinusIcon title={title} />
-                                    }
-                                    return <ShieldPlusIcon title={title} />
-                            }
-                        })()}
-                    </div>)}
+                                        if (mb.block!.strength > mb.goal!.strength) {
+                                            return <ShieldMinusIcon title={title} />
+                                        }
+                                        return <ShieldPlusIcon title={title} />
+                                }
+                            })()}
+                        </div>)}
 
-            {phase instanceof ResultPhase &&
-                <div className={styles.resultContainer}>
-                    <div className={styles.result}>
-                        <span>Your score is {Math.floor(phase.result.score * 100)}%. Level <strong>{phase.result.score === 1 ? 'complete' : 'incomplete'}</strong>.</span>
+                {phase instanceof ResultPhase &&
+                    <div className={styles.resultContainer}>
+                        <div className={styles.result}>
+                            <span>Your score is {Math.floor(phase.result.score * 100)}%. Level <strong>{phase.result.score === 1 ? 'complete' : 'incomplete'}</strong>.</span>
 
-                        <div className='mt-3'>
-                            {phase.result.score === 1 && <>
-                                <button type="button" className="btn btn-primary" onClick={props.onLevelFinishedClick}>{props.levelFinishedButtonText}</button>&nbsp;
+                            <div className='mt-3'>
+                                {phase.result.score === 1 && <>
+                                    <button type="button" className="btn btn-primary" onClick={props.onLevelFinishedClick}>{props.levelFinishedButtonText}</button>&nbsp;
                                 <button type="button" className="btn btn-secondary" onClick={restartLevel}>Restart Level</button>
-                            </>}
-                            {phase.result.score < 1 && <>
-                                <button type="button" className="btn btn-primary" onClick={restartLevel}>Try again</button>&nbsp;
+                                </>}
+                                {phase.result.score < 1 && <>
+                                    <button type="button" className="btn btn-primary" onClick={restartLevel}>Try again</button>&nbsp;
                                 <button type="button" className="btn btn-secondary" onClick={inspectResult}>Inspect Result</button>
-                            </>}
+                                </>}
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
 
-            {showGoal && <>
-                <div className={styles.goalContainer}>
-                    {goalBlocks.map(block => <BlockComponent key={block.id} block={block} />)}
-                </div>
-            </>}
+                {showGoal && <>
+                    <div className={styles.goalContainer}>
+                        {goalBlocks.map(block => <BlockComponent key={block.id} block={block} />)}
+                    </div>
+                </>}
+            </AutoScaler>
         </div>
     </>
 }

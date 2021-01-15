@@ -10,6 +10,7 @@ import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
 import { ReactComponent as EraserIcon } from "bootstrap-icons/icons/eraser.svg"
 import { ReactComponent as ClipboardIcon } from "bootstrap-icons/icons/clipboard.svg"
 import Modal from "../components/Modal";
+import AutoScaler from "../components/AutoScaler";
 import Game from "./Game";
 import Obfuscate from 'react-obfuscate';
 
@@ -231,12 +232,12 @@ export default function LazzleLevelEditor() {
                 <div className="col-12 col-md-6">
                     <div className='mb-3'>
                         <label htmlFor="gridXRange" className="form-label">Level width: {level.gridX} blocks</label>
-                        <input id="gridXRange" type="range" className="form-range" min="1" max="15" step="1" value={level.gridX} onChange={handleGridXRangeChange} />
+                        <input id="gridXRange" type="range" className="form-range" min="1" max="25" step="1" value={level.gridX} onChange={handleGridXRangeChange} />
                     </div>
 
                     <div className='mb-3 mb-md-0'>
                         <label htmlFor="gridYRange" className="form-label">Level height: {level.gridY} blocks</label>
-                        <input id="gridYRange" type="range" className="form-range" min="1" max="15" step="1" value={level.gridY} onChange={handleGridYRangeChange} />
+                        <input id="gridYRange" type="range" className="form-range" min="1" max="13" step="1" value={level.gridY} onChange={handleGridYRangeChange} />
                     </div>
                 </div>
             </div>
@@ -252,27 +253,30 @@ export default function LazzleLevelEditor() {
                 <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" checked={showGoal} onChange={() => setShowGoal(true)} />
                 <label className="btn btn-outline-primary" htmlFor="btnradio2">Goal Blocks</label>
             </div>
-            <div className={styles.world + ' ' + styles.editor + ' mb-3'} style={{ width: WORLD_WIDTH + 'px', height: WORLD_HEIGHT + 'px' }}>
-                <div className={styles.blockAidLines}>
-                    {Array(level.gridY).fill(0).map((_y, indexY) =>
-                        <div key={indexY} className={styles.blockAidLinesRow}>
-                            {Array(level.gridX).fill(0).map((_x, indexX) =>
-                                <div key={indexX}
-                                    className={styles.blockAidLinesCell}
-                                    style={{ width: BLOCK_SIZE + 'px', height: BLOCK_SIZE + 'px' }}
-                                    onClick={() => handleBlockClick(indexX, indexY)}>
-                                </div>)}
-                        </div>)}
-                </div>
 
-                {blocks.map(block => <BlockComponent key={block.id} block={block} />)}
-                {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={new LevelEditorPhase()} blocks={[]} />)}
-
-                {showGoal && <>
-                    <div className={styles.goalContainer}>
-                        {goalBlocks.map(block => <BlockComponent key={block.id} block={block} />)}
+            <div className={styles.editor + ' mb-3 ' + styles.worldContainer}>
+                <AutoScaler defaultWidth={WORLD_WIDTH} defaultHeight={WORLD_HEIGHT} className={styles.world} maxScaledHeight='100vh'>
+                    <div className={styles.blockAidLines}>
+                        {Array(level.gridY).fill(0).map((_y, indexY) =>
+                            <div key={indexY} className={styles.blockAidLinesRow}>
+                                {Array(level.gridX).fill(0).map((_x, indexX) =>
+                                    <div key={indexX}
+                                        className={styles.blockAidLinesCell}
+                                        style={{ width: BLOCK_SIZE + 'px', height: BLOCK_SIZE + 'px' }}
+                                        onClick={() => handleBlockClick(indexX, indexY)}>
+                                    </div>)}
+                            </div>)}
                     </div>
-                </>}
+
+                    {blocks.map(block => <BlockComponent key={block.id} block={block} />)}
+                    {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={new LevelEditorPhase()} blocks={[]} />)}
+
+                    {showGoal && <>
+                        <div className={styles.goalContainer}>
+                            {goalBlocks.map(block => <BlockComponent key={block.id} block={block} />)}
+                        </div>
+                    </>}
+                </AutoScaler>
             </div>
 
             <Tabs>

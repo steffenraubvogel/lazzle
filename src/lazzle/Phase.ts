@@ -50,7 +50,7 @@ export class LaserShotPhase extends Phase {
  */
 export class BlockFallPhase extends Phase {
 
-    constructor(public readonly order: number) {
+    constructor(public readonly order: number, public readonly changed: boolean) {
         super()
     }
 
