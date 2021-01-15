@@ -38,7 +38,7 @@ export default function LazzleLevelEditor() {
 
     const [activeBlockColor, setActiveBlockColor] = useState<number>(0)
     const [activeStrength, setActiveStrength] = useState<number>(1)
-    const [initialLaserOpen, setInitialLaserOpen] = useState<number>(0)
+    const [initialLaserOpen, setInitialLaserOpen] = useState<number>()
 
     const [testLevel, setTestLevel] = useState<Level>()
 
@@ -48,24 +48,39 @@ export default function LazzleLevelEditor() {
         setLevel(prev => ({ ...prev, name: event.target.value }))
     }
     function handleGridXRangeChange(event: ChangeEvent<HTMLInputElement>) {
+        const oldGridX = level.gridX
         const newGridX = Number(event.target.value)
+        let offsetX = (newGridX - oldGridX) / 2.0
+        if (offsetX % 1 !== 0) {
+            // fractional offset, means the diff gridX is uneven, so we have to decide to put a new column to the left or right of blocks
+            if (newGridX % 2 === 0) {
+                offsetX = Math.floor(offsetX)
+            }
+            else {
+                offsetX = Math.ceil(offsetX)
+            }
+        }
+
         setLevel(prev => ({
             ...prev, gridX: newGridX,
-            blocks: removeOutsideBlocks(prev.blocks, newGridX, prev.gridY),
-            goal: removeOutsideBlocks(prev.goal, newGridX, prev.gridY)
+            blocks: moveBlocksAndRemoveOutsideBlocks(prev.blocks, offsetX, 0, newGridX, prev.gridY),
+            goal: moveBlocksAndRemoveOutsideBlocks(prev.goal, offsetX, 0, newGridX, prev.gridY)
         }))
     }
     function handleGridYRangeChange(event: ChangeEvent<HTMLInputElement>) {
+        const oldGridY = level.gridY
         const newGridY = Number(event.target.value)
+        const offsetY = newGridY - oldGridY
         setLevel(prev => ({
             ...prev, gridY: newGridY,
-            blocks: removeOutsideBlocks(prev.blocks, prev.gridX, newGridY),
-            goal: removeOutsideBlocks(prev.goal, prev.gridX, newGridY)
+            blocks: moveBlocksAndRemoveOutsideBlocks(prev.blocks, 0, offsetY, prev.gridX, newGridY),
+            goal: moveBlocksAndRemoveOutsideBlocks(prev.goal, 0, offsetY, prev.gridX, newGridY)
         }))
     }
 
-    function removeOutsideBlocks(blocks: LevelBlock[], gridX: number, gridY: number) {
-        return blocks.filter(b => b.x < gridX && b.y < gridY)
+    function moveBlocksAndRemoveOutsideBlocks(blocks: LevelBlock[], offsetX: number, offsetY: number, gridX: number, gridY: number) {
+        return blocks.map(b => ({ ...b, x: b.x + offsetX, y: b.y + offsetY }))
+            .filter(b => b.x < gridX && b.x >= 0 && b.y < gridY && b.y >= 0)
     }
 
     useEffect(() => {
@@ -185,6 +200,18 @@ export default function LazzleLevelEditor() {
             alert(`Imported level '${existingLevel.name}'.`)
         }
     }
+
+    useEffect(() => {
+        // handle shortcuts
+        const eventListener: (event: KeyboardEvent) => void = (event) => {
+            if (event.key === 'g') {
+                setShowGoal(prev => !prev)
+                event.preventDefault() // prevents browser features like quick search
+            }
+        }
+        document.addEventListener("keydown", eventListener);
+        return () => document.removeEventListener("keydown", eventListener);
+    }, [])
 
     return <div className={"container-md " + styles.lazzle}>
         <h1>Lazzle - Level Editor</h1>
@@ -371,7 +398,7 @@ export default function LazzleLevelEditor() {
             <h2>Export</h2>
 
             <label htmlFor="exportOutput" className="form-label">
-                The level is stored as JSON file. If you would like to share your awesome level, copy the level data below and send me 
+                The level is stored as JSON file. If you would like to share your awesome level, copy the level data below and send me
                 an <Obfuscate email="steffen@lazzle.de">email</Obfuscate>:
             </label>
             <div className='row'>
@@ -416,6 +443,13 @@ export default function LazzleLevelEditor() {
                         <option key={index} value={index}>{(index + 1) + ' - ' + existingLevel.name}</option>)}
                 </select>
             </div>
+        </section>
+
+        <section>
+            <h2>Shortcuts</h2>
+            <ul>
+                <li><kbd>g</kbd> - toggle goal</li>
+            </ul>
         </section>
     </div >
 
