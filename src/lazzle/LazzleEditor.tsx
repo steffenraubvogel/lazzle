@@ -390,10 +390,8 @@ export default function LazzleLevelEditor() {
             <button className='btn btn-outline-secondary' onClick={() => setTestLevel(level)}>Test Level</button>
             {testLevel &&
                 <Modal title='Test Your Level' fullScreen={true} close={() => setTestLevel(undefined)}>
-                    <div className='d-flex justify-content-center'>
-                        <div>
-                            <Game level={testLevel} levelFinishedButtonText='Close Test' onLevelFinishedClick={() => setTestLevel(undefined)} />
-                        </div>
+                    <div className='container-md'>
+                        <Game level={testLevel} levelFinishedButtonText='Close Test' onLevelFinishedClick={() => setTestLevel(undefined)} />
                     </div>
                 </Modal>}
         </section>

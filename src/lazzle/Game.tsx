@@ -259,6 +259,10 @@ export default function Game(props: {
                 toggleGoal()
                 event.preventDefault() // prevents browser features like quick search
             }
+            else if (event.key === 's') {
+                startLasers()
+                event.preventDefault()
+            }
         }
         document.addEventListener("keydown", eventListener);
         return () => document.removeEventListener("keydown", eventListener);
@@ -267,8 +271,8 @@ export default function Game(props: {
     return <>
         <div className='mt-3 mb-2'>
             {phase instanceof SetupPhase && <>
-                <button type="button" className="btn btn-primary" onClick={startLasers}><PlayIcon /> Start Lasers</button>&nbsp;
-                <button type="button" className="btn btn-secondary" onClick={toggleGoal}><BullsEyeIcon /> Toggle <u>G</u>oal</button>
+                <button type="button" className="btn btn-primary" onClick={startLasers} title="shortcut 's'"><PlayIcon /> <u>S</u>tart Lasers</button>&nbsp;
+                <button type="button" className="btn btn-secondary" onClick={toggleGoal} title="shortcut 'g'"><BullsEyeIcon /> Toggle <u>G</u>oal</button>
             </>}
             {!(phase instanceof SetupPhase) && <>
                 <div className="btn-group me-3">

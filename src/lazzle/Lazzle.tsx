@@ -81,7 +81,7 @@ export function LevelLoader(props: RouteComponentProps<{ levelIndex?: string | u
             <section>
                 <h2>Level {AllLevels.indexOf(level) + 1} - {level.name}</h2>
                 <Game level={level}
-                    levelFinishedButtonText={AllLevels.indexOf(level) === AllLevels.length - 1 ? 'Finish Level' : 'Next Level'} 
+                    levelFinishedButtonText={AllLevels.indexOf(level) === AllLevels.length - 1 ? 'Finish Level' : 'Next Level'}
                     onLevelFinished={storeProgress}
                     onLevelFinishedClick={startNextLevel} />
             </section>
@@ -114,6 +114,7 @@ export function LevelLoader(props: RouteComponentProps<{ levelIndex?: string | u
                     Shortcuts:
                 </p>
                 <ul>
+                    <li><kbd>s</kbd> - start lasers</li>
                     <li><kbd>g</kbd> - toggle goal</li>
                 </ul>
             </section>
