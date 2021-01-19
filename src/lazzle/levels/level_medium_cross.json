@@ -1,5 +1,8 @@
 {
-    "name": "The cross",
+    "name": {
+        "en": "The cross",
+        "de": "Das Kreuz"
+    },
     "gridX": 6,
     "gridY": 7,
     "blocks": [

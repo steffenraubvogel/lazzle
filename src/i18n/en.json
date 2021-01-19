@@ -1,0 +1,165 @@
+{
+    "homepage": {
+        "welcome": "Welcome to Lazzle!",
+        "play": "Play the Game",
+        "play_description": "Click to play the game level by level.",
+        "play_action": "Play",
+        "editor": "Game Level Editor",
+        "editor_description": "Create your own Lazzle levels by starting from scratch or loading existing levels.",
+        "editor_action": "Open Editor"
+    },
+    "game": {
+        "heading": "Lazzle",
+        "level": {
+            "choose": "Choose a Level",
+            "title": "Level {{index}}",
+            "play": "Play",
+            "play_again": "Play Again",
+            "locked": "Locked",
+            "not_found": {
+                "heading": "Level not found",
+                "description": "The level you are requesting doesn't exist. Please visit the <0>level chooser</0>."
+            }
+        },
+        "play": {
+            "start_lasers": "<0>S</0>tart Lasers",
+            "start_lasers_tooltip": "shortcut 's'",
+            "toggle_goal": "Toggle <0>G</0>oal",
+            "toggle_goal_tooltip": "shortcut 'g'",
+            "action_next_level": "Next Level",
+            "action_finish_level": "Finish Level",
+            "action_restart_level": "Restart Level",
+            "action_try_again": "Try Again",
+            "action_inspect_result": "Inspect Result",
+            "sim": {
+                "slow": "slow",
+                "fast": "fast",
+                "phase_current": "Phase: ",
+                "phase_stopped": " (stopped)",
+                "phase": {
+                    "starting": "Starting lasers...",
+                    "laser_shooting": "Shooting lasers with order {{order}}",
+                    "blocks_falling": "Blocks falling...",
+                    "matching": "Matching blocks with goal blocks",
+                    "result": "Simluation finished"
+                },
+                "match": {
+                    "overtowering": "The block is not filled in goal.",
+                    "matching": "The block is matching with goal.",
+                    "missing": "The block is missing because it is present in goal but not in your result.",
+                    "wrongColor": "The block has the wrong color. It should be {{goal}} but is {{actual}}.",
+                    "wrongStrength": "The block strength doesn't match with the goal. It should be {{goal}} but is {{actual}}."
+                },
+                "level_complete": "Your score is {{score}}%. Level <0>complete</0>!",
+                "level_incomplete": "Your score is {{score}}%. Level <0>incomplete</0>!"
+            },
+            "block_color": {
+                "0": "red",
+                "1": "green",
+                "2": "blue",
+                "3": "yellow",
+                "4": "pink",
+                "5": "cyan",
+                "6": "gray",
+                "7": "purple",
+                "8": "brown",
+                "9": "orange",
+                "10": "yellowish green"
+            },
+            "block_strength": {
+                "0": "destroyed",
+                "1": "normal",
+                "2": "strengthened",
+                "3": "heavy"
+            }
+        },
+        "won": {
+            "heading": "Congratulations!",
+            "description": "You managed to solve all levels. Well done!"
+        },
+        "help": {
+            "howto": "<h2>How to</h2><p>The game consists of colored blocks and lasers.</p><ul><li>Use <em>Toggle Goal</em> to see the target blocks arrangement that you need to accomplish by shooting with the lasers.</li><li>Lasers can be dragged around on their semi-circle and rotated in any direction (if allowed by level). Drag the grip behind the laser to move it. Drag the laser aid line to rotate it.</li> <li>Once you are ready click <em>Start Lasers</em>. Lasers will be shot in sequence as indicated by their numbers. The lasers will destroy or re-color the blocks they are aiming at. Blocks up in the air will then fall down. After all lasers shot, the resulting block arrangement will be compared with the goal.</li><li>If a laser has a color different than black then its shot will not destroy but re-color the blocks hit.</li></ul><p>You will win the level if all resulting blocks match with the target blocks. Have fun!</p>",
+            "hints": "<h2>Hints and Help</h2><p>The difficulty will increase with each level. At the moment there are {{count}} levels available.</p><p>Shortcuts:</p><ul><li><kbd>s</kbd> - start lasers</li><li><kbd>g</kbd> - toggle goal</li></ul>"
+        }
+    },
+    "editor" : {
+        "heading": "Lazzle - Level Editor",
+        "settings": {
+            "heading": "Settings",
+            "level_name": "Level name:",
+            "level_name_description": "Provide a funny and short description for the level for each supported language, usually with a hint on difficulty.",
+            "width": "Level width: {{value}} blocks",
+            "height": "Level height: {{value}} blocks"
+        },
+        "design": {
+            "heading": "Design",
+            "starting_blocks": "Starting Blocks",
+            "goal_blocks": "Goal Blocks",
+            "block": {
+                "color": "Select a color and click on a block above to color it:",
+                "color_description": "Colors are predefined. Use the rubber to remove blocks.",
+                "rubber": "Rubber",
+                "strength": "Block Strength:",
+                "strength_item": "{{name}} (resists {{count}} shot before destroyed)",
+                "strength_item_plural": "{{name}} (resists {{count}} shots before destroyed)",
+                "other_tools": "Or use one of the tools below:",
+                "tool_remove_all": "Remove all blocks"
+            },
+            "laser": {
+                "order": "Order:",
+                "order_description": "The order defines the sequence of laser shots. Lower order numbers start first.",
+                "distance": "Distance: {{value}}",
+                "distance_description": "The distance from the bottom center of the blocks (radius of laser's semi-circle).",
+                "angle": "Angle: {{value}}°",
+                "angle_description": "Controls where the laser is positioned on its semi-circle.",
+                "rotation": "Rotation: {{value}}°",
+                "rotation_description": "Sets the direction in which the laser shoots.",
+                "movable": "Can be moved",
+                "rotatable": "Can be rotated",
+                "effect": "Effect:",
+                "effect_description": "If a color is chosen then the laser will not destroy but color the hit blocks.",
+                "effect_destroy": "Destroys blocks",
+                "effect_recolor": "Colors blocks to {{colorName}}",
+                "remove": "Remove This Laser",
+                "add": "Add Laser"
+            }
+        },
+        "test": {
+            "heading": "Test Level",
+            "description": "You can try out your level here. A fullscreen dialog will open and show how the level would be played by users.",
+            "action": "Test now",
+            "close": "Close Test"
+        },
+        "export": {
+            "heading": "Export",
+            "description_0": "The level is stored as JSON file. If you would like to share your awesome level, copy the level data below and send me an ",
+            "description_1": "email",
+            "description_2": ":",
+            "copy_tooltip": "Copies the level JSON to clipboard."
+        },
+        "import": {
+            "heading": "Import",
+            "description": "In case you need to refine an existing level or don't want to start from scratch, you can paste the level JSON below and click the <0>Load Level</0> button.",
+            "load": "Load Level",
+            "existing_level": "Alternatively you can load an existing level from the game:",
+            "existing_level_placeholder": "Select a level to load it.",
+            "success": "Imported level '{{name}}'."
+        },
+        "shortcuts": {
+            "heading": "Shortcuts",
+            "toggle_goal": "toggle goal"
+        }
+    },
+    "footer": {
+        "copyright": "© Steffen Harbich",
+        "nav": {
+            "home": "Home",
+            "legal": "Legal, Data Privacy"
+        },
+        "credits": "Hosting credits to <0>falconiform</0>"
+    },
+    "language": {
+        "en": "English",
+        "de": "Deutsch"
+    }
+}

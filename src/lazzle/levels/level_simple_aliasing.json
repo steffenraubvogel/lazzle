@@ -1,5 +1,8 @@
 {
-    "name": "Aliasing for the win",
+    "name": {
+        "en": "Aliasing for the win",
+        "de": "Siegestreppchen"
+    },
     "gridX": 7,
     "gridY": 6,
     "blocks": [

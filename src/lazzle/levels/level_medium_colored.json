@@ -1,5 +1,8 @@
 {
-    "name": "Color up your life",
+    "name": {
+        "en": "Color up your life",
+        "de": "Bring Farbe in dein Leben"
+    },
     "gridX": 7,
     "gridY": 6,
     "blocks": [

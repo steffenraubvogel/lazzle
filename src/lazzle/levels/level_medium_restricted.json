@@ -1,5 +1,8 @@
 {
-    "name": "You have to work with what you have.",
+    "name": {
+        "en": "You have to work with what you have",
+        "de": "Man muss mit dem arbeiten, was man hat"
+    },
     "gridX": 6,
     "gridY": 8,
     "blocks": [

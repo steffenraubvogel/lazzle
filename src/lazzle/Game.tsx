@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Lazzle.module.scss";
 import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
-import { BlockStrengthNames, ColorNames, Colors, Level, LevelBlock } from "./Levels";
+import { Colors, Level, LevelBlock } from "./Levels";
 import { BlockFallPhase, GoalMatchPhase, LaserShotPhase, MatchingBlock, Phase, ResultPhase, SetupPhase, StartPhase } from "./Phase";
 import { Point, rayIntersectsBlock } from "./Geometry";
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
@@ -18,6 +18,7 @@ import { ReactComponent as WrongColorIcon } from "./images/wrongColor.svg"
 import { ReactComponent as ShieldPlusIcon } from "bootstrap-icons/icons/shield-plus.svg"
 import { ReactComponent as ShieldMinusIcon } from "bootstrap-icons/icons/shield-minus.svg"
 import AutoScaler from "../components/AutoScaler";
+import { Trans, useTranslation } from "react-i18next";
 
 export default function Game(props: {
     level: Level,
@@ -25,6 +26,8 @@ export default function Game(props: {
     onLevelFinished?: () => void, // full score reached
     onLevelFinishedClick: () => void // finish button clicked
 }) {
+
+    const { t } = useTranslation()
 
     const [lasers, setLasers] = useState<Laser[]>([])
     const [blocks, setBlocks] = useState<Block[]>([])
@@ -271,21 +274,25 @@ export default function Game(props: {
     return <>
         <div className='mt-3 mb-2'>
             {phase instanceof SetupPhase && <>
-                <button type="button" className="btn btn-primary" onClick={startLasers} title="shortcut 's'"><PlayIcon /> <u>S</u>tart Lasers</button>&nbsp;
-                <button type="button" className="btn btn-secondary" onClick={toggleGoal} title="shortcut 'g'"><BullsEyeIcon /> Toggle <u>G</u>oal</button>
+                <button type="button" className="btn btn-primary" onClick={startLasers} title={t('game.play.start_lasers_tooltip')}>
+                    <PlayIcon /> <Trans i18nKey='game.play.start_lasers'><u></u></Trans>
+                </button>&nbsp;
+                <button type="button" className="btn btn-secondary" onClick={toggleGoal} title={t('game.play.toggle_goal_tooltip')}>
+                    <BullsEyeIcon /> <Trans i18nKey='game.play.toggle_goal'><u></u></Trans>
+                </button>
             </>}
             {!(phase instanceof SetupPhase) && <>
                 <div className="btn-group me-3">
                     <button type="button" className="btn btn-light" onClick={skipStart} disabled={phase instanceof ResultPhase}><SkipStartIcon /></button>
-                    <button type="button" className="btn btn-light" onClick={() => setSpeed(0.25)} disabled={phase instanceof ResultPhase}>slow</button>
+                    <button type="button" className="btn btn-light" onClick={() => setSpeed(0.25)} disabled={phase instanceof ResultPhase}>{t('game.play.sim.slow')}</button>
                     <button type="button" className="btn btn-light" onClick={playOrPause} disabled={phase instanceof ResultPhase}>
                         {speed === 0 && <PlayIcon />}
                         {speed > 0 && <PauseIcon />}
                     </button>
-                    <button type="button" className="btn btn-light" onClick={() => setSpeed(4.00)} disabled={phase instanceof ResultPhase}>fast</button>
+                    <button type="button" className="btn btn-light" onClick={() => setSpeed(4.00)} disabled={phase instanceof ResultPhase}>{t('game.play.sim.fast')}</button>
                     <button type="button" className="btn btn-light" onClick={skipEnd} disabled={phase instanceof ResultPhase}><SkipEndIcon /></button>
                 </div>
-                Phase: {phase.displayName}{speed === 0 && ' (stopped)'}
+                {t('game.play.sim.phase_current')}{phase.getDisplayName(t)}{speed === 0 && t('game.play.sim.phase_stopped')}
             </>}
         </div>
 
@@ -307,19 +314,23 @@ export default function Game(props: {
                             {(() => {
                                 switch (mb.state) {
                                     case "overtowering":
-                                        return <RemoveIcon title='The block is not filled in goal.' />
+                                        return <RemoveIcon title={t('game.play.sim.match.' + mb.state)} />
                                     case "matching":
-                                        return <CheckIcon title='The block is matching with goal.' />
+                                        return <CheckIcon title={t('game.play.sim.match.' + mb.state)} />
                                     case "missing":
-                                        return <QuestionMarkIcon title='The block is missing because it is present in goal but not in your result.' />
+                                        return <QuestionMarkIcon title={t('game.play.sim.match.' + mb.state)} />
                                     case "wrongColor":
                                         return <WrongColorIcon
-                                            title={'The block has the wrong color. It should be ' + ColorNames[Colors.indexOf(mb.goal!.color)] + ' but is '
-                                                + ColorNames[Colors.indexOf(mb.block!.color)] + '.'}
+                                            title={t('game.play.sim.match.' + mb.state, {
+                                                goal: t('game.play.block_color.' + Colors.indexOf(mb.goal!.color)),
+                                                actual: t('game.play.block_color.' + Colors.indexOf(mb.block!.color))
+                                            })}
                                             style={{ ['--goalBlockColor' as any]: mb.goal!.color }} />
                                     case "wrongStrength":
-                                        const title = 'The block strength doesn\'t match with the goal. It should be ' + BlockStrengthNames[mb.goal!.strength]
-                                            + ' but is ' + BlockStrengthNames[mb.block!.strength] + '.'
+                                        const title = t('game.play.sim.match.' + mb.state, {
+                                            goal: t('game.play.block_strength.' + mb.goal!.strength),
+                                            actual: t('game.play.block_strength.' + mb.block!.strength)
+                                        })
 
                                         if (mb.block!.strength > mb.goal!.strength) {
                                             return <ShieldMinusIcon title={title} />
@@ -338,16 +349,19 @@ export default function Game(props: {
             {phase instanceof ResultPhase &&
                 <div className={styles.resultContainer}>
                     <div className={styles.result}>
-                        <span>Your score is {Math.floor(phase.result.score * 100)}%. Level <strong>{phase.result.score === 1 ? 'complete' : 'incomplete'}</strong>.</span>
+                        <span>
+                            <Trans i18nKey={phase.result.score === 1 ? 'game.play.sim.level_complete' : 'game.play.sim.level_incomplete'}
+                                tOptions={{ score: Math.floor(phase.result.score * 100) }}><strong></strong></Trans>
+                        </span>
 
                         <div className='mt-3'>
                             {phase.result.score === 1 && <>
                                 <button type="button" className="btn btn-primary" onClick={props.onLevelFinishedClick}>{props.levelFinishedButtonText}</button>&nbsp;
-                                <button type="button" className="btn btn-secondary" onClick={restartLevel}>Restart Level</button>
+                                <button type="button" className="btn btn-secondary" onClick={restartLevel}>{t('game.play.action_restart_level')}</button>
                             </>}
                             {phase.result.score < 1 && <>
-                                <button type="button" className="btn btn-primary" onClick={restartLevel}>Try again</button>&nbsp;
-                                <button type="button" className="btn btn-secondary" onClick={inspectResult}>Inspect Result</button>
+                                <button type="button" className="btn btn-primary" onClick={restartLevel}>{t('game.play.action_try_again')}</button>&nbsp;
+                                <button type="button" className="btn btn-secondary" onClick={inspectResult}>{t('game.play.action_inspect_result')}</button>
                             </>}
                         </div>
                     </div>

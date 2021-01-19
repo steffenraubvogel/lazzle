@@ -1,5 +1,8 @@
 {
-    "name": "Strengthened blocks to the rescue",
+    "name": {
+        "en": "Strengthened blocks to the rescue",
+        "de": "Verstärkte Blöcke sei dank"
+    },
     "gridX": 3,
     "gridY": 6,
     "blocks": [

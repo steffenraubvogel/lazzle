@@ -1,5 +1,8 @@
 {
-    "name": "The Single Survivor",
+    "name": {
+        "en": "The Single Survivor",
+        "de": "Der einzige Überlebende"
+    },
     "gridX": 8,
     "gridY": 8,
     "blocks": [

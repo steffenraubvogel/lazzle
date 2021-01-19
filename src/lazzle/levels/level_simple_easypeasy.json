@@ -1,5 +1,8 @@
 {
-    "name": "Easy Peasy",
+    "name": {
+        "en": "Easy Peasy",
+        "de": "Kinderleicht"
+    },
     "gridX": 1,
     "gridY": 6,
     "blocks": [

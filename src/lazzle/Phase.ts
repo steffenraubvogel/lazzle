@@ -1,8 +1,11 @@
+import { TFunction } from "react-i18next"
 import { Block } from "./Block"
 
 export abstract class Phase {
 
-    abstract get displayName(): string
+    getDisplayName(t: TFunction): string {
+        return '<unknown phase>'
+    }
 
 }
 
@@ -10,11 +13,6 @@ export abstract class Phase {
  * In this phase the user positions the lasers.
  */
 export class SetupPhase extends Phase {
-
-    get displayName() {
-        return 'Position lasers'
-    }
-
 }
 
 /**
@@ -22,8 +20,8 @@ export class SetupPhase extends Phase {
  */
 export class StartPhase extends Phase {
 
-    get displayName() {
-        return 'Starting lasers...'
+    getDisplayName(t: TFunction) {
+        return t('game.play.sim.phase.starting')
     }
 
 }
@@ -38,8 +36,8 @@ export class LaserShotPhase extends Phase {
         super()
     }
 
-    get displayName() {
-        return 'Shooting lasers with order ' + this.order
+    getDisplayName(t: TFunction) {
+        return t('game.play.sim.phase.laser_shooting', { order: this.order })
     }
 
 }
@@ -54,8 +52,8 @@ export class BlockFallPhase extends Phase {
         super()
     }
 
-    get displayName() {
-        return 'Blocks falling...'
+    getDisplayName(t: TFunction) {
+        return t('game.play.sim.phase.blocks_falling')
     }
 
 }
@@ -79,8 +77,8 @@ export class GoalMatchPhase extends Phase {
         super()
     }
 
-    get displayName() {
-        return 'Matching blocks with goal blocks'
+    getDisplayName(t: TFunction) {
+        return t('game.play.sim.phase.matching')
     }
 
 }
@@ -97,8 +95,8 @@ export class ResultPhase extends Phase {
         super()
     }
 
-    get displayName() {
-        return 'Simluation finished'
+    getDisplayName(t: TFunction) {
+        return t('game.play.sim.phase.result')
     }
 
 }
@@ -107,20 +105,10 @@ export class ResultPhase extends Phase {
  * This phase is active as long as a level is being edited in the level editor.
  */
 export class LevelEditorPhase extends Phase {
-
-    get displayName() {
-        return 'Editing level'
-    }
-
 }
 
 /**
  * Used to render a preview of the level where levels can be chosen from.
  */
 export class LevelPreviewPhase extends Phase {
-
-    get displayName() {
-        return 'Previewing level'
-    }
-
 }

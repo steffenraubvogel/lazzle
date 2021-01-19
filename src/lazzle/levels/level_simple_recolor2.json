@@ -1,5 +1,8 @@
 {
-    "name": "So beautiful! Let's paint it gray.",
+    "name": {
+        "en": "So beautiful! Let's paint it gray.",
+        "de": "Wunderschön! Lass es uns grau färben."
+    },
     "gridX": 5,
     "gridY": 8,
     "blocks": [

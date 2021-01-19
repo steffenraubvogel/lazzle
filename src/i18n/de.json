@@ -1,0 +1,158 @@
+{
+    "homepage": {
+        "welcome": "Willkommen bei Lazzle!",
+        "play": "Spielen",
+        "play_description": "Klicke hier, um das Spiel Level für Level zu spielen.",
+        "play_action": "Spielen",
+        "editor": "Level-Editor",
+        "editor_description": "Erstelle deine eigenen Lazzle-Level, indem du mit einem leeren Level beginnst oder ein vorhandenes Level lädst.",
+        "editor_action": "Editor öffnen"
+    },
+    "game": {
+        "heading": "Lazzle",
+        "level": {
+            "choose": "Wähle ein Level",
+            "title": "Level {{index}}",
+            "play": "Spielen",
+            "play_again": "Erneut spielen",
+            "locked": "Nicht freigeschaltet",
+            "not_found": {
+                "heading": "Level nicht gefunden",
+                "description": "Das Level, das du spielen möchtest, gibt es nicht. Bitte besuche die <0>Levelauswahl</0>."
+            }
+        },
+        "play": {
+            "start_lasers": "Laser <0>s</0>tarten",
+            "start_lasers_tooltip": "Tastenkürzel 's'",
+            "toggle_goal": "Zielanzeige umschalten",
+            "toggle_goal_tooltip": "Tastenkürzel 'g'",
+            "action_next_level": "Nächstes Level",
+            "action_finish_level": "Level abschließen",
+            "action_restart_level": "Level neustarten",
+            "action_try_again": "Erneut versuchen",
+            "action_inspect_result": "Ergebnis anschauen",
+            "sim": {
+                "slow": "langsam",
+                "fast": "schnell",
+                "phase_current": "Phase: ",
+                "phase_stopped": " (angehalten)",
+                "phase": {
+                    "starting": "Starte Laser...",
+                    "laser_shooting": "Laser mit der Reihenfolge {{order}} schießen",
+                    "blocks_falling": "Blöcke fallen...",
+                    "matching": "Ermittle mit Ziel übereinstimmende Blöcke",
+                    "result": "Simluation abgeschlossen"
+                },
+                "match": {
+                    "overtowering": "Der Block ist nicht im Ziel vorhanden.",
+                    "matching": "Der Block stimmt mit dem Ziel überein.",
+                    "missing": "Dieser Block fehlt in deinem Ergebnis, verglichen mit dem Ziel.",
+                    "wrongColor": "Der Block hat die falsche Farbe. Es sollte {{goal}} sein, ist aber {{actual}}.",
+                    "wrongStrength": "Die Stärke des Blocks stimmt nicht mit dem Ziel überein. Sie sollte {{goal}} sein, ist aber {{actual}}."
+                },
+                "level_complete": "Deine Punktzahl ist {{score}}%. Level <0>abgeschlossen</0>!",
+                "level_incomplete": "Deine Punktzahl ist {{score}}%. Level <0>unvollständig</0>!"
+            },
+            "block_color": {
+                "0": "rot",
+                "1": "grün",
+                "2": "blau",
+                "3": "gelb",
+                "4": "pink",
+                "5": "cyan",
+                "6": "grau",
+                "7": "lila",
+                "8": "braun",
+                "9": "orange",
+                "10": "gelb-grün"
+            },
+            "block_strength": {
+                "0": "zerstört",
+                "1": "normal",
+                "2": "verstärkt",
+                "3": "stark"
+            }
+        },
+        "won": {
+            "heading": "Glückwunsch!",
+            "description": "Du hast alle Level gemeistert. Gut gemacht!"
+        },
+        "help": {
+        }
+    },
+    "editor" : {
+        "heading": "Lazzle - Level-Editor",
+        "settings": {
+            "heading": "Einstellungen",
+            "level_name": "Levelname:",
+            "level_name_description": "Gebe eine kurze, lustige Beschreibung für das Level in jeder unterstützten Sprache an. Für gewöhnlich ist ein Hinweis zur Schwierigkeit enthalten.",
+            "width": "Levelbreite: {{value}} Blöcke",
+            "height": "Levelhöhe: {{value}} Blöcke"
+        },
+        "design": {
+            "heading": "Entwurf",
+            "starting_blocks": "Anfängliche Blöcke",
+            "goal_blocks": "Zielblöcke",
+            "block": {
+                "color": "Wähle eine Farbe und klicken oben auf das Spielfeld, um Blöcke einzufärben:",
+                "color_description": "Die Farben sind vordefiniert. Benutze den Radiergummi, um Blöcke zu entfernen.",
+                "rubber": "Radiergummi",
+                "strength": "Blockstärke:",
+                "strength_item": "{{name}} (hält {{count}} Schuss aus bevor zerstört)",
+                "strength_item_plural": "{{name}} (hält {{count}} Schüsse aus bevor zerstört)",
+                "other_tools": "Oder benutze eines der folgenden Werkzeuge:",
+                "tool_remove_all": "Alle Blöcke entfernen"
+            },
+            "laser": {
+                "order": "Reihenfolge:",
+                "order_description": "Die Reihenfolge definiert die Abfolge der Laserschüsse. Niedrigere Zahlen beginnen zuerst.",
+                "distance": "Abstand: {{value}}",
+                "distance_description": "Der Abstand von der Mitte unten der Blöcke (Radius des Laserhalbkreises).",
+                "angle": "Winkel: {{value}}°",
+                "angle_description": "Stellt ein, wo der Laser auf seinem Halbkreis positioniert ist.",
+                "rotation": "Drehung: {{value}}°",
+                "rotation_description": "Setzt die Richtung des Lasers, in der er schießt.",
+                "movable": "Kann bewegt werden",
+                "rotatable": "Kann gedreht werden",
+                "effect": "Effekt:",
+                "effect_description": "Ist eine Farbe gewählt, so färbt der Laser die getroffenen Blöcke ein anstelle sie zu zerstören.",
+                "effect_destroy": "Zerstört Blöcke",
+                "effect_recolor": "Färbt Blöcke {{colorName}}",
+                "remove": "Laser entfernen",
+                "add": "Laser hinzufügen"
+            }
+        },
+        "test": {
+            "heading": "Level Testen",
+            "description": "Du kannst dein Level hier ausprobieren. Ein Fenster-füllender Dialog zeigt dir, wie das Level von anderen Spielern gespielt werden würde",
+            "action": "Jetzt testen",
+            "close": "Test schließen"
+        },
+        "export": {
+            "heading": "Exportieren",
+            "description_0": "Das Level wird als JSON-Datei gespeichert. Wenn du dein cooles Level teilen möchtest, kopiere die Daten untenhalb und schicke mir eine ",
+            "description_1": "E-Mail",
+            "description_2": ":",
+            "copy_tooltip": "Kopiert das Level (JSON) in die Zwischenablage."
+        },
+        "import": {
+            "heading": "Importieren",
+            "description": "Falls du ein existierendes Level verbessern oder nicht von Null anfangen möchtest, kannst du unten die JSON-Daten eines Levels einfügen und auf <0>Level laden</0> klicken.",
+            "load": "Level laden",
+            "existing_level": "Alternativ kannst du auch ein Level aus dem Spiel laden:",
+            "existing_level_placeholder": "Wähle ein vorhandenes Level aus, um es zu laden.",
+            "success": "Level '{{name}}' wurde importiert."
+        },
+        "shortcuts": {
+            "heading": "Tastenkürzel",
+            "toggle_goal": "Zielansicht umschalten"
+        }
+    },
+    "footer": {
+        "nav": {
+            "home": "Startseite",
+            "legal": "Impressum & Datenschutzerklärung"
+        },
+        "credits": "Danke fürs Bereitstellen <0>falconiform</0>"
+    }
+}

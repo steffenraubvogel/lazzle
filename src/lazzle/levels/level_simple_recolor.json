@@ -1,5 +1,8 @@
 {
-    "name": "Do you like orange?",
+    "name": {
+        "en": "Do you like orange?",
+        "de": "Magst du orange?"
+    },
     "gridX": 6,
     "gridY": 7,
     "blocks": [

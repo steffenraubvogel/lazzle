@@ -8,6 +8,7 @@ import LevelRecolor2 from './levels/level_simple_recolor2.json'
 import LevelRestricted from './levels/level_medium_restricted.json'
 import Level4 from './levels/level_medium_cross.json'
 import Level5 from './levels/level_medium_colored.json'
+import { TranslatedString } from './Util'
 
 export const Colors: string[] = [
     '#dc3545', // red
@@ -23,33 +24,14 @@ export const Colors: string[] = [
     '#ace600', // yellow-green
 ]
 
-export const ColorNames: string[] = [ // must match Colors
-    'red',
-    'green',
-    'blue',
-    'yellow',
-    'pink',
-    'cyan',
-    'gray',
-    'purple',
-    'brown',
-    'orange',
-    'yellowish green',
-]
-
-export const BlockStrengthNames: string[] = [
-    'destroyed', // 0
-    'normal', // 1
-    'strengthened', // 2
-    'heavy' // 3
-]
-
 export type LevelBlock = {
     x: number // coordinate on grid
     y: number // coordinate on grid
     color: number // index, see Colors
     strength?: number // how many shots the block can resist before destroyed, defaults to 1
 }
+
+export const MAX_BLOCK_STRENGTH = 3
 
 export type LevelLaser = {
     order: number // when will the laser shot (sequence number)
@@ -62,7 +44,7 @@ export type LevelLaser = {
 }
 
 export type Level = {
-    name: string // fancy name of level, short description
+    name: TranslatedString // fancy name of level, short description
     gridX: number // maximum number of horizontal blocks
     gridY: number // maximum number of vertical blocks
     blocks: LevelBlock[] // initial blocks

@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import styles from "./Lazzle.module.scss";
 import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
-import { AllLevels, BlockStrengthNames, ColorNames, Colors, Level, LevelBlock, LevelLaser } from "./Levels";
+import { AllLevels, Colors, Level, LevelBlock, LevelLaser, MAX_BLOCK_STRENGTH } from "./Levels";
 import { LevelEditorPhase } from "./Phase";
 import Tabs, { Tab } from "../components/Tabs";
 import Accordion, { AccordionItem } from "../components/Accordion";
@@ -13,11 +13,15 @@ import Modal from "../components/Modal";
 import AutoScaler from "../components/AutoScaler";
 import Game from "./Game";
 import Obfuscate from 'react-obfuscate';
+import { Trans, useTranslation } from "react-i18next";
+import { getTranslation } from "./Util";
 
 export default function LazzleLevelEditor() {
 
+    const { t, i18n } = useTranslation()
+
     const [level, setLevel] = useState<Level>({
-        name: 'New Level',
+        name: { 'en': 'New Level', 'de': 'Neues Level' },
         gridX: 4,
         gridY: 5,
         blocks: [],
@@ -45,8 +49,13 @@ export default function LazzleLevelEditor() {
 
     const [importValue, setImportValue] = useState<string>('')
 
-    function handleLevelNameChange(event: ChangeEvent<HTMLInputElement>) {
-        setLevel(prev => ({ ...prev, name: event.target.value }))
+    function handleLevelNameChange(event: ChangeEvent<HTMLInputElement>, lng: string) {
+        setLevel(prev => ({
+            ...prev, name: {
+                ...prev.name,
+                [lng]: event.target.value
+            }
+        }))
     }
     function handleGridXRangeChange(event: ChangeEvent<HTMLInputElement>) {
         const oldGridX = level.gridX
@@ -186,7 +195,7 @@ export default function LazzleLevelEditor() {
         try {
             const loadedLevel = JSON.parse(importValue) as Level
             setLevel(loadedLevel)
-            alert(`Imported level '${loadedLevel.name}'.`)
+            alert(t('editor.import.success', { name: getTranslation(loadedLevel.name, i18n) }))
         }
         catch (e) {
             alert(e)
@@ -198,7 +207,7 @@ export default function LazzleLevelEditor() {
         if (index >= 0) {
             const existingLevel = AllLevels[index]
             setLevel(existingLevel)
-            alert(`Imported level '${existingLevel.name}'.`)
+            alert(t('editor.import.success', { name: getTranslation(existingLevel.name, i18n) }))
         }
     }
 
@@ -215,28 +224,33 @@ export default function LazzleLevelEditor() {
     }, [])
 
     return <div className={"container-md " + styles.lazzle}>
-        <h1>Lazzle - Level Editor</h1>
+        <h1>{t('editor.heading')}</h1>
 
         <section>
-            <h2>Settings</h2>
+            <h2>{t('editor.settings.heading')}</h2>
 
             <div className="row">
                 <div className="col-12 col-md-6">
                     <div className="mb-3 mb-md-0">
-                        <label htmlFor="levelNameInput" className="form-label"> Level name:</label>
-                        <input id="levelNameInput" name="levelName" type="text" className="form-control" value={level.name} onChange={handleLevelNameChange} />
-                        <div className="form-text">Provide a funny and short description for the level, usually with a hint on difficulty.</div>
+                        <label htmlFor="levelNameInput0" className="form-label">{t('editor.settings.level_name')}</label>
+                        {(i18n.options.supportedLngs as string[]).filter(lng => lng !== 'cimode').map((lng, index) =>
+                            <div className="input-group mb-1">
+                                <span className="input-group-text">{lng.toUpperCase()}</span>
+                                <input key={lng} id={"levelNameInput" + index} name={"levelName" + index} type="text" className="form-control"
+                                    value={level.name[lng]} onChange={event => handleLevelNameChange(event, lng)} />
+                            </div>)}
+                        <div className="form-text">{t('editor.settings.level_name_description')}</div>
                     </div>
                 </div>
 
                 <div className="col-12 col-md-6">
                     <div className='mb-3'>
-                        <label htmlFor="gridXRange" className="form-label">Level width: {level.gridX} blocks</label>
+                        <label htmlFor="gridXRange" className="form-label">{t('editor.settings.width', { value: level.gridX })}</label>
                         <input id="gridXRange" type="range" className="form-range" min="1" max="25" step="1" value={level.gridX} onChange={handleGridXRangeChange} />
                     </div>
 
                     <div className='mb-3 mb-md-0'>
-                        <label htmlFor="gridYRange" className="form-label">Level height: {level.gridY} blocks</label>
+                        <label htmlFor="gridYRange" className="form-label">{t('editor.settings.height', { value: level.gridY })}</label>
                         <input id="gridYRange" type="range" className="form-range" min="1" max="13" step="1" value={level.gridY} onChange={handleGridYRangeChange} />
                     </div>
                 </div>
@@ -244,14 +258,14 @@ export default function LazzleLevelEditor() {
         </section>
 
         <section>
-            <h2>Design</h2>
+            <h2>{t('editor.design.heading')}</h2>
 
             <div className={"btn-group " + styles.editorSwitchMode} role="group">
                 <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autoComplete="off" checked={!showGoal} onChange={() => setShowGoal(false)} />
-                <label className="btn btn-outline-primary" htmlFor="btnradio1">Starting Blocks</label>
+                <label className="btn btn-outline-primary" htmlFor="btnradio1">{t('editor.design.starting_blocks')}</label>
 
                 <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" checked={showGoal} onChange={() => setShowGoal(true)} />
-                <label className="btn btn-outline-primary" htmlFor="btnradio2">Goal Blocks</label>
+                <label className="btn btn-outline-primary" htmlFor="btnradio2">{t('editor.design.goal_blocks')}</label>
             </div>
 
             <div className={styles.editor + ' mb-3 ' + styles.worldContainer}>
@@ -282,11 +296,11 @@ export default function LazzleLevelEditor() {
             <Tabs>
                 <Tab header='Blocks'>
                     <div className="mb-3">
-                        <label className="form-label">Select a color and click on a block above to color it:</label>
+                        <label className="form-label">{t('editor.design.block.color')}</label>
                         <div>
                             <button className={'btn btn-outline-secondary me-2' + (-1 === activeBlockColor ? ' active' : '')}
                                 onClick={() => setActiveBlockColor(-1)}>
-                                <EraserIcon />&nbsp;Rubber
+                                <EraserIcon />&nbsp;{t('editor.design.block.rubber')}
                             </button>
 
                             {Colors.map((_color, index) =>
@@ -298,19 +312,21 @@ export default function LazzleLevelEditor() {
                                 </button>
                             )}
                         </div>
-                        <div className="form-text">Colors are predefined. Use the rubber to remove blocks.</div>
+                        <div className="form-text">{t('editor.design.block.color_description')}</div>
                     </div>
                     <div className="mb-3">
-                        <label htmlFor='strengthSelect' className="form-label">Block Strength:</label>
+                        <label htmlFor='strengthSelect' className="form-label">{t('editor.design.block.strength')}</label>
                         <select id='strengthSelect' className="form-select" value={activeStrength} onChange={event => setActiveStrength(Number(event.target.value))}>
-                            {BlockStrengthNames.map((bsn, index) => (index === 0 ? undefined :
-                                <option key={index} value={index}>{bsn} ({index} shots to destroy)</option>))}
+                            {Array(MAX_BLOCK_STRENGTH + 1).fill(0).map((_, index) => (index === 0 ? undefined :
+                                <option key={index} value={index}>
+                                    {t('editor.design.block.strength_item', { name: t('game.play.block_strength.' + index), count: index })}
+                                </option>))}
                         </select>
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Or use one of the tools below:</label>
+                        <label className="form-label">{t('editor.design.block.other_tools')}</label>
                         <div>
-                            <button className='btn btn-outline-secondary me-2' onClick={removeAllBlocks}>Remove all blocks</button>
+                            <button className='btn btn-outline-secondary me-2' onClick={removeAllBlocks}>{t('editor.design.block.tool_remove_all')}</button>
                         </div>
                     </div>
                 </Tab>
@@ -319,38 +335,38 @@ export default function LazzleLevelEditor() {
                         {level.lasers.map((laser, index) => <AccordionItem key={index} header={'Laser #' + (index + 1)}>
                             <div className='row'>
                                 <div className="col-12 col-md-6 mb-3">
-                                    <label htmlFor={"laserOrderInput_" + index} className="form-label">Order:</label>
+                                    <label htmlFor={"laserOrderInput_" + index} className="form-label">{t('editor.design.laser.order')}</label>
                                     <input type="number" className="form-control" id={"laserOrderInput_" + index} value={laser.order}
                                         onChange={event => handleNumericLaserPropertyChange(laser, 'order', event)} min={1} max={level.lasers.length} step={1} />
-                                    <div className="form-text">The order defines the sequence of laser shots. Lower order numbers start first.</div>
+                                    <div className="form-text">{t('editor.design.laser.order_description')}</div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
-                                    <label htmlFor={"laserDistanceInput_" + index} className="form-label">Distance: {laser.distance}</label>
+                                    <label htmlFor={"laserDistanceInput_" + index} className="form-label">{t('editor.design.laser.distance', { value: laser.distance })}</label>
                                     <input type="range" className="form-range" id={"laserDistanceInput_" + index} value={laser.distance}
                                         onChange={event => handleNumericLaserPropertyChange(laser, 'distance', event)} min={200} max={400} step={25} />
-                                    <div className="form-text">The distance from the bottom center of the blocks (radius of laser's semi-circle).</div>
+                                    <div className="form-text">{t('editor.design.laser.distance_description')}</div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
-                                    <label htmlFor={"laserAngleInput_" + index} className="form-label">Angle: {laser.angle}°</label>
+                                    <label htmlFor={"laserAngleInput_" + index} className="form-label">{t('editor.design.laser.angle', { value: laser.angle })}</label>
                                     <input type="range" className="form-range" id={"laserAngleInput_" + index} value={laser.angle}
                                         onChange={event => handleNumericLaserPropertyChange(laser, 'angle', event)} min={0} max={180} step={1} />
-                                    <div className="form-text">Controls where the laser is positioned on its semi-circle.</div>
+                                    <div className="form-text">{t('editor.design.laser.angle_description')}</div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
-                                    <label htmlFor={"laserRotationInput_" + index} className="form-label">Rotation: {laser.rotation}°</label>
+                                    <label htmlFor={"laserRotationInput_" + index} className="form-label">{t('editor.design.laser.rotation', { value: laser.rotation })}</label>
                                     <input type="range" className="form-range" id={"laserRotationInput_" + index} value={laser.rotation}
                                         onChange={event => handleNumericLaserPropertyChange(laser, 'rotation', event)} min={0} max={359} step={1} />
-                                    <div className="form-text">Sets the direction in which the laser shoots.</div>
+                                    <div className="form-text">{t('editor.design.laser.rotation_description')}</div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
                                     <div className="form-check form-switch">
                                         <input className="form-check-input" type="checkbox" id={"laserMovableSwitch_" + index} checked={laser.movable}
                                             onChange={event => handleBooleanLaserPropertyChange(laser, 'movable', event)} />
-                                        <label className="form-check-label" htmlFor={"laserMovableSwitch_" + index}>Can be moved</label>
+                                        <label className="form-check-label" htmlFor={"laserMovableSwitch_" + index}>{t('editor.design.laser.movable')}</label>
                                     </div>
                                 </div>
 
@@ -358,50 +374,53 @@ export default function LazzleLevelEditor() {
                                     <div className="form-check form-switch">
                                         <input className="form-check-input" type="checkbox" id={"laserRotatableSwitch_" + index} checked={laser.rotatable}
                                             onChange={event => handleBooleanLaserPropertyChange(laser, 'rotatable', event)} />
-                                        <label className="form-check-label" htmlFor={"laserRotatableSwitch_" + index}>Can be rotated</label>
+                                        <label className="form-check-label" htmlFor={"laserRotatableSwitch_" + index}>{t('editor.design.laser.rotatable')}</label>
                                     </div>
                                 </div>
 
                                 <div className="col-12 col-md-6 mb-3">
-                                    <label htmlFor={"laserColor_" + index} className="form-label">Effect:</label>
+                                    <label htmlFor={"laserColor_" + index} className="form-label">{t('editor.design.laser.effect')}</label>
                                     <select id={"laserColor_" + index} className="form-select" value={laser.color}
                                         onChange={event => handleLaserColorChange(laser, event)}>
-                                        <option value={-1}>Destroys blocks</option>
+                                        <option value={-1}>{t('editor.design.laser.effect_destroy')}</option>
                                         {Colors.map((color, index) =>
-                                            <option key={index} value={index} style={{ backgroundColor: color }}>Colors blocks to {ColorNames[index]}</option>)}
+                                            <option key={index} value={index} style={{ backgroundColor: color }}>
+                                                {t('editor.design.laser.effect_recolor', { colorName: t('game.play.block_color.' + index) })}
+                                            </option>)}
                                     </select>
-                                    <div className="form-text">If a color is chosen then the laser will not destroy but color the hit blocks.</div>
+                                    <div className="form-text">{t('editor.design.laser.effect_description')}</div>
                                 </div>
                             </div>
-                            <button className='btn btn-outline-secondary' onClick={() => removeLaser(index)}>Remove This Laser</button>
+                            <button className='btn btn-outline-secondary' onClick={() => removeLaser(index)}>{t('editor.design.laser.remove')}</button>
                         </AccordionItem>)}
                     </Accordion>
 
-                    <button className='btn btn-outline-secondary' onClick={addLaser}>Add Laser</button>
+                    <button className='btn btn-outline-secondary' onClick={addLaser}>{t('editor.design.laser.add')}</button>
                 </Tab>
             </Tabs>
         </section >
 
         <section>
-            <h2>Test Level</h2>
+            <h2>{t('editor.test.heading')}</h2>
             <p>
-                You can try out your level here. A fullscreen dialog will open and show how the level would be played by users.
+                {t('editor.test.description')}
             </p>
-            <button className='btn btn-outline-secondary' onClick={() => setTestLevel(level)}>Test Level</button>
+            <button className='btn btn-outline-secondary' onClick={() => setTestLevel(level)}>{t('editor.test.action')}</button>
             {testLevel &&
                 <Modal title='Test Your Level' fullScreen={true} close={() => setTestLevel(undefined)}>
                     <div className='container-md'>
-                        <Game level={testLevel} levelFinishedButtonText='Close Test' onLevelFinishedClick={() => setTestLevel(undefined)} />
+                        <Game level={testLevel} levelFinishedButtonText={t('editor.test.close')} onLevelFinishedClick={() => setTestLevel(undefined)} />
                     </div>
                 </Modal>}
         </section>
 
         <section>
-            <h2>Export</h2>
+            <h2>{t('editor.export.heading')}</h2>
 
             <label htmlFor="exportOutput" className="form-label">
-                The level is stored as JSON file. If you would like to share your awesome level, copy the level data below and send me
-                an <Obfuscate email="steffen@lazzle.de">email</Obfuscate>:
+                {t('editor.export.description_0') /* obfuscate doesn't work with Trans component */}
+                <Obfuscate email="steffen@lazzle.de">{t('editor.export.description_1')}</Obfuscate>
+                {t('editor.export.description_2')}
             </label>
             <div className='row'>
                 <div className='col'>
@@ -411,19 +430,18 @@ export default function LazzleLevelEditor() {
                     </textarea>
                 </div>
                 <div className='col-auto'>
-                    <button type="button" className="btn btn-outline-secondary" onClick={copyExportOutput}><ClipboardIcon /></button>
+                    <button type="button" className="btn btn-outline-secondary" onClick={copyExportOutput} title={t('editor.export.copy_tooltip')}><ClipboardIcon /></button>
                 </div>
             </div>
         </section>
 
         <section>
-            <h2>Import</h2>
+            <h2>{t('editor.import.heading')}</h2>
 
             <div className="mb-3">
                 <label htmlFor="importInput" className="form-label">
-                    In case you need to refine an existing level or don't want to start from scratch, you can paste the level JSON
-                below and click the <em>Load Level</em> button.
-            </label>
+                    <Trans i18nKey='editor.import.description'><em></em></Trans>
+                </label>
                 <div className='row'>
                     <div className='col'>
                         <textarea
@@ -432,25 +450,25 @@ export default function LazzleLevelEditor() {
                         </textarea>
                     </div>
                     <div className='col-auto'>
-                        <button type="button" className="btn btn-outline-secondary" onClick={importLevel}>Load Level</button>
+                        <button type="button" className="btn btn-outline-secondary" onClick={importLevel}>{t('editor.import.load')}</button>
                     </div>
                 </div>
             </div>
 
             <div className="mb-3">
-                <label htmlFor="importExistingLevelSelect" className="form-label">Alternatively you can load an existing level from the game:</label>
+                <label htmlFor="importExistingLevelSelect" className="form-label">{t('editor.import.existing_level')}</label>
                 <select id="importExistingLevelSelect" className="form-select" value={undefined} onChange={importExistingLevel}>
-                    <option value={-1}>Select a level to load it.</option>
+                    <option value={-1}>{t('editor.import.existing_level_placeholder')}</option>
                     {AllLevels.map((existingLevel, index) =>
-                        <option key={index} value={index}>{(index + 1) + ' - ' + existingLevel.name}</option>)}
+                        <option key={index} value={index}>{(index + 1) + ' - ' + getTranslation(existingLevel.name, i18n)}</option>)}
                 </select>
             </div>
         </section>
 
         <section>
-            <h2>Shortcuts</h2>
+            <h2>{t('editor.shortcuts.heading')}</h2>
             <ul>
-                <li><kbd>g</kbd> - toggle goal</li>
+                <li><kbd>g</kbd> - {t('editor.shortcuts.toggle_goal')}</li>
             </ul>
         </section>
     </div >

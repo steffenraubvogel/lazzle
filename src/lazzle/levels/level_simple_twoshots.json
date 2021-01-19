@@ -1,5 +1,8 @@
 {
-    "name": "Almost starting to think",
+    "name": {
+        "en": "Almost starting to think",
+        "de": "Fast am Nachdenken"
+    },
     "gridX": 1,
     "gridY": 6,
     "blocks": [
