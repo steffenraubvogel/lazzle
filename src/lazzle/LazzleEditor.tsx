@@ -14,7 +14,7 @@ import AutoScaler from "../components/AutoScaler";
 import Game from "./Game";
 import Obfuscate from 'react-obfuscate';
 import { Trans, useTranslation } from "react-i18next";
-import { getTranslation } from "./Util";
+import { getTranslation, useShortcuts } from "./Util";
 
 export default function LazzleLevelEditor() {
 
@@ -211,17 +211,9 @@ export default function LazzleLevelEditor() {
         }
     }
 
-    useEffect(() => {
-        // handle shortcuts
-        const eventListener: (event: KeyboardEvent) => void = (event) => {
-            if (event.key === 'g') {
-                setShowGoal(prev => !prev)
-                event.preventDefault() // prevents browser features like quick search
-            }
-        }
-        document.addEventListener("keydown", eventListener);
-        return () => document.removeEventListener("keydown", eventListener);
-    }, [])
+    useShortcuts({
+        'g': () => setShowGoal(prev => !prev)
+    })
 
     return <div className={"container-md " + styles.lazzle}>
         <h1>{t('editor.heading')}</h1>
@@ -444,9 +436,7 @@ export default function LazzleLevelEditor() {
                 </label>
                 <div className='row'>
                     <div className='col'>
-                        <textarea
-                            className={'form-control ' + styles.importInput} id="importInput" rows={4}
-                            value={importValue} onChange={handleImportInputChange}>
+                        <textarea className='form-control' id="importInput" rows={4} value={importValue} onChange={handleImportInputChange}>
                         </textarea>
                     </div>
                     <div className='col-auto'>

@@ -19,6 +19,7 @@ import { ReactComponent as ShieldPlusIcon } from "bootstrap-icons/icons/shield-p
 import { ReactComponent as ShieldMinusIcon } from "bootstrap-icons/icons/shield-minus.svg"
 import AutoScaler from "../components/AutoScaler";
 import { Trans, useTranslation } from "react-i18next";
+import { useShortcuts } from "./Util";
 
 export default function Game(props: {
     level: Level,
@@ -255,21 +256,10 @@ export default function Game(props: {
         setSpeed(1000) // increase speed such that it appears to be almost instant
     }
 
-    useEffect(() => {
-        // handle shortcuts
-        const eventListener: (event: KeyboardEvent) => void = (event) => {
-            if (event.key === 'g') {
-                toggleGoal()
-                event.preventDefault() // prevents browser features like quick search
-            }
-            else if (event.key === 's') {
-                startLasers()
-                event.preventDefault()
-            }
-        }
-        document.addEventListener("keydown", eventListener);
-        return () => document.removeEventListener("keydown", eventListener);
-    }, [])
+    useShortcuts({
+        'g': () => toggleGoal(),
+        's': () => startLasers()
+    })
 
     return <>
         <div className='mt-3 mb-2'>
