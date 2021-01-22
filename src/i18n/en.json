@@ -87,7 +87,7 @@
         "settings": {
             "heading": "Settings",
             "level_name": "Level name:",
-            "level_name_description": "Provide a funny and short description for the level for each supported language, usually with a hint on difficulty.",
+            "level_name_description": "Provide a preferably funny and short description for the level for each supported language, usually with a hint on difficulty.",
             "width": "Level width: {{value}} blocks",
             "height": "Level height: {{value}} blocks"
         },

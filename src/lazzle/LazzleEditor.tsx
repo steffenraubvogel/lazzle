@@ -228,7 +228,8 @@ export default function LazzleLevelEditor() {
                         {(i18n.options.supportedLngs as string[]).filter(lng => lng !== 'cimode').map((lng, index) =>
                             <div className="input-group mb-1">
                                 <span className="input-group-text">{lng.toUpperCase()}</span>
-                                <input key={lng} id={"levelNameInput" + index} name={"levelName" + index} type="text" className="form-control"
+                                <input key={lng} id={"levelNameInput" + index} name={"levelName" + index} type="text"
+                                    required className={"form-control" + (!level.name[lng] ? ' is-invalid' : '')}
                                     value={level.name[lng]} onChange={event => handleLevelNameChange(event, lng)} />
                             </div>)}
                         <div className="form-text">{t('editor.settings.level_name_description')}</div>
@@ -328,7 +329,8 @@ export default function LazzleLevelEditor() {
                             <div className='row'>
                                 <div className="col-12 col-md-6 mb-3">
                                     <label htmlFor={"laserOrderInput_" + index} className="form-label">{t('editor.design.laser.order')}</label>
-                                    <input type="number" className="form-control" id={"laserOrderInput_" + index} value={laser.order}
+                                    <input type="number" className={"form-control" + (!laser.order || laser.order < 1 || laser.order > level.lasers.length ? ' is-invalid' : '')}
+                                        id={"laserOrderInput_" + index} value={laser.order} required
                                         onChange={event => handleNumericLaserPropertyChange(laser, 'order', event)} min={1} max={level.lasers.length} step={1} />
                                     <div className="form-text">{t('editor.design.laser.order_description')}</div>
                                 </div>

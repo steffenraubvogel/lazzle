@@ -85,7 +85,7 @@
         "settings": {
             "heading": "Einstellungen",
             "level_name": "Levelname:",
-            "level_name_description": "Gebe eine kurze, lustige Beschreibung für das Level in jeder unterstützten Sprache an. Für gewöhnlich ist ein Hinweis zur Schwierigkeit enthalten.",
+            "level_name_description": "Gebe eine kurze, möglichst lustige Beschreibung für das Level in jeder unterstützten Sprache an. Für gewöhnlich ist ein Hinweis zur Schwierigkeit enthalten.",
             "width": "Levelbreite: {{value}} Blöcke",
             "height": "Levelhöhe: {{value}} Blöcke"
         },
