@@ -10,31 +10,36 @@
             "x": 1,
             "y": 5,
             "color": 4,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 1,
             "y": 4,
             "color": 4,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 1,
             "y": 3,
             "color": 7,
-            "strength": 2
+            "strength": 2,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 1,
             "y": 2,
             "color": 5,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 1,
             "y": 1,
             "color": 5,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         }
     ],
     "goal": [
@@ -42,7 +47,8 @@
             "x": 1,
             "y": 5,
             "color": 7,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         }
     ],
     "lasers": [

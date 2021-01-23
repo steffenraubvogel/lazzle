@@ -96,6 +96,7 @@
             "starting_blocks": "Starting Blocks",
             "goal_blocks": "Goal Blocks",
             "block": {
+                "tab": "Blocks",
                 "color": "Select a color and click on a block above to color it:",
                 "color_description": "Colors are predefined. Use the rubber to remove blocks.",
                 "rubber": "Rubber",
@@ -103,9 +104,11 @@
                 "strength_item": "{{name}} (resists {{count}} shot before destroyed)",
                 "strength_item_plural": "{{name}} (resists {{count}} shots before destroyed)",
                 "other_tools": "Or use one of the tools below:",
+                "tool_link": "Link Blocks",
                 "tool_remove_all": "Remove all blocks"
             },
             "laser": {
+                "tab": "Lasers",
                 "order": "Order:",
                 "order_description": "The order defines the sequence of laser shots. Lower order numbers start first.",
                 "distance": "Distance: {{value}}",

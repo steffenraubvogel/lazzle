@@ -10,121 +10,141 @@
             "x": 1,
             "y": 7,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 3,
             "y": 6,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 2,
             "y": 6,
             "color": 9,
-            "strength": 2
+            "strength": 2,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 2,
             "y": 7,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 3,
             "y": 7,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 4,
             "y": 7,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 4,
             "y": 6,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 5,
             "y": 7,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 5,
             "y": 6,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 4,
             "y": 5,
             "color": 9,
-            "strength": 2
+            "strength": 2,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 5,
             "y": 5,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 6,
             "y": 5,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 6,
             "y": 4,
             "color": 9,
-            "strength": 2
+            "strength": 2,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 6,
             "y": 6,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 6,
             "y": 7,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 0,
             "y": 7,
             "color": 9,
-            "strength": 2
+            "strength": 2,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 7,
             "y": 4,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 7,
             "y": 5,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 7,
             "y": 6,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 7,
             "y": 7,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         }
     ],
     "goal": [
@@ -132,7 +152,8 @@
             "x": 6,
             "y": 7,
             "color": 9,
-            "strength": 1
+            "strength": 1,
+            "link": { "left": false, "top": false }
         }
     ],
     "lasers": [

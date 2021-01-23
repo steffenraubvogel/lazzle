@@ -128,6 +128,18 @@ export default function Game(props: {
                             block.strength -= 1
                             if (block.strength === 0) {
                                 block.state = "destroyed"
+                                // remove links
+                                block.links = { left: false, top: false }
+
+                                const rightBlock = blocks.find(b => b.x === block.x + BLOCK_SIZE && b.y === block.y)
+                                if (rightBlock) {
+                                    rightBlock.links.left = false
+                                }
+
+                                const bottomBlock = blocks.find(b => b.x === block.x && b.y === block.y + BLOCK_SIZE)
+                                if (bottomBlock) {
+                                    bottomBlock.links.top = false
+                                }
                             }
                         }
                         else {
@@ -149,19 +161,11 @@ export default function Game(props: {
 
             for (let block of blocks) {
                 if (block.state !== "destroyed") {
-                    // not grounded, check if any other block is directly below the block
-                    let highestOtherBlockBelowY = WORLD_HEIGHT
+                    const linkedBlocks = findTransitiveLinkedBlocks(block)
+                    const fallDistance = determineFallDistance(linkedBlocks)
 
-                    for (let otherBlock of blocks) {
-                        if (otherBlock !== block && otherBlock.x === block.x && otherBlock.y > block.y && otherBlock.state !== "destroyed") {
-                            // same horizontal position and below
-                            highestOtherBlockBelowY = Math.min(otherBlock.y, highestOtherBlockBelowY)
-                        }
-                    }
-
-                    const newBlockY = highestOtherBlockBelowY - BLOCK_SIZE
-                    if (newBlockY !== block.y) {
-                        block.y = newBlockY
+                    if (fallDistance > 0) {
+                        linkedBlocks.forEach(b => b.y = b.y + fallDistance)
                         blockFallen = true
                         changed = true
                     }
@@ -173,6 +177,51 @@ export default function Game(props: {
         // start fall phase
         setBlocks([...blocks])
         setPhase(new BlockFallPhase(laserOrder, changed))
+    }
+
+    function findTransitiveLinkedBlocks(block: Block) {
+        const result: Block[] = [block]
+        const visit: Block[] = [block]
+
+        while (visit.length > 0) {
+            const nextVisit = visit.pop()!
+            // discover direct links in all directions
+            for (let b of blocks) {
+                if (b.state !== "destroyed" &&
+                    ((b.x === nextVisit.x && b.y === nextVisit.y - BLOCK_SIZE && nextVisit.links.top) // top linked
+                    || (b.x === nextVisit.x - BLOCK_SIZE && b.y === nextVisit.y && nextVisit.links.left) // left linked
+                    || (b.x === nextVisit.x && b.y === nextVisit.y + BLOCK_SIZE && b.links.top) // bottom linked
+                    || (b.x === nextVisit.x + BLOCK_SIZE && b.y === nextVisit.y && b.links.left)) // right linked
+                ) {
+                    if (!result.includes(b)) {
+                        result.push(b)
+                        visit.push(b)
+                    }
+                }
+            }
+        }
+
+        return result
+    }
+
+    function determineFallDistance(linkedBlocks: Block[]) {
+        let fallDistance = WORLD_HEIGHT
+
+        for (let linkedBlock of linkedBlocks) {
+            let highestOtherBlockBelowY = WORLD_HEIGHT
+
+            for (let otherBlock of blocks) {
+                if (!linkedBlocks.includes(otherBlock) && otherBlock.x === linkedBlock.x && otherBlock.y > linkedBlock.y && otherBlock.state !== "destroyed") {
+                    // same horizontal position and below
+                    highestOtherBlockBelowY = Math.min(otherBlock.y, highestOtherBlockBelowY)
+                }
+            }
+
+            const thisBlockfallDistance = highestOtherBlockBelowY - (linkedBlock.y + BLOCK_SIZE)
+            fallDistance = Math.min(thisBlockfallDistance, fallDistance)
+        }
+
+        return fallDistance // the maximum distance the linked blocks as one unit can fall without being blocked by other (not-linked) blocks
     }
 
     function afterAllLasersShot() {
@@ -290,7 +339,7 @@ export default function Game(props: {
             <AutoScaler id='world' defaultWidth={WORLD_WIDTH} defaultHeight={WORLD_HEIGHT} maxScaledHeight='100vh' className={styles.world} style={{
                 ['--speed' as any]: (speed === 0 ? 1000 : speed) // a value of exactly 0 would mean division by 0 in CSS
             }}>
-                {blocks.map(block => <BlockComponent key={block.id} block={block} />)}
+                {blocks.map(block => <BlockComponent key={block.id} block={block} phase={phase} />)}
                 {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={phase} blocks={blocks} />)}
 
                 {phase instanceof GoalMatchPhase &&
@@ -332,7 +381,7 @@ export default function Game(props: {
 
                 {showGoal &&
                     <div className={styles.goalContainer}>
-                        {goalBlocks.map(block => <BlockComponent key={block.id} block={block} />)}
+                        {goalBlocks.map(block => <BlockComponent key={block.id} block={block} phase={phase} />)}
                     </div>}
             </AutoScaler>
 

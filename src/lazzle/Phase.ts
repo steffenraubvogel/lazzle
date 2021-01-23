@@ -105,6 +105,15 @@ export class ResultPhase extends Phase {
  * This phase is active as long as a level is being edited in the level editor.
  */
 export class LevelEditorPhase extends Phase {
+
+    constructor(
+        public readonly onLeftLinkClick: (target: Block) => void,
+        public readonly onTopLinkClick: (target: Block) => void,
+        public readonly showLinkToNeighbor: (offsetX: number, offsetY: number, source: Block) => boolean
+    ) {
+        super()
+    }
+
 }
 
 /**

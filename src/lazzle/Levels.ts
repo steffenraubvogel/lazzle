@@ -6,6 +6,7 @@ import LevelStrengthened2 from './levels/level_medium_strengthened.json'
 import LevelRecolor from './levels/level_simple_recolor.json'
 import LevelRecolor2 from './levels/level_simple_recolor2.json'
 import LevelRestricted from './levels/level_medium_restricted.json'
+import LevelLinks from './levels/level_simple_links.json'
 import Level4 from './levels/level_medium_cross.json'
 import Level5 from './levels/level_medium_colored.json'
 import LevelShortcut from './levels/level_simple_shortcut.json'
@@ -30,6 +31,7 @@ export type LevelBlock = {
     y: number // coordinate on grid
     color: number // index, see Colors
     strength?: number // how many shots the block can resist before destroyed, defaults to 1
+    link: { top: boolean, left: boolean } // if linked to another block then it will fall only if itself could fall AND its linked blocks
 }
 
 export const MAX_BLOCK_STRENGTH = 3
@@ -53,4 +55,7 @@ export type Level = {
     lasers: LevelLaser[] // initial lasers
 }
 
-export const AllLevels: Level[] = [Level1, Level2, Level3, LevelStrengthened, LevelStrengthened2, LevelRecolor2, LevelShortcut, LevelRecolor, LevelRestricted, Level5, Level4]
+export const AllLevels: Level[] = [
+    Level1, Level2, Level3, LevelLinks, LevelStrengthened, LevelStrengthened2, 
+    LevelRecolor2, LevelShortcut, LevelRecolor, LevelRestricted, Level5, Level4
+]

@@ -21,7 +21,7 @@ export default function LevelPreview(props: { level: Level }) {
     return (
         <div className={styles.levelPreview + ' bg-light'}>
             <AutoScaler defaultWidth={WORLD_WIDTH} defaultHeight={WORLD_HEIGHT} maxScaledHeight='7rem' className={styles.world}>
-                {blocks.map(block => <BlockComponent key={block.id} block={block} />)}
+                {blocks.map(block => <BlockComponent key={block.id} block={block} phase={phase} />)}
                 {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={phase} blocks={blocks} />)}
             </AutoScaler>
         </div>

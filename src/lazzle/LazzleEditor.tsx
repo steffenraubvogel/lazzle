@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, MouseEvent, useMemo, useState } from "react";
 import styles from "./Lazzle.module.scss";
 import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
@@ -9,6 +9,8 @@ import Accordion, { AccordionItem } from "../components/Accordion";
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
 import { ReactComponent as EraserIcon } from "bootstrap-icons/icons/eraser.svg"
 import { ReactComponent as ClipboardIcon } from "bootstrap-icons/icons/clipboard.svg"
+import { ReactComponent as LinkIcon } from "bootstrap-icons/icons/link.svg"
+import { ReactComponent as TrashIcon } from "bootstrap-icons/icons/trash.svg"
 import Modal from "../components/Modal";
 import AutoScaler from "../components/AutoScaler";
 import Game from "./Game";
@@ -36,12 +38,12 @@ export default function LazzleLevelEditor() {
             color: undefined
         }]
     })
-    const [lasers, setLasers] = useState<Laser[]>([])
-    const [blocks, setBlocks] = useState<Block[]>([])
-    const [goalBlocks, setGoalBlocks] = useState<Block[]>([])
+    const lasers = useMemo(() => level.lasers.map(l => new Laser(l)), [level])
+    const blocks = useMemo(() => level.blocks.map(b => new Block(b, level)), [level])
+    const goalBlocks = useMemo(() => level.goal.map(b => new Block(b, level)), [level])
     const [showGoal, setShowGoal] = useState<boolean>(false)
 
-    const [activeBlockColor, setActiveBlockColor] = useState<number>(0)
+    const [activeTool, setActiveTool] = useState<{ type: "none" | "rubber" | "color" | "link", color?: number }>({ type: "none" })
     const [activeStrength, setActiveStrength] = useState<number>(1)
     const [initialLaserOpen, setInitialLaserOpen] = useState<number>()
 
@@ -93,35 +95,65 @@ export default function LazzleLevelEditor() {
             .filter(b => b.x < gridX && b.x >= 0 && b.y < gridY && b.y >= 0)
     }
 
-    useEffect(() => {
-        setLasers(level.lasers.map(l => new Laser(l)))
-        setBlocks(level.blocks.map(b => new Block(b, level)))
-        setGoalBlocks(level.goal.map(b => new Block(b, level)))
-    }, [level])
-
     function removeAllBlocks() {
         setLevel(prev => ({ ...prev, blocks: [], goal: [] }))
     }
 
-    function handleBlockClick(blockX: number, blockY: number) {
+    function handleBlockClick(blockX: number, blockY: number, event: MouseEvent<HTMLDivElement>) {
         const blocksType: keyof Level = showGoal ? 'goal' : 'blocks'
         const existingBlock = level[blocksType].find(b => b.x === blockX && b.y === blockY)
 
-        if (!existingBlock && activeBlockColor >= 0) {
-            // add a new block with active color and strength
-            setLevel(prev => ({ ...prev, [blocksType]: prev[blocksType].concat({ x: blockX, y: blockY, color: activeBlockColor, strength: activeStrength }) }))
+        if (activeTool.type === "color") {
+            if (!existingBlock) {
+                // add a new block with active color and strength
+                setLevel(prev => ({
+                    ...prev,
+                    [blocksType]: prev[blocksType].concat({ x: blockX, y: blockY, color: activeTool.color!, strength: activeStrength, link: { left: false, top: false} })
+                }))
+            }
+            else if (existingBlock) {
+                // re-color block and adapt strength
+                setLevel(prev => ({
+                    ...prev,
+                    [blocksType]: prev[blocksType].map(b => {
+                        if (b === existingBlock) {
+                            return { ...b, color: activeTool.color!, strength: activeStrength }
+                        }
+                        return b
+                    })
+                }))
+            }
         }
-        else if (existingBlock && activeBlockColor === -1) {
+        else if (activeTool.type === "rubber" && existingBlock) {
             // remove a block
-            setLevel(prev => ({ ...prev, [blocksType]: prev[blocksType].filter(b => b !== existingBlock) }))
+            setLevel(prev => ({
+                ...prev,
+                [blocksType]: prev[blocksType].filter(b => b !== existingBlock).map(b => {
+                    // remove bottom and right links of removed block
+                    if (b.x === existingBlock.x + 1 && b.y === existingBlock.y) {
+                        return { ...b, link: { ...b.link, left: false } }
+                    }
+                    if (b.x === existingBlock.x && b.y === existingBlock.y + 1) {
+                        return { ...b, link: { ...b.link, top: false } }
+                    }
+                    return b
+                })
+            }))
         }
-        else if (existingBlock && activeBlockColor >= 0) {
-            // re-color block and adapt strength
+    }
+
+    function handleLinkClick(block: LevelBlock, edge: "top" | "left") {
+        const blocksType: keyof Level = showGoal ? 'goal' : 'blocks'
+
+        if (activeTool.type === "link") {
+            // toggle the link on specified edge
             setLevel(prev => ({
                 ...prev,
                 [blocksType]: prev[blocksType].map(b => {
-                    if (b === existingBlock) {
-                        return { ...b, color: activeBlockColor, strength: activeStrength }
+                    if (b.x === block.x && b.y === block.y) {
+                        // same block as clicked
+                        if (edge === "left") return { ...b, link: { ...b.link, left: !block.link.left } }
+                        if (edge === "top") return { ...b, link: { ...b.link, top: !block.link.top } }
                     }
                     return b
                 })
@@ -215,6 +247,14 @@ export default function LazzleLevelEditor() {
         'g': () => setShowGoal(prev => !prev)
     })
 
+    const phase = new LevelEditorPhase(
+        (block) => handleLinkClick(block.original, "left"),
+        (block) => handleLinkClick(block.original, "top"),
+        (offsetX, offsetY, source) => {
+            const activeBlocks = showGoal ? level.goal : level.blocks
+            return !!activeBlocks.find(b => b.x === source.original.x + offsetX && b.y === source.original.y + offsetY)
+        })
+
     return <div className={"container-md " + styles.lazzle}>
         <h1>{t('editor.heading')}</h1>
 
@@ -261,7 +301,7 @@ export default function LazzleLevelEditor() {
                 <label className="btn btn-outline-primary" htmlFor="btnradio2">{t('editor.design.goal_blocks')}</label>
             </div>
 
-            <div className={styles.editor + ' mb-3 ' + styles.worldContainer}>
+            <div className={styles.editor + ' mb-3 ' + styles.worldContainer + ' ' + (styles['tool-' + activeTool.type] || '')}>
                 <AutoScaler defaultWidth={WORLD_WIDTH} defaultHeight={WORLD_HEIGHT} className={styles.world} maxScaledHeight='100vh'>
                     <div className={styles.blockAidLines}>
                         {Array(level.gridY).fill(0).map((_y, indexY) =>
@@ -270,36 +310,36 @@ export default function LazzleLevelEditor() {
                                     <div key={indexX}
                                         className={styles.blockAidLinesCell}
                                         style={{ width: BLOCK_SIZE + 'px', height: BLOCK_SIZE + 'px' }}
-                                        onClick={() => handleBlockClick(indexX, indexY)}>
+                                        onClick={event => handleBlockClick(indexX, indexY, event)}>
                                     </div>)}
                             </div>)}
                     </div>
 
-                    {blocks.map(block => <BlockComponent key={block.id} block={block} />)}
-                    {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={new LevelEditorPhase()} blocks={[]} />)}
+                    {blocks.map(block => <BlockComponent key={block.id} block={block} phase={phase} />)}
+                    {lasers.map(laser => <LaserComponent key={laser.id} laser={laser} phase={phase} blocks={[]} />)}
 
                     {showGoal && <>
                         <div className={styles.goalContainer}>
-                            {goalBlocks.map(block => <BlockComponent key={block.id} block={block} />)}
+                            {goalBlocks.map(block => <BlockComponent key={block.id} block={block} phase={phase} />)}
                         </div>
                     </>}
                 </AutoScaler>
             </div>
 
             <Tabs>
-                <Tab header='Blocks'>
+                <Tab header={t('editor.design.block.tab')}>
                     <div className="mb-3">
                         <label className="form-label">{t('editor.design.block.color')}</label>
                         <div>
-                            <button className={'btn btn-outline-secondary me-2' + (-1 === activeBlockColor ? ' active' : '')}
-                                onClick={() => setActiveBlockColor(-1)}>
+                            <button className={'btn btn-outline-secondary me-2' + (activeTool.type === "rubber" ? ' active' : '')}
+                                onClick={() => setActiveTool({ type: "rubber" })}>
                                 <EraserIcon />&nbsp;{t('editor.design.block.rubber')}
                             </button>
 
                             {Colors.map((_color, index) =>
                                 <button key={index}
-                                    className={'btn btn-outline-secondary me-2' + (index === activeBlockColor ? ' active' : '')}
-                                    onClick={() => setActiveBlockColor(index)}
+                                    className={'btn btn-outline-secondary me-2' + (activeTool.type === "color" && activeTool.color === index ? ' active' : '')}
+                                    onClick={() => setActiveTool({ type: "color", color: index })}
                                 >
                                     <span className='px-2' style={{ backgroundColor: Colors[index] }}>&nbsp;</span>
                                 </button>
@@ -319,11 +359,14 @@ export default function LazzleLevelEditor() {
                     <div className="mb-3">
                         <label className="form-label">{t('editor.design.block.other_tools')}</label>
                         <div>
-                            <button className='btn btn-outline-secondary me-2' onClick={removeAllBlocks}>{t('editor.design.block.tool_remove_all')}</button>
+                            <button className={'btn btn-outline-secondary me-2' + (activeTool.type === "link" ? ' active' : '')}
+                                onClick={() => setActiveTool({ type: "link" })}><LinkIcon /> {t('editor.design.block.tool_link')}</button>
+
+                            <button className='btn btn-outline-secondary me-2' onClick={removeAllBlocks}><TrashIcon /> {t('editor.design.block.tool_remove_all')}</button>
                         </div>
                     </div>
                 </Tab>
-                <Tab header='Lasers'>
+                <Tab header={t('editor.design.laser.tab')}>
                     <Accordion initialOpened={initialLaserOpen}>
                         {level.lasers.map((laser, index) => <AccordionItem key={index} header={'Laser #' + (index + 1)}>
                             <div className='row'>

@@ -24,7 +24,7 @@
         "play": {
             "start_lasers": "Laser <0>s</0>tarten",
             "start_lasers_tooltip": "Tastenkürzel 's'",
-            "toggle_goal": "Zielanzeige umschalten",
+            "toggle_goal": "Zielanzei<0>g</0>e umschalten",
             "toggle_goal_tooltip": "Tastenkürzel 'g'",
             "action_next_level": "Nächstes Level",
             "action_finish_level": "Level abschließen",
@@ -94,6 +94,7 @@
             "starting_blocks": "Anfängliche Blöcke",
             "goal_blocks": "Zielblöcke",
             "block": {
+                "tab": "Blöcke",
                 "color": "Wähle eine Farbe und klicken oben auf das Spielfeld, um Blöcke einzufärben:",
                 "color_description": "Die Farben sind vordefiniert. Benutze den Radiergummi, um Blöcke zu entfernen.",
                 "rubber": "Radiergummi",
@@ -101,9 +102,11 @@
                 "strength_item": "{{name}} (hält {{count}} Schuss aus bevor zerstört)",
                 "strength_item_plural": "{{name}} (hält {{count}} Schüsse aus bevor zerstört)",
                 "other_tools": "Oder benutze eines der folgenden Werkzeuge:",
+                "tool_link": "Blöcke verknüpfen",
                 "tool_remove_all": "Alle Blöcke entfernen"
             },
             "laser": {
+                "tab": "Laser",
                 "order": "Reihenfolge:",
                 "order_description": "Die Reihenfolge definiert die Abfolge der Laserschüsse. Niedrigere Zahlen beginnen zuerst.",
                 "distance": "Abstand: {{value}}",
@@ -130,7 +133,7 @@
         },
         "export": {
             "heading": "Exportieren",
-            "description_0": "Das Level wird als JSON-Datei gespeichert. Wenn du dein cooles Level teilen möchtest, kopiere die Daten untenhalb und schicke mir eine ",
+            "description_0": "Das Level wird als JSON-Datei gespeichert. Wenn du dein cooles Level teilen möchtest, kopiere die Daten unten und schicke mir eine ",
             "description_1": "E-Mail",
             "description_2": ":",
             "copy_tooltip": "Kopiert das Level (JSON) in die Zwischenablage."

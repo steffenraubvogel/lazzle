@@ -9,134 +9,160 @@
         {
             "x": 0,
             "y": 5,
-            "color": 0
+            "color": 0,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 1,
             "y": 5,
-            "color": 0
+            "color": 0,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 2,
             "y": 5,
-            "color": 0
+            "color": 0,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 3,
             "y": 5,
-            "color": 0
+            "color": 0,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 4,
             "y": 5,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 5,
             "y": 5,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 6,
             "y": 5,
-            "color": 0
+            "color": 0,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 1,
             "y": 4,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 2,
             "y": 4,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 3,
             "y": 4,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 4,
             "y": 4,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 5,
             "y": 4,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 2,
             "y": 3,
-            "color": 3
+            "color": 3,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 3,
             "y": 3,
-            "color": 2
+            "color": 2,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 4,
             "y": 3,
-            "color": 3
+            "color": 3,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 3,
             "y": 2,
-            "color": 3
+            "color": 3,
+            "link": { "left": false, "top": false }
         }
     ],
     "goal": [
         {
             "x": 0,
             "y": 5,
-            "color": 0
+            "color": 0,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 1,
             "y": 5,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 2,
             "y": 5,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 3,
             "y": 5,
-            "color": 2
+            "color": 2,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 4,
             "y": 5,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 5,
             "y": 5,
-            "color": 1
+            "color": 1,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 6,
             "y": 5,
-            "color": 0
+            "color": 0,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 2,
             "y": 4,
-            "color": 3
+            "color": 3,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 3,
             "y": 4,
-            "color": 3
+            "color": 3,
+            "link": { "left": false, "top": false }
         },
         {
             "x": 4,
             "y": 4,
-            "color": 3
+            "color": 3,
+            "link": { "left": false, "top": false }
         }
     ],
     "lasers": [
