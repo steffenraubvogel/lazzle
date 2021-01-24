@@ -9,6 +9,7 @@ import { initReactI18next, Trans, useTranslation } from "react-i18next";
 import LanguageDetector from 'i18next-browser-languagedetector';
 import translationsEn from "./i18n/en.json"
 import translationsDe from "./i18n/de.json"
+import { Fragment } from "react";
 
 i18n
   .use(LanguageDetector) // detect user language, see https://github.com/i18next/i18next-browser-languageDetector
@@ -60,12 +61,12 @@ export default function App() {
             <div className="col-6 col-md">
               {(i18n.options.supportedLngs as string[]).filter(lng => lng !== 'cimode').map(lng => {
                 if (i18n.language === lng) {
-                  return <><span>{t('language.' + lng)}</span><br /></>
+                  return <Fragment key={lng}><span>{t('language.' + lng)}</span><br /></Fragment>
                 }
                 else {
                   // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                  return <><a key={lng} href='' className="link-secondary" onClick={event => { i18n.changeLanguage(lng); event.preventDefault(); return false }}>{t('language.' + lng)}</a>
-                    <br /></>
+                  return <Fragment key={lng}><a href='' className="link-secondary" onClick={event => { i18n.changeLanguage(lng); event.preventDefault(); return false }}>{t('language.' + lng)}</a>
+                    <br /></Fragment>
                 }
               })}
             </div>
