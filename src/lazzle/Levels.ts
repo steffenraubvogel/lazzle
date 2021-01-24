@@ -7,6 +7,7 @@ import LevelRecolor from './levels/level_simple_recolor.json'
 import LevelRecolor2 from './levels/level_simple_recolor2.json'
 import LevelRestricted from './levels/level_medium_restricted.json'
 import LevelLinks from './levels/level_simple_links.json'
+import LevelLinks2 from './levels/level_medium_links.json'
 import Level4 from './levels/level_medium_cross.json'
 import Level5 from './levels/level_medium_colored.json'
 import LevelShortcut from './levels/level_simple_shortcut.json'
@@ -56,6 +57,6 @@ export type Level = {
 }
 
 export const AllLevels: Level[] = [
-    Level1, Level2, Level3, LevelLinks, LevelStrengthened, LevelStrengthened2, 
+    Level1, Level2, Level3, LevelLinks, LevelLinks2, LevelStrengthened, LevelStrengthened2, 
     LevelRecolor2, LevelShortcut, LevelRecolor, LevelRestricted, Level5, Level4
 ]
