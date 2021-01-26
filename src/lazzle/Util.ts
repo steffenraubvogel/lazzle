@@ -39,3 +39,15 @@ export function useShortcuts(keyToActionMap: { [key: string]: (event: KeyboardEv
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 }
+
+// reading JSON from localStorage
+export function readAndParseFromLocalStorage<T>(key: string, defaultValue: T): T {
+    try {
+        const ls = localStorage.getItem(key)
+        return ls ? JSON.parse(ls) as T : defaultValue
+    }
+    catch (e) {
+        console.warn("Couldn't read " + key + " from local storage properly", e)
+        return defaultValue
+    }
+}

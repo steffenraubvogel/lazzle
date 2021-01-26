@@ -1,5 +1,5 @@
 import { BLOCK_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./Constants";
-import { Colors, Level, LevelBlock } from "./Levels";
+import { Colors, LevelBlock, PersistentLevel } from "./Levels";
 import styles from "./Lazzle.module.scss";
 import { nextId } from "./Util";
 import { ReactComponent as BlockLinkIcon } from "bootstrap-icons/icons/pause.svg"
@@ -16,7 +16,7 @@ export class Block {
     public strength: number // number of shots to resist
     public links: { left: boolean, top: boolean } // links to adjacent blocks
 
-    constructor(block: LevelBlock, level: Level) {
+    constructor(block: LevelBlock, level: PersistentLevel) {
         this.id = nextId()
         this.original = block
         this.x = WORLD_WIDTH / 2 - level.gridX / 2 * BLOCK_SIZE + block.x * BLOCK_SIZE

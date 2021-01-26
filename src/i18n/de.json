@@ -78,6 +78,44 @@
             "description": "Du hast alle Level gemeistert. Gut gemacht!"
         },
         "help": {
+            "features": {
+                "first": {
+                    "h1": "Anleitung",
+                    "p1": "Lazzle hat Laser <0/> und Blöcke <1/>. Als Erstes ordnest du die Laser wie gewünscht an. Danach klicke auf <2/><3>Laser Starten</3>. Die Laser werden schießen und getroffene Blöcke zerstören. Freischwebende Blöcke fallen runter. Du gewinnst das Level, wenn die übriggebliebenen Blöcke mit den Zielblöcken des Levels übereinstimmen. Benutze die Schaltfläche \"Zielanzeige umschalten\", um dir das Ziel anzuschauen.",
+                    "p2": "Die nächsten Level führen noch mehr Spielelemente ein und die Schwierigkeit wird sich erhöhen.",
+                    "h2": "Laser anordnen",
+                    "p3": "Ziehe den Bewegungsgriff <0/> eines Lasers, um ihn auf seinem Halbkreis zu bewegen. Ziehe die gestrichelten Laser-Hilfslinie <1/>, um ihn zu drehen."
+                },
+                "blockColor": {
+                    "h1": "Blockfarbe",
+                    "p1": "Blöcke können verschiedene Farben haben, etwa <0/><1/><2/>. Das beeinflusst, ob die tatsächlichen Blöcke mit denen vom Ziel übereinstimmen: Sie müssen die gleiche Farbe haben. Also, achte auch auf die Farbe."
+                },
+                "linkedBlock": {
+                    "h1": "Verknüpfte Blöcke",
+                    "p1": "Wenn zwei Blöcke verknüpft sind - dargestellt durch Tackernadeln <0/> - dann verhalten sie sich anders beim Fallen. Sie fallen nur zusammen als eine Einheit. Das hat zur Folge, dass einige Blöcke so aussehen, als schwebten sie in der Luft, werden aber durch die verknüpften Blöcke festgehalten."
+                },
+                "strengthenedBlock": {
+                    "h1": "Verstärkte Blöcke",
+                    "p1": "Einige Blöcke sind stärker als gewöhnliche Blöcke, die durch einen Treffer zerstört werden. Blöcke, die wie <0/> aussehen, benötigen zwei Schüsse, um zerstört zu werden. <1/> Blöcke halten sogar noch einen Schuss mehr aus, d.h. sie brauchen drei Treffer, um zerstört zu werden."
+                },
+                "laserOrder": {
+                    "h1": "Reihenfolge der Laser",
+                    "p1": "Bei mehr als einem Laser im Level zeigt dir die Nummer nebem dem Laser seine Reihenfolge in der Abfolge der Laser-Schüsse an. Höhere Nummern kommen später dran. Zwei Laser können auch dieselbe Reihenfolgenummer haben. In diesem Fall schießen sie gleichzeitig."
+                },
+                "laserColor": {
+                    "h1": "Färbende Laser",
+                    "p1": "Laser, die eine andere Farbe haben als das übliche Schwarz, färben die getroffenen Blöcke ein statt sie zu zerstören. Beispielsweise färbt ein Laser, der wie <0/> aussieht, die Blöcke rot ein."
+                },
+                "unmovableLaser": {
+                    "h1": "Nicht bewegbare Laser",
+                    "p1": "Einige Laser können nicht bewegt werden. Halte mit der Maus über den Bewegungsgriff <0/>, um zu sehen, dass sich der Mauszeiger zu einem \"nicht erlaubt\"-Symbol ändert."
+                },
+                "unrotatableLaser": {
+                    "h1": "Nicht drehbare Laser",
+                    "p1": "Einige Laser können nicht gedreht werden. Halte mit der Maus über die gestrichelte Laser-Hilfslinie <0/>, um zu sehen, dass sich der Mauszeiger zu einem \"nicht erlaubt\"-Symbol ändert."
+                }
+            },
+            "shortcuts": "<h2>Tastenkürzel</h2><ul><li><kbd>s</kbd> - Laser starten</li><li><kbd>g</kbd> - Zielanzeige umschalten</li></ul>"
         }
     },
     "editor" : {
@@ -129,6 +167,7 @@
             "heading": "Level Testen",
             "description": "Du kannst dein Level hier ausprobieren. Ein Fenster-füllender Dialog zeigt dir, wie das Level von anderen Spielern gespielt werden würde",
             "action": "Jetzt testen",
+            "dialog_title": "Teste dein Level",
             "close": "Test schließen"
         },
         "export": {
@@ -150,6 +189,9 @@
             "heading": "Tastenkürzel",
             "toggle_goal": "Zielansicht umschalten"
         }
+    },
+    "modal": {
+        "close": "Schließen"
     },
     "footer": {
         "nav": {

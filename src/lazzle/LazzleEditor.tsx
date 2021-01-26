@@ -2,7 +2,7 @@ import { ChangeEvent, MouseEvent, useMemo, useState } from "react";
 import styles from "./Lazzle.module.scss";
 import LaserComponent, { Laser } from "./Laser";
 import BlockComponent, { Block } from "./Block";
-import { AllLevels, Colors, Level, LevelBlock, LevelLaser, MAX_BLOCK_STRENGTH } from "./Levels";
+import { AllLevels, Colors, Level, LevelBlock, LevelLaser, MAX_BLOCK_STRENGTH, PersistentLevel } from "./Levels";
 import { LevelEditorPhase } from "./Phase";
 import Tabs, { Tab } from "../components/Tabs";
 import Accordion, { AccordionItem } from "../components/Accordion";
@@ -22,7 +22,7 @@ export default function LazzleLevelEditor() {
 
     const { t, i18n } = useTranslation()
 
-    const [level, setLevel] = useState<Level>({
+    const [level, setLevel] = useState<PersistentLevel>({
         name: { 'en': 'New Level', 'de': 'Neues Level' },
         gridX: 4,
         gridY: 5,
@@ -442,9 +442,9 @@ export default function LazzleLevelEditor() {
             <p>
                 {t('editor.test.description')}
             </p>
-            <button className='btn btn-outline-secondary' onClick={() => setTestLevel(level)}>{t('editor.test.action')}</button>
+            <button className='btn btn-outline-secondary' onClick={() => setTestLevel({ ...level, firstOccurrenceOfFeatures: [] })}>{t('editor.test.action')}</button>
             {testLevel &&
-                <Modal title='Test Your Level' fullScreen={true} close={() => setTestLevel(undefined)}>
+                <Modal title={t('editor.test.dialog_title')} fullScreen={true} close={() => setTestLevel(undefined)}>
                     <div className='container-md'>
                         <Game level={testLevel} levelFinishedButtonText={t('editor.test.close')} onLevelFinishedClick={() => setTestLevel(undefined)} />
                     </div>

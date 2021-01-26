@@ -91,10 +91,7 @@ export function LevelLoader(props: RouteComponentProps<{ levelIndex?: string | u
                     onLevelFinishedClick={startNextLevel} />
             </section>
 
-            <section dangerouslySetInnerHTML={{ __html: t('game.help.howto', { interpolation: { escapeValue: false } } )}}>
-            </section>
-
-            <section dangerouslySetInnerHTML={{ __html: t('game.help.hints', { count: AllLevels.length, interpolation: { escapeValue: false } } )}}>
+            <section dangerouslySetInnerHTML={{ __html: t('game.help.shortcuts')}}>
             </section>
         </>}
 

@@ -78,8 +78,44 @@
             "description": "You managed to solve all levels. Well done!"
         },
         "help": {
-            "howto": "<h2>How to</h2><p>The game consists of colored blocks and lasers.</p><ul><li>Use <em>Toggle Goal</em> to see the target blocks arrangement that you need to accomplish by shooting with the lasers.</li><li>Lasers can be dragged around on their semi-circle and rotated in any direction (if allowed by level). Drag the grip behind the laser to move it. Drag the laser aid line to rotate it.</li> <li>Once you are ready click <em>Start Lasers</em>. Lasers will be shot in sequence as indicated by their numbers. The lasers will destroy or re-color the blocks they are aiming at. Blocks up in the air will then fall down. After all lasers shot, the resulting block arrangement will be compared with the goal.</li><li>If a laser has a color different than black then its shot will not destroy but re-color the blocks hit.</li></ul><p>You will win the level if all resulting blocks match with the target blocks. Have fun!</p>",
-            "hints": "<h2>Hints and Help</h2><p>The difficulty will increase with each level. At the moment there are {{count}} levels available.</p><p>Shortcuts:</p><ul><li><kbd>s</kbd> - start lasers</li><li><kbd>g</kbd> - toggle goal</li></ul>"
+            "features": {
+                "first": {
+                    "h1": "How to Play",
+                    "p1": "Lazzle has lasers <0></0> and blocks <1></1>. First you start to arrange lasers. Then click <2></2><3>Start Lasers</3>. They will shoot and destroy hit blocks. Blocks up in the air fall down. You will win the level if the remaining blocks match the goal blocks of the level. Use the \"Toggle Goal\" button to see the actual goal.",
+                    "p2": "The next levels will introduce more game elements and increase the difficulty.",
+                    "h2": "Arrange a Laser",
+                    "p3": "Drag the movement handle <0/> of a laser to move it on its semi-circle. Drag the dashed laser aiming line <1/> to rotate it."
+                },
+                "blockColor": {
+                    "h1": "Block Color",
+                    "p1": "Blocks can have different colors like <0/><1/><2/>. This affects whether the actual block matches the one from the goal: They have to be the same color to match. So, mind the color."
+                },
+                "linkedBlock": {
+                    "h1": "Linked Blocks",
+                    "p1": "If two blocks are linked - indicated by staples <0/> - then they behave differently when falling. They will only fall down together as a unit. As a consequence, some blocks appear to be up in the air but are hold by the linked block."
+                },
+                "strengthenedBlock": {
+                    "h1": "Strengthened Block",
+                    "p1": "Some blocks are stronger than usual blocks that are destroyed on first hit. Blocks that look like <0/> require two shots to be destroyed. And finally, <1/> blocks resist even one more shot, i.e. need three shots to be destroyed."
+                },
+                "laserOrder": {
+                    "h1": "Order of Laser",
+                    "p1": "When there are more than one laser in a level, the number near a laser shows its order in the sequence of laser shots. Higher numbers will shoot later. Two lasers can also have the same order number. In that case, they shoot at the same time."
+                },
+                "laserColor": {
+                    "h1": "Coloring Lasers",
+                    "p1": "Lasers that have a color other than the usual black will shoot and re-color hit blocks instead of destroying them. For example, a laser that looks like <0/> colors blocks red."
+                },
+                "unmovableLaser": {
+                    "h1": "Unmovable Laser",
+                    "p1": "Some lasers cannot be moved around. Hover over the movement handle <0/> to see that the cursor changes to a disallow icon."
+                },
+                "unrotatableLaser": {
+                    "h1": "Unrotatable Laser",
+                    "p1": "Some lasers cannot be rotated. Hover over the dashed laser aiming line <0/> to see that the cursor changes to a disallow icon."
+                }
+            },
+            "shortcuts": "<h2>Shortcuts</h2><ul><li><kbd>s</kbd> - start lasers</li><li><kbd>g</kbd> - toggle goal</li></ul>"
         }
     },
     "editor" : {
@@ -131,6 +167,7 @@
             "heading": "Test Level",
             "description": "You can try out your level here. A fullscreen dialog will open and show how the level would be played by users.",
             "action": "Test now",
+            "dialog_title": "Test Your Level",
             "close": "Close Test"
         },
         "export": {
@@ -152,6 +189,9 @@
             "heading": "Shortcuts",
             "toggle_goal": "toggle goal"
         }
+    },
+    "modal": {
+        "close": "Close"
     },
     "footer": {
         "copyright": "© Steffen Harbich",

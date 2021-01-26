@@ -1,0 +1,43 @@
+.modalBackDrop {
+    animation: backdrop-animation 0.2s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes backdrop-animation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.modal {
+    animation: backdrop-blur-animation 0.2s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes backdrop-blur-animation {
+    0% {
+        backdrop-filter: none;
+    }
+    100% {
+        backdrop-filter: blur(2px);
+    }
+}
+
+.modalDialog {
+    animation: modal-animation 0.3s ease-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes modal-animation {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}

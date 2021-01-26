@@ -20,6 +20,7 @@ import { ReactComponent as ShieldMinusIcon } from "bootstrap-icons/icons/shield-
 import AutoScaler from "../components/AutoScaler";
 import { Trans, useTranslation } from "react-i18next";
 import { useShortcuts } from "./Util";
+import FeatureIntroduction from "./FeatureIntroduction";
 
 export default function Game(props: {
     level: Level,
@@ -406,6 +407,8 @@ export default function Game(props: {
                     </div>
                 </div>
             }
+
+            <FeatureIntroduction level={props.level} />
         </div>
     </>
 }
