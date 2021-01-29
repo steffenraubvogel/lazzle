@@ -56,6 +56,7 @@ export default function App() {
             <div className="col-12 col-md">{t('footer.copyright')}</div>
             <div className="col-6 col-md">
               <Link className="link-secondary" to="/">{t('footer.nav.home')}</Link><br />
+              <a className="link-secondary" href="https://github.com/steffenraubvogel/lazzle-issues/issues/new/choose" target="_blank" rel="noreferrer">{t('footer.nav.contribute')}</a><br/>
               <Link className="link-secondary" to="/legal">{t('footer.nav.legal')}</Link>
             </div>
             <div className="col-6 col-md">

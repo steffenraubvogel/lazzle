@@ -196,6 +196,7 @@
     "footer": {
         "nav": {
             "home": "Startseite",
+            "contribute": "Mitwirken",
             "legal": "Impressum & Datenschutzerklärung"
         },
         "credits": "Danke fürs Bereitstellen <0>falconiform</0>"
